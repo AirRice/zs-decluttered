@@ -73,7 +73,7 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
 
-	MySelf:ApplySkills()
+	--MySelf:ApplySkills()
 end)
 
 -- Remove when model decal crash is fixed.
@@ -1416,11 +1416,7 @@ function GM:EvaluateFilmMode()
 	if self.CenterNotificationHUD and self.CenterNotificationHUD:IsValid() then
 		self.CenterNotificationHUD:SetVisible(visible)
 	end
-
-	if self.XPHUD and self.XPHUD:IsValid() then
-		self.XPHUD:SetVisible(visible and self.DisplayXPHUD)
-	end
-
+	
 	if self.HealthHUD and self.HealthHUD:IsValid() then
 		self.HealthHUD:SetVisible(visible)
 	end
@@ -1467,12 +1463,6 @@ function GM:CreateLateVGUI()
 
 	if not self.StatusHUD then
 		self.StatusHUD = vgui.Create("ZSStatusArea")
-	end
-
-	if not self.XPHUD then
-		self.XPHUD = vgui.Create("ZSExperienceHUD")
-		self.XPHUD:ParentToHUD()
-		self.XPHUD:InvalidateLayout()
 	end
 end
 

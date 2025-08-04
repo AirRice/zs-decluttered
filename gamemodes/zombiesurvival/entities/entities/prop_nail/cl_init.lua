@@ -100,8 +100,6 @@ function ENT:DrawTranslucent()
 
 		local displayowner = self:GetDTString(0)
 		local redname = false
-		local expert = false
-		local hcolor = COLOR_WHITE
 
 		local deployer = self:GetOwner()
 		if displayowner == "" then
@@ -109,20 +107,7 @@ function ENT:DrawTranslucent()
 
 			if deployer:IsValid() then
 				displayowner = deployer:Name()
-				if deployer:Team() == TEAM_HUMAN and deployer:Alive() then
-					local rlvl = deployer:GetZSRemortLevel()
-					expert = rlvl > 0
-
-					if expert then
-						local rlvlmod, hlvl = math.floor((rlvl % 40) / 4), 0
-						for rlvlr, rcolor in pairs(GAMEMODE.RemortColors) do
-							if rlvlmod >= rlvlr and rlvlr >= hlvl then
-								hlvl = rlvlr
-								hcolor = rcolor
-							end
-						end
-					end
-				else
+				if not (deployer:Team() == TEAM_HUMAN and deployer:Alive()) then
 					displayowner = "(DEAD) "..displayowner
 					redname = true
 				end

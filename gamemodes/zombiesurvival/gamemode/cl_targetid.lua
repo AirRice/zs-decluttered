@@ -83,15 +83,6 @@ function GM:DrawTargetID(ent, fade)
 				draw.SimpleTextBlur(wep:GetPrintName(), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 			end
 		end
-
-		local level = ent:GetZSLevel()
-		local remortlevel = ent:GetZSRemortLevel()
-		y = y + draw.GetFontHeight("ZSHUDFontTiny") + 4
-		if remortlevel >= 1 then
-			draw.SimpleTextBlur(string_format("LVL %d R.LVL %d", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
-		else
-			draw.SimpleTextBlur("LVL "..level, "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
-		end
 	end
 end
 

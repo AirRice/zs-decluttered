@@ -74,10 +74,8 @@ function PANEL:Init()
 	self.m_ZombieHeading:SetTeam(TEAM_UNDEAD)
 
 	self.m_PointsLabel = EasyLabel(self, "Score", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCLabel = EasyLabel(self, "R.LVL", "ZSScoreBoardPlayer", COLOR_GRAY)
 
 	self.m_BrainsLabel = EasyLabel(self, "Brains", "ZSScoreBoardPlayer", COLOR_GRAY)
-	self.m_RemortCZLabel = EasyLabel(self, "R.LVL", "ZSScoreBoardPlayer", COLOR_GRAY)
 
 	self.ZombieList = vgui.Create("DScrollPanel", self)
 	self.ZombieList.Team = TEAM_UNDEAD
@@ -106,17 +104,9 @@ function PANEL:PerformLayout()
 	self.m_PointsLabel:SetPos((self:GetWide() / 2 - 24) * 0.6 - self.m_PointsLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
 	self.m_PointsLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
 
-	self.m_RemortCLabel:SizeToContents()
-	self.m_RemortCLabel:SetPos((self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_RemortCLabel:MoveBelow(self.m_HumanHeading, 1 * screenscale)
-
 	self.m_BrainsLabel:SizeToContents()
 	self.m_BrainsLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2 - 24) * 0.61 - self.m_BrainsLabel:GetWide() * 0.35, 110 * screenscale - self.m_HumanHeading:GetTall())
 	self.m_BrainsLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
-
-	self.m_RemortCZLabel:SizeToContents()
-	self.m_RemortCZLabel:SetPos(self:GetWide() / 2 + 3 * screenscale + (self:GetWide() / 2 - 24) * 0.71 - self.m_RemortCZLabel:GetWide() * 0.5, 110 * screenscale - self.m_HumanHeading:GetTall())
-	self.m_RemortCZLabel:MoveBelow(self.m_ZombieHeading, 1 * screenscale)
 
 	self.HumanList:SetSize(self:GetWide() / 2 - 24, self:GetTall() - 150 * screenscale)
 	self.HumanList:AlignBottom(16 * screenscale)
@@ -300,7 +290,6 @@ function PANEL:Init()
 
 	self.m_PlayerLabel = EasyLabel(self, " ", "ZSScoreBoardPlayer", COLOR_WHITE)
 	self.m_ScoreLabel = EasyLabel(self, " ", "ZSScoreBoardPlayerSmall", COLOR_WHITE)
-	self.m_RemortLabel = EasyLabel(self, " ", "ZSScoreBoardPlayerSmaller", COLOR_WHITE)
 
 	self.m_PingMeter = vgui.Create("DPingMeter", self)
 	self.m_PingMeter.PingBars = 5
@@ -377,10 +366,6 @@ function PANEL:PerformLayout()
 	self.m_Friend:SetSize(16, 16)
 	self.m_Friend:MoveLeftOf(self.m_Mute, 8)
 	self.m_Friend:CenterVertical()
-
-	self.m_RemortLabel:SizeToContents()
-	self.m_RemortLabel:MoveLeftOf(self.m_ClassImage, 2)
-	self.m_RemortLabel:CenterVertical()
 end
 
 function PANEL:RefreshPlayer()
@@ -399,20 +384,6 @@ function PANEL:RefreshPlayer()
 
 	self.m_ScoreLabel:SetText(pl:Frags())
 	self.m_ScoreLabel:SetAlpha(240)
-
-	local rlvl = pl:GetZSRemortLevel()
-	self.m_RemortLabel:SetText(rlvl > 0 and rlvl or "")
-
-	local rlvlmod = math.floor((rlvl % 40) / 4)
-	local hcolor, hlvl = COLOR_GRAY, 0
-	for rlvlr, rcolor in pairs(GAMEMODE.RemortColors) do
-		if rlvlmod >= rlvlr and rlvlr >= hlvl then
-			hlvl = rlvlr
-			hcolor = rcolor
-		end
-	end
-	self.m_RemortLabel:SetColor(hcolor)
-	self.m_RemortLabel:SetAlpha(240)
 
 	if MySelf:Team() == TEAM_UNDEAD and pl:Team() == TEAM_UNDEAD and pl:GetZombieClassTable().Icon then
 		self.m_ClassImage:SetVisible(true)
