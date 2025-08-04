@@ -29,7 +29,8 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 
 	if not itemtab or not itemtab.PointShop then return end
 	local itemcat = itemtab.Category
-	if usescrap and not (itemcat == ITEMCAT_TRINKETS or itemcat == ITEMCAT_AMMO) and not itemtab.CanMakeFromScrap then return end
+	if usescrap and (itemtab.PreventMakeFromScrap or (not (itemcat == ITEMCAT_TRINKETS or itemcat == ITEMCAT_AMMO) and not itemtab.OnlyFromScrap)) then return end
+	if not usescrap and itemtab.OnlyFromScrap then return end
 
 	local points = usescrap and sender:GetAmmoCount("scrap") or sender:GetPoints()
 	local cost = itemtab.Price
@@ -41,11 +42,6 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 
 	if GAMEMODE.ZombieEscape and itemtab.NoZombieEscape then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", itemtab.Name))
-		return
-	end
-
-	if itemtab.SkillRequirement and not sender:IsSkillActive(itemtab.SkillRequirement) then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", itemtab.Name))
 		return
 	end
 
@@ -225,6 +221,58 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 	end
 end)
 
+concommand.Add("zs_upgrade_altform", function(sender, command, arguments)
+	if not (sender:IsValid() and sender:IsConnected() and sender:IsValidLivingHuman()) then return end
+
+	if not sender:NearRemantler() then
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "need_to_be_near_remantler"))
+		return
+	end
+	local nearest = sender:NearestRemantler()
+	local contents = sender:GetActiveWeapon():GetClass()
+	local contentstbl = weapons.Get(contents)
+	if not contentstbl.Alternate then return end
+
+	if not (nearest and nearest:IsValid() and contents) then return end
+
+	upgclass = contentstbl.Alternate
+	local classtbl = weapons.Get(upgclass)
+	if not classtbl then return end
+
+	if contentstbl.AmmoIfHas and sender:GetAmmoCount(contentstbl.Primary.Ammo) == 0 then
+		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+		return
+	end
+
+	if sender:HasWeapon(upgclass) then
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "remantle_cannot"))
+		return
+	end
+
+	local upgname = classtbl.PrintName
+	sender:CenterNotify(COLOR_CYAN, translate.ClientGet(sender, "remantle_success"), color_white, " "..upgname)
+	sender:SendLua("surface.PlaySound(\"buttons/lever"..math.random(5)..".wav\")")
+
+	local wep = sender:GiveEmptyWeapon(upgclass)
+	if wep and wep:IsValid() then
+		sender:GetActiveWeapon():EmptyAll(true)
+		sender:StripWeapon(contents)
+		sender:UpdateAltSelectedWeapon()
+
+		if contentstbl.AmmoIfHas then
+			sender:RemoveAmmo(1, contentstbl.Primary.Ammo)
+		end
+		if wep.AmmoIfHas then
+			sender:GiveAmmo(1, wep.Primary.Ammo)
+		end
+		sender:SelectWeapon(upgclass)
+		net.Start("zs_remantlealtformconf")
+		net.Send(sender)
+
+		GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, upgclass, "Upgrades", 1)
+	end
+end)
+
 concommand.Add("zs_upgrade", function(sender, command, arguments)
 	if not (sender:IsValid() and sender:IsConnected() and sender:IsValidLivingHuman()) then return end
 
@@ -322,7 +370,7 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 		id = tonumber(id) or id
 
 		local tab = FindStartingItem(id)
-		if tab and not hasalready[id] and (not tab.SkillRequirement or sender:IsSkillActive(tab.SkillRequirement)) then
+		if tab and not hasalready[id] then
 			cost = cost + tab.Price
 			hasalready[id] = true
 		end
@@ -337,9 +385,7 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 
 		local tab = FindStartingItem(id)
 		if tab and not hasalready[id] then
-			if tab.SkillRequirement and not sender:IsSkillActive(tab.SkillRequirement) then
-				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", tab.Name))
-			elseif tab.NoClassicMode and GAMEMODE:IsClassicMode() then
+			if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
 				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
 			elseif tab.Callback then
 				tab.Callback(sender)

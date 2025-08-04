@@ -70,44 +70,67 @@ function PANEL:Init()
 		local gtbl = self.GunTab
 		local curqua = gtbl.QualityTier
 
-		if gtbl.AllowQualityWeapons then
+		if gtbl.AllowQualityWeapons or gtbl.Alternate then
+			qualityweps = gtbl.AllowQualityWeapons
+			altForm = weapons.Get(gtbl.Alternate)
+			local altFormBranch = 1
 			local branches = gtbl.Branches
-
 			if branches then
 				for no, _ in pairs(branches) do
 					self.RemantleNodes[no] = {}
+					altFormBranch = altFormBranch + 1
 				end
+			end
+			if altForm then
+				self.RemantleNodes[altFormBranch] = {}
 			end
 
 			self.OrigTab = gtbl.BaseQuality and weapons.Get(gtbl.BaseQuality) or gtbl
 
 			for i = 0, #GAMEMODE.WeaponQualities do
-				node = ClientsideModel("models/props/cs_italy/orange.mdl", RENDER_GROUP_OPAQUE_ENTITY)
-				if IsValid(node) then
-					node:SetNoDraw(true)
-					node:SetPos(Vector(0, -48 + i * 30, i > 0 and branches and 0 or -9))
+				if qualityweps or i == 0 then
+					node = ClientsideModel("models/props/cs_italy/orange.mdl", RENDER_GROUP_OPAQUE_ENTITY)
+					if IsValid(node) then
+						node:SetNoDraw(true)
+						node:SetPos(Vector(0, -48 + i * 30, i > 0 and (branches or altForm) and 0 or -9))
 
-					node.Unlocked = i == 0 or (curqua and curqua >= i or nil)
-					if i ~= 0 and curqua and curqua >= 1 and gtbl.Branch then
-						node.Locked = true
-					end
-					self.RemantleNodes[0][i] = node
-				end
-
-				if i > 0 and branches then
-					for no, br in pairs(branches) do
-						node = ClientsideModel("models/props/cs_italy/orange.mdl", RENDER_GROUP_OPAQUE_ENTITY)
-						if IsValid(node) then
-							node:SetNoDraw(true)
-							node:SetPos(Vector(0, -48 + i * 30, 0 - (16/#branches)*no))
-
-							node.Unlocked = i == 0 or (curqua and curqua >= i or nil)
-							if curqua and curqua >= 1 and gtbl.Branch ~= no then
-								node.Locked = true
-							end
-							node.Name = br and br.NewNames and br.NewNames[i] or nil
-							self.RemantleNodes[no][i] = node
+						node.Unlocked = i == 0 or (curqua and curqua >= i or nil)
+						if i ~= 0 and curqua and curqua >= 1 and gtbl.Branch then
+							node.Locked = true
 						end
+						self.RemantleNodes[0][i] = node
+					end	
+					if i > 0 and branches then
+						for no, br in pairs(branches) do
+							node = ClientsideModel("models/props/cs_italy/orange.mdl", RENDER_GROUP_OPAQUE_ENTITY)
+							if IsValid(node) then
+								node:SetNoDraw(true)
+								node:SetPos(Vector(0, -48 + i * 30, 0 - (16/(#branches + (altForm and 1 or 0)))*no))
+
+								node.Unlocked = i == 0 or (curqua and curqua >= i or nil)
+								if curqua and curqua >= 1 and gtbl.Branch ~= no then
+									node.Locked = true
+								end
+								node.Name = br and br.NewNames and br.NewNames[i] or nil
+								self.RemantleNodes[no][i] = node
+							end
+						end
+					end
+				end
+				if i == 1 and altForm then
+					node = ClientsideModel("models/props/cs_italy/orange.mdl", RENDER_GROUP_OPAQUE_ENTITY)
+					if IsValid(node) then
+						node:SetNoDraw(true)
+						node:SetPos(Vector(0, -18, qualityweps and -16 or -9))
+						node.Unlocked = (curqua and curqua > 0 or nil)
+						if curqua and curqua > 0 then
+							node.Locked = true
+						end
+
+						node.AltConvert = true
+						node.SWEPName = altForm.PrintName
+						node.SWEPDesc = altForm.Description
+						self.RemantleNodes[altFormBranch][1] = node
 					end
 				end
 			end
@@ -340,7 +363,9 @@ function PANEL:Paint(w, h)
 
 				local txt = "Standard"
 				local quals = GAMEMODE.WeaponQualities[id]
-				if quals then
+				if node.AltConvert then
+					txt = node.SWEPName
+				elseif quals then
 					txt = node.Name or branch == 0 and quals[1] or quals[3]
 				end
 
@@ -391,27 +416,36 @@ function PANEL:Paint(w, h)
 
 		if hovquality and hovbranch then
 			local txt, scost = "Standard", ""
-
+			local costtext = ""
 			local quals = GAMEMODE.WeaponQualities[hovquality]
-			if quals then
+			local altConversionMode = self.RemantleNodes[hovbranch][hovquality].AltConvert
+			if altConversionMode then
+				txt = self.RemantleNodes[hovbranch][hovquality].SWEPName
+				costtext = "NO Scrap Cost (Conversion)"
+			elseif quals then
 				txt = self.RemantleNodes[hovbranch][hovquality].Name or hovbranch == 0 and quals[1] or quals[3]
 				scost = GAMEMODE:GetUpgradeScrap(self.GunTab, hovquality)
+				costtext = scost ~= "" and "Scrap Cost: " .. scost or ""
 			end
 
 			self.QualityName:SetText(txt)
 			self.QualityName:SizeToContents()
-
-			self.ScrapCost:SetText(scost ~= "" and "Scrap Cost: " .. scost or "")
-			self.ScrapCost:SetTextColor(scost ~= "" and MySelf:GetAmmoCount("scrap") >= scost and COLOR_WHITE or COLOR_RED)
+			
+			self.ScrapCost:SetText(costtext)
+			self.ScrapCost:SetTextColor(altConversionMode and COLOR_GREEN or (scost ~= "" and MySelf:GetAmmoCount("scrap") >= scost and COLOR_WHITE or COLOR_RED))
 			self.ScrapCost:SizeToContents()
 
 			local dtxt
-			local altdesc = self.OrigTab.RemantleDescs
-			local altdescs = altdesc and altdesc[hovbranch][hovquality]
-
+			local altdescs = {}
+			if altConversionMode then
+				altdescs = string.Explode("\n", self.RemantleNodes[hovbranch][hovquality].SWEPDesc)
+			else
+				local altdesc = self.OrigTab.RemantleDescs
+				altdescs = altdesc and altdesc[hovbranch][hovquality]
+			end
 			for i=1, 5 do
 				dtxt = " "
-				if txt ~= "Standard" and altdesc and altdescs and altdescs[i] then
+				if txt ~= "Standard" and altdescs and altdescs[i] then
 					dtxt = altdescs[i]
 				end
 
@@ -419,7 +453,6 @@ function PANEL:Paint(w, h)
 				self.QualityDesc[i]:SetText(dtxt)
 				self.QualityDesc[i]:SizeToContents()
 			end
-
 			surface.PlaySound("zombiesurvival/ui/misc1.ogg")
 
 			self.Top:SetAlpha(0)
@@ -435,6 +468,32 @@ function PANEL:Paint(w, h)
 
 	return true
 end
+
+net.Receive("zs_remantlealtformconf", function()
+	if not (GAMEMODE.RemantlerInterface and GAMEMODE.RemantlerInterface:IsValid() and hovquality and hovbranch) then return end
+
+	local ri = GAMEMODE.RemantlerInterface
+	local path = ri.RemantlePath
+	local wepclass = ri.m_WepClass
+	local lastwep = weapons.Get(wepclass)
+	if not lastwep then return end
+	GAMEMODE.GunTab = weapons.Get(lastwep.Alternate)
+	local gtbl = GAMEMODE.GunTab
+
+	ri.m_ContentsLabel:SetText(gtbl.PrintName)
+	ri.m_ContentsLabel:SizeToContents()
+	ri.m_ContentsLabel:CenterHorizontal()
+
+	local retscrap = GAMEMODE:GetDismantleScrap(gtbl)
+	local disscraptxt = gtbl.NoDismantle and "Cannot Dismantle" or "Dismantle for " .. retscrap .. " Scrap"
+
+	ri.m_Dismantle:SetText(disscraptxt)
+	ri.m_Dismantle:SizeToContents()
+	ri.m_Dismantle:CenterHorizontal()
+
+	ri.m_DisaButton:SetDisabled(gtbl.NoDismantle)
+	ri.m_DisaButton:SetTextColor(gtbl.NoDismantle and COLOR_DARKGRAY or COLOR_WHITE)
+end)
 
 net.Receive("zs_remantleconf", function()
 	if not (GAMEMODE.RemantlerInterface and GAMEMODE.RemantlerInterface:IsValid() and hovquality and hovbranch) then return end
@@ -477,18 +536,29 @@ function PANEL:OnMousePressed(mc)
 		local current = self.RemantleNodes[hovbranch][hovquality]
 		local prev = self.RemantleNodes[hovbranch][hovquality - 1] or hovquality == 1 and self.RemantleNodes[0][0]
 		if cqua and hovquality > cqua and prev and prev.Unlocked and not current.Locked then
-
-			local scost = GAMEMODE:GetUpgradeScrap(self.GunTab, hovquality)
-			if MySelf:GetAmmoCount("scrap") >= scost then
-				GAMEMODE.RemantlerInterface.BranchCache = hovbranch
-				RunConsoleCommand("zs_upgrade", hovbranch ~= 0 and hovbranch)
-
-				return
+			if current.AltConvert and gtbl.Alternate then
+				altForm = weapons.Get(gtbl.Alternate)
+				if altForm then
+					RunConsoleCommand("zs_upgrade_altform")
+					local pan = GAMEMODE.RemantlerInterface
+					if pan and pan:IsValid() and pan:IsVisible() then
+						pan:SetVisible(false)
+					end
+					return
+				end
 			else
-				GAMEMODE:CenterNotify(COLOR_RED, "You need enough scrap to upgrade this weapon!")
-				surface.PlaySound("buttons/button8.wav")
+				local scost = GAMEMODE:GetUpgradeScrap(self.GunTab, hovquality)
+				if MySelf:GetAmmoCount("scrap") >= scost then
+					GAMEMODE.RemantlerInterface.BranchCache = hovbranch
+					RunConsoleCommand("zs_upgrade", hovbranch ~= 0 and hovbranch)
 
-				return
+					return
+				else
+					GAMEMODE:CenterNotify(COLOR_RED, "You need enough scrap to upgrade this weapon!")
+					surface.PlaySound("buttons/button8.wav")
+
+					return
+				end
 			end
 		else
 			GAMEMODE:CenterNotify(COLOR_RED, "You must upgrade your weapon to the correct quality first!")
@@ -537,7 +607,7 @@ function GM:OpenRemantlerMenu(remantler)
 	end
 
 	local gtbl = self.GunTab
-	if not SelectedInv() and not (gtbl.AllowQualityWeapons or gtbl.PermitDismantle) then
+	if not SelectedInv() and not (gtbl.AllowQualityWeapons or gtbl.PermitDismantle or gtbl.Alternate) then
 		frame.m_WepClass, gtbl = nil, nil
 	elseif SelectedInv() and ((gtbl.PermitDismantle ~= nil and not gtbl.PermitDismantle) or (self:GetInventoryItemType(mytarget) ~= INVCAT_TRINKETS)) then
 		frame.m_WepClass, gtbl = nil, nil
@@ -605,11 +675,18 @@ function GM:OpenRemantlerMenu(remantler)
 	ammoframe:SetPaintBackground(true)
 	frame.m_AmmoFrame = ammoframe
 
-	local subpropertysheet
-	for frameindex = 0, 1 do
-		local curframe = frameindex == 0 and trinketsframe or ammoframe
+	local othersframe = vgui.Create("DPanel")
+	sheet = remprop:AddSheet("Other", othersframe, GAMEMODE.ItemCategoryIcons[ITEMCAT_OTHER], false, false)
+	sheet.Panel:SetPos(0, tabhei + 2)
+	othersframe:SetSize(wid - 8, boty - topy - 8 - topspace:GetTall())
+	othersframe:SetPaintBackground(false)
+	frame.OthersFrame = othersframe
 
+	local subpropertysheet
+	for frameindex = 0, 2 do
+		local curframe = nil
 		if frameindex == 0 then
+			curframe = trinketsframe
 			local tabpane = vgui.Create("DPanel", curframe)
 			--tabpane.Paint = function() end
 			tabpane.Grids = {}
@@ -660,7 +737,8 @@ function GM:OpenRemantlerMenu(remantler)
 					self:AddShopItem(tabpane.Grids[tab.SubCategory], j, tab, false, true)
 				end
 			end
-		else
+		elseif frameindex == 1 then
+			curframe = ammoframe
 			local list = vgui.Create("DGrid", curframe)
 			list:SetPos(0, 0)
 			list:SetSize(curframe:GetWide() - 312, curframe:GetTall())
@@ -673,8 +751,38 @@ function GM:OpenRemantlerMenu(remantler)
 			list:SetTall(ammoframe:GetTall() - 32)
 
 			for j, tab in ipairs(GAMEMODE.Items) do
-				if tab.PointShop and tab.Category == ITEMCAT_AMMO or tab.CanMakeFromScrap then
+				if tab.PointShop and tab.Category == ITEMCAT_AMMO and not tab.PreventMakeFromScrap then
 					self:AddShopItem(list, j, tab, false, true)
+				end
+			end
+		elseif frameindex == 2 then
+			curframe = othersframe
+			local tabpane = vgui.Create("DPanel", curframe)
+			--tabpane.Paint = function() end
+			tabpane.Grids = {}
+			tabpane.Buttons = {}
+			tabpane:SetSize(curframe:GetWide(), curframe:GetTall())
+
+			local offset = 64 * screenscale
+			local itemframe = vgui.Create("DScrollPanel", tabpane)
+			itemframe:SetSize(curframe:GetWide(), curframe:GetTall() - 32)
+			itemframe:SetPos(0, 0)
+
+			local mkgrid = function()
+				local list = vgui.Create("DGrid", itemframe)
+				list:SetPos(0, 0)
+				list:SetSize(curframe:GetWide() - 312, curframe:GetTall())
+				list:SetCols(2)
+				list:SetColWide(280 * screenscale)
+				list:SetRowHeight(100 * screenscale)
+
+				return list
+			end
+			tabpane.Grid = mkgrid()
+			
+			for j, tab in ipairs(GAMEMODE.Items) do
+				if tab.PointShop and tab.Category != ITEMCAT_AMMO and tab.Category != ITEMCAT_TRINKETS and (tab.CanMakeFromScrap or tab.OnlyFromScrap) then
+					self:AddShopItem(tabpane.Grid, j, tab, false, true)
 				end
 			end
 		end
@@ -682,6 +790,7 @@ function GM:OpenRemantlerMenu(remantler)
 	frame.m_SubProp = subpropertysheet
 
 	self:CreateItemInfoViewer(trinketsframe, frame, topspace, bottomspace, MENU_REMANTLER)
+	self:CreateItemInfoViewer(othersframe, frame, topspace, bottomspace, MENU_REMANTLER)
 
 	local scroller = remprop:GetChildren()[1]
 	local dragbase = scroller:GetChildren()[1]

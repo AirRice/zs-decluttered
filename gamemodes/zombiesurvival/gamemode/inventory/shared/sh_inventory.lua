@@ -60,6 +60,8 @@ GM:AddWeaponBreakdownRecipe("weapon_zs_onyx",								"comp_precision")
 GM:AddWeaponBreakdownRecipe("weapon_zs_minelayer",							"comp_launcher")
 GM:AddWeaponBreakdownRecipe("weapon_zs_fracture",							"comp_linearactuator")
 GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
+GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret",							"comp_turretassembly")
+GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret_buckshot",					"comp_turretassembly")
 
 -- Assemblies (Assembly, Component, Weapon)
 GM.Assemblies["weapon_zs_waraxe"] 								= {"comp_modbarrel", 		"weapon_zs_glock3"}
@@ -90,6 +92,10 @@ GM.Assemblies["trinket_electromagnet"]							= {"comp_electrobattery",	"trinket_
 GM.Assemblies["trinket_projguide"]								= {"comp_cpuparts",			"trinket_targetingvisori"}
 GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
 GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
+GM.Assemblies["weapon_zs_rollermine"]							= {"trinket_pulseampi", 	"weapon_zs_manhack"}
+GM.Assemblies["weapon_zs_zapper_arc"]							= {"comp_contaecore", 		"weapon_zs_zapper"}
+GM.Assemblies["weapon_zs_gunturret_assault"]					= {"comp_turretassembly", 	"weapon_zs_akbar"}
+GM.Assemblies["weapon_zs_gunturret_rocket"]						= {"comp_turretassembly", 	"weapon_zs_hyena"}
 
 GM:AddInventoryItemData("comp_modbarrel",		"Modular Barrel",			"A modular barrel suited for pairing up with another gun barrel.",								"models/props_c17/trappropeller_lever.mdl")
 GM:AddInventoryItemData("comp_burstmech",		"Burst Fire Mechanism",		"A mechanism that could be used to make a gun burst fire.",										"models/props_c17/trappropeller_lever.mdl")
@@ -120,6 +126,7 @@ GM:AddInventoryItemData("comp_linearactuator",	"Linear Actuator",			"A linear ac
 GM:AddInventoryItemData("comp_pulsespool",		"Pulse Spool",				"Used to inject more pulse power to a system. Could be used to stabilise something.",			"models/Items/combine_rifle_cartridge01.mdl")
 GM:AddInventoryItemData("comp_flak",			"Flak Chamber",				"An internal chamber for projecting heated scrap.",												"models/weapons/w_rocket_launcher.mdl")
 GM:AddInventoryItemData("comp_precision",		"Precision Chassis",		"A suite setup for rewarding precise shots on moving targets.",									"models/Items/combine_rifle_cartridge01.mdl")
+GM:AddInventoryItemData("comp_turretassembly",	"Turret Assembly",			"The automated targeting and scanning mechanisms from a turret.",								"models/combine_turrets/floor_turret_gib1.mdl")
 
 -- Trinkets
 local trinket, description, trinketwep

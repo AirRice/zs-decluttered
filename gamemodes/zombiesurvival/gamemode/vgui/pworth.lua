@@ -19,7 +19,7 @@ end)
 
 local ExtraStartingWorth = 0
 local function GetStartingWorth()
-	return GAMEMODE.StartingWorth + ExtraStartingWorth
+	return GAMEMODE.StartingWorth -- + ExtraStartingWorth
 end
 
 net.Receive("zs_extrastartingworth", function(len)
@@ -505,8 +505,6 @@ function PANEL:SetWorthID(id)
 	self.Signature = tab.Signature
 	self.Price = tab.Price
 
-	local missing_skill = tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement)
-
 	local nottrinkets = tab.Category ~= ITEMCAT_TRINKETS
 	self:SetTall((nottrinkets and 100 or 60) * screenscale)
 
@@ -514,7 +512,7 @@ function PANEL:SetWorthID(id)
 		self.ModelFrame:SetVisible(true)
 		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and "weapon_zs_craftables" or tab.SWEP or tab.Model)
 		if kitbl then
-			GAMEMODE:AttachKillicon(kitbl, self, self.ModelFrame, tab.Category == ITEMCAT_AMMO, missing_skill)
+			GAMEMODE:AttachKillicon(kitbl, self, self.ModelFrame, tab.Category == ITEMCAT_AMMO)
 		elseif tab.Model then
 			local mdlpanel = vgui.Create("DModelPanel", self.ModelFrame)
 			mdlpanel:SetSize(self.ModelFrame:GetSize())
@@ -532,10 +530,7 @@ function PANEL:SetWorthID(id)
 		self.ItemCounter:SetVisible(false)
 	end
 
-	if missing_skill then
-		self.PriceLabel:SetTextColor(COLOR_RED)
-		self.PriceLabel:SetText(GAMEMODE.Skills[tab.SkillRequirement].Name)
-	elseif tab.Price then
+	if tab.Price then
 		self.PriceLabel:SetText(tostring(tab.Price).." Worth")
 	else
 		self.PriceLabel:SetText("")
@@ -548,7 +543,7 @@ function PANEL:SetWorthID(id)
 
 	self:SetTooltip(tab.Description)
 
-	if missing_skill or tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
+	if tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
 		self:SetAlpha(120)
 		self.Locked = true
 	else
@@ -607,9 +602,6 @@ function PANEL:DoClick(silent, force)
 			surface.PlaySound("buttons/button18.wav")
 		end
 		remainingworth = remainingworth + tab.Price
-	elseif tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement) then
-		surface.PlaySound("buttons/button8.wav")
-		return
 	else
 		if remainingworth < tab.Price then
 			if not force then

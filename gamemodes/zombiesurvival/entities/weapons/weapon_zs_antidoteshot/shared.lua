@@ -39,6 +39,8 @@ SWEP.IronSightsAng = Vector(-0.15, -1, 2)
 
 SWEP.AllowQualityWeapons = true
 
+SWEP.Alternate = "weapon_zs_strengthshot"
+
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 5)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_PROJECTILE_VELOCITY, 50)
 

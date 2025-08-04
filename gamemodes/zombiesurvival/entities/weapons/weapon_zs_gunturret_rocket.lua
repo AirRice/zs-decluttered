@@ -17,4 +17,6 @@ SWEP.Primary.Ammo = "turret_rocket"
 
 SWEP.Tier = 4
 
+SWEP.Alternate = "weapon_zs_gunturret_assault"
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_TURRET_SPREAD, -0.45)

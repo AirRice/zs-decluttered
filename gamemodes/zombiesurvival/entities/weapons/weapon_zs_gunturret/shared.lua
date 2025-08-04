@@ -34,6 +34,8 @@ SWEP.TurretSpread = 2
 SWEP.NoDeploySpeedChange = true
 SWEP.AllowQualityWeapons = true
 
+SWEP.Alternate = "weapon_zs_gunturret_buckshot"
+
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_TURRET_SPREAD, -0.4)
 
 function SWEP:Initialize()

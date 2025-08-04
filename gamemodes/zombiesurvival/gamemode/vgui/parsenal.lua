@@ -225,11 +225,19 @@ end
 
 local function ItemPanelDoClick(self)
 	local shoptbl = self.ShopTabl
-	local viewer = self.NoPoints and GAMEMODE.RemantlerInterface.TrinketsFrame.Viewer or GAMEMODE.ArsenalInterface.Viewer
+	local viewer = nil
+	if self.NoPoints then
+		if shoptbl.Category ~= ITEMCAT_TRINKETS and shoptbl.Category ~= ITEMCAT_AMMO then
+			viewer = GAMEMODE.RemantlerInterface.OthersFrame.Viewer
+		else
+			viewer = GAMEMODE.RemantlerInterface.TrinketsFrame.Viewer
+		end
+	else 
+		viewer = GAMEMODE.ArsenalInterface.Viewer
+	end
 
 	if not shoptbl then return end
 	local sweptable = GAMEMODE.ZSInventoryItemData[shoptbl.SWEP] or weapons.Get(shoptbl.SWEP)
-
 	if not sweptable or GAMEMODE.AlwaysQuickBuy then
 		RunConsoleCommand("zs_pointsshopbuy", self.ID, self.NoPoints and "scrap")
 		return
@@ -285,7 +293,7 @@ end
 local function ArsenalMenuThink(self)
 end
 
-function GM:AttachKillicon(kitbl, itempan, mdlframe, ammo, missing_skill)
+function GM:AttachKillicon(kitbl, itempan, mdlframe, ammo)
 	local function imgAdj(img, maximgx, maximgy)
 		img:SizeToContents()
 		local iwidth, height = img:GetSize()
@@ -306,7 +314,6 @@ function GM:AttachKillicon(kitbl, itempan, mdlframe, ammo, missing_skill)
 		if kitbl[2] then
 			img:SetImageColor(kitbl[2])
 		end
-		if missing_skill then img:SetAlpha(50) end
 
 		imgAdj(img, mdlframe:GetWide() - 6, mdlframe:GetTall() - 3)
 		if ammo then img:SetSize(img:GetWide() + 3, img:GetTall() + 3) end
@@ -324,23 +331,13 @@ function GM:AttachKillicon(kitbl, itempan, mdlframe, ammo, missing_skill)
 		label:Dock(FILL)
 		itempan.m_Icon = label
 	end
-
-	if missing_skill then
-		local img = vgui.Create("DImage", mdlframe)
-		img:SetImage("zombiesurvival/padlock.png")
-		img:SetImageColor(Color(255, 30, 30))
-		imgAdj(img, mdlframe:GetWide(), mdlframe:GetTall())
-
-		img:Center()
-		itempan.m_Padlock = img
-	end
 end
 
 function GM:AddShopItem(list, i, tab, issub, nopointshop)
+	if tab.OnlyFromScrap and not nopointshop then return end
+	
 	local screenscale = BetterScreenScale()
-
 	local nottrinkets = tab.Category ~= ITEMCAT_TRINKETS
-	local missing_skill = tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement)
 	local wid = 280
 
 	local itempan = vgui.Create("DButton")
@@ -368,7 +365,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 
 		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and "weapon_zs_craftables" or tab.SWEP or tab.Model)
 		if kitbl then
-			self:AttachKillicon(kitbl, itempan, mdlframe, tab.Category == ITEMCAT_AMMO, missing_skill)
+			self:AttachKillicon(kitbl, itempan, mdlframe, tab.Category == ITEMCAT_AMMO)
 		elseif tab.Model then
 			if tab.Model then
 				local mdlpanel = vgui.Create("DModelPanel", mdlframe)
@@ -389,25 +386,17 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 	local name = tab.Name or ""
 	local namelab = EasyLabel(itempan, name, "ZSHUDFontSmaller", COLOR_WHITE)
 	namelab:SetPos(12 * screenscale, itempan:GetTall() * (nottrinkets and 0.8 or 0.7) - namelab:GetTall() * 0.5)
-	if missing_skill then
-		namelab:SetAlpha(30)
-	end
 	itempan.NameLabel = namelab
 
 	local alignri = (issub and (320 + 32) or (nopointshop and 32 or 20)) * screenscale
 
 	local pricelabel = EasyLabel(itempan, "", "ZSHUDFontTiny")
-	if missing_skill then
-		pricelabel:SetTextColor(COLOR_RED)
-		pricelabel:SetText(GAMEMODE.Skills[tab.SkillRequirement].Name)
-	else
-		local points = math.floor(tab.Price * (MySelf.ArsenalDiscount or 1))
-		local price = tostring(points)
-		if nopointshop then
-			price = tostring(math.ceil(self:PointsToScrap(tab.Price)))
-		end
-		pricelabel:SetText(price..(nopointshop and " Scrap" or " Points"))
+	local points = math.floor(tab.Price * (MySelf.ArsenalDiscount or 1))
+	local price = tostring(points)
+	if nopointshop then
+		price = tostring(math.ceil(self:PointsToScrap(tab.Price)))
 	end
+	pricelabel:SetText(price..(nopointshop and " Scrap" or " Points"))
 	pricelabel:SizeToContents()
 	pricelabel:AlignRight(alignri)
 
@@ -423,7 +412,7 @@ function GM:AddShopItem(list, i, tab, issub, nopointshop)
 		itempan:GetTall() * (nottrinkets and 0.15 or 0.3) - pricelabel:GetTall() * 0.5
 	)
 
-	if missing_skill or tab.NoClassicMode and isclassic or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
+	if tab.NoClassicMode and isclassic or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
 		itempan:SetAlpha(160)
 	end
 
