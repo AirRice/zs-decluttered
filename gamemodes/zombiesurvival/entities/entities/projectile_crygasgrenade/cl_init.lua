@@ -21,12 +21,14 @@ function ENT:Draw()
 	local particle
 	local pos = self:GetPos()
 	local emitter = ParticleEmitter(pos)
+	local owner = self:GetOwner()
+	local clr = (owner and owner.CloudRadius) and owner.CloudRadius or 1
 	emitter:SetNearClip(12, 16)
 
 	local vel = Vector(0, 0, 170)
 	for i=1, 7 do
 		local angler = AngleRand()
-		local dist = math.Rand(0, self.Radius)
+		local dist = math.Rand(0, self.Radius * clr)
 		particle = emitter:Add(math.random(2) == 1 and "particle/smokesprites_0003" or "particle/smokestack", pos)
 		particle:SetColor(70, 120, 150)
 		particle:SetVelocity(vel * math.Rand(0.5, 1) + Vector(math.cos(angler.y) * dist, math.sin(angler.y) * dist, 0)/1.21)

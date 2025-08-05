@@ -24,6 +24,8 @@ end
 function ENT:Draw()
 	local time = CurTime()
 	local pos = self:GetPos()
+	local owner = self:GetOwner()
+	local clr = (owner and owner.CloudRadius) and owner.CloudRadius or 1
 
 	local dlight = DynamicLight(self:EntIndex())
 	if dlight then
@@ -32,8 +34,8 @@ function ENT:Draw()
 		dlight.g = 190
 		dlight.b = 30
 		dlight.Brightness = 8
-		dlight.Size = self.Radius / 2
-		dlight.Decay = self.Radius * 2
+		dlight.Size = self.Radius * clr / 2
+		dlight.Decay = self.Radius * clr * 2
 		dlight.DieTime = time + 0.75
 	end
 
@@ -47,7 +49,7 @@ function ENT:Draw()
 
 	for i=1, 75 do
 		local angler = AngleRand()
-		local dist = math.Rand(0, self.Radius)
+		local dist = math.Rand(0, self.Radius * clr)
 		particle = emitter:Add("effects/fire_cloud"..math.random(1, 2), pos + Vector(math.cos(angler.y) * dist, math.sin(angler.y) * dist, 0))
 		particle:SetColor(255, 220, 140)
 		particle:SetDieTime(math.Rand(1.35, 1.7))
