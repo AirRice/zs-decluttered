@@ -46,7 +46,7 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 					owner:CenterNotify(COLOR_RED, translate.Format("frail_healdart_warning", eHitEntity:GetName()))
 					self:EmitSound("buttons/button8.wav", 70, math.random(115,128))
 					self:DoRefund(owner)
-				elseif not (owner:IsSkillActive(SKILL_RECLAIMSOL) and ehithp >= ehitmaxhp) then
+				else
 					local status = eHitEntity:GiveStatus(alt and "strengthdartboost" or "medrifledefboost", (alt and 1 or 2) * (self.BuffDuration or 10))
 					status.Applier = owner
 

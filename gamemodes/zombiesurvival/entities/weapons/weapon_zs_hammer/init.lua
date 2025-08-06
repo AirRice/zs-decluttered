@@ -68,7 +68,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	end
 
 	if hitent:IsNailed() then
-		if owner:IsSkillActive(SKILL_BARRICADEEXPERT) then
+		if owner:HasTrinket("blueprintsii") then
 			hitent.ReinforceEnd = CurTime() + 2
 			hitent.ReinforceApplier = owner
 		end

@@ -6,7 +6,7 @@ function ENT:FireTurret(src, dir)
 	if self:GetNextFire() <= CurTime() then
 		local curammo = self:GetAmmo()
 		local owner = self:GetObjectOwner()
-		local twinvolley = self:GetManualControl() and owner:IsSkillActive(SKILL_TWINVOLLEY)
+		local twinvolley = self:GetManualControl() and owner:HasTrinket("mrsiallocator")
 		if curammo > (twinvolley and 1 or 0) then
 			self:SetNextFire(CurTime() + self.FireDelay * (twinvolley and 1.5 or 1))
 			self:SetAmmo(curammo - (twinvolley and 2 or 1))

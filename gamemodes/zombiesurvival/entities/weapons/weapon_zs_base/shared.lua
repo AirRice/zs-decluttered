@@ -160,12 +160,13 @@ function SWEP:GetCone()
 	local basecone = self.ConeMin
 	local conedelta = self.ConeMax - basecone
 
-	local orphic = not owner.Orphic and 1 or self:GetIronsights() and 0.9 or 1.1
+	-- SKILL_ORPHICFOCUS is now default
+	local ironsightsmul = self:GetIronsights() and 0.9 or 1
 	local tiervalid = (self.Tier or 1) <= 3
 	local spreadmul = (owner.AimSpreadMul or 1) - ((tiervalid and owner:HasTrinket("refinedsub")) and 0.27 or 0)
 
 	if owner.TrueWooism then
-		return (basecone + conedelta * 0.5 ^ self.ConeRamp) * spreadmul * orphic
+		return (basecone + conedelta * 0.5 ^ self.ConeRamp) * spreadmul * ironsightsmul
 	end
 
 	if not owner:OnGround() or self.ConeMax == basecone then return self.ConeMax end
@@ -179,13 +180,13 @@ function SWEP:GetCone()
 	if not owner:Crouching() then multiplier = multiplier + 0.25 end
 	if not self:GetIronsights() then multiplier = multiplier + ironsightmul end
 
-	return (basecone + conedelta * (self.FixedAccuracy and 0.6 or multiplier) ^ self.ConeRamp) * spreadmul * orphic
+	return (basecone + conedelta * (self.FixedAccuracy and 0.6 or multiplier) ^ self.ConeRamp) * spreadmul * ironsightsmul
 end
 
 function SWEP:GetWalkSpeed()
 	local owner = self:GetOwner()
 	if self:GetIronsights() then
-		return math.min(self.WalkSpeed, math.max(90, self.WalkSpeed * (owner.Wooism and 0.75 or 0.5)))
+		return math.min(self.WalkSpeed, math.max(90, self.WalkSpeed * (owner.NoIronSightsSlow and 0.75 or 0.5)))
 	end
 
 	return self.WalkSpeed

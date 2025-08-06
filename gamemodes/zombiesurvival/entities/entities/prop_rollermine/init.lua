@@ -59,7 +59,7 @@ function ENT:SetupPlayerSkills()
 		newmaxhealth = newmaxhealth * owner:GetTotalAdditiveModifier("ControllableHealthMul")
 		maxspeed = maxspeed * (owner.ControllableSpeedMul or 1)
 		acceleration = acceleration * (owner.ControllableHandlingMul or 1)
-		loaded = owner:IsSkillActive(SKILL_LOADEDHULL)
+		loaded = owner:HasTrinket("loadedhull")
 	end
 
 	newmaxhealth = math.ceil(newmaxhealth)
@@ -226,7 +226,7 @@ function ENT:Destroy()
 	util.Effect("sparks", effectdata)
 
 	local owner = self:GetObjectOwner()
-	if owner:IsValidLivingHuman() and owner:IsSkillActive(SKILL_LOADEDHULL) then
+	if owner:IsValidLivingHuman() and owner:HasTrinket("loadedhull") then
 		effectdata = EffectData()
 			effectdata:SetOrigin(epicenter)
 			effectdata:SetNormal(Vector(0, 0, -1))

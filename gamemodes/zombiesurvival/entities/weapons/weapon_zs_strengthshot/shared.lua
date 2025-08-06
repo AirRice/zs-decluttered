@@ -79,7 +79,7 @@ function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay()/2)
 
 	local owner = self:GetOwner()
-	if not owner:IsSkillActive(SKILL_SMARTTARGETING) then return end
+	if not owner:HasTrinket("automedtarget") then return end
 
 	local targetent = owner:CompensatedMeleeTrace(2048, 2, nil, nil, true).Entity
 	local locked = targetent and targetent:IsValidLivingHuman()

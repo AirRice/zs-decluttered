@@ -506,7 +506,7 @@ end
 function meta:SetSpeed(speed)
 	if not speed then speed = 200 end
 
-	local runspeed = self:GetBloodArmor() > 0 and self:IsSkillActive(SKILL_CARDIOTONIC) and speed + 40 or speed
+	local runspeed = self:GetBloodArmor() > 0 and self:HasTrinket("cardiotonic") and speed + 40 or speed
 
 	self:SetWalkSpeed(speed)
 	self:SetRunSpeed(runspeed)
@@ -546,7 +546,7 @@ function meta:ResetSpeed(noset, health)
 		speed = speed + self.SkillSpeedAdd
 	end
 
-	if self:IsSkillActive(SKILL_LIGHTWEIGHT) and wep:IsValid() and wep.IsMelee then
+	if self:HasTrinket("sharpkit") and wep:IsValid() and wep.IsMelee then
 		speed = speed + 6
 	end
 

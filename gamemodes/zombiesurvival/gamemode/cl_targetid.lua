@@ -59,7 +59,7 @@ function GM:DrawTargetID(ent, fade)
 			end
 			if phant >= 1 then
 				util.ColorCopy(COLOR_MIDGRAY, colTemp)
-				draw.SimpleTextBlur("(BLOODLUST)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur("(BIOBUFFER)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 		end

@@ -1266,7 +1266,7 @@ function GM:Think()
 				pl:PointCashOut(pl.LastDamageDealtPos or pl:GetPos(), FM_NONE)
 			end
 
-			if P_GetPhantomHealth(pl) > 0 and P_Alive(pl) and pl:IsSkillActive(SKILL_BLOODLUST) then
+			if P_GetPhantomHealth(pl) > 0 and P_Alive(pl) then
 				pl:SetPhantomHealth(math_max(0, P_GetPhantomHealth(pl) - 5 * FrameTime()))
 			end
 		end
@@ -1309,7 +1309,7 @@ function GM:Think()
 
 				local healmax = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 
-				if pl:IsSkillActive(SKILL_REGENERATOR) and time >= pl.NextRegenerate and pl:Health() < math.min(healmax, pl:GetMaxHealth() * 0.6) then
+				if pl:HasTrinket("regenenzyme") and time >= pl.NextRegenerate and pl:Health() < math.min(healmax, pl:GetMaxHealth() * 0.6) then
 					pl.NextRegenerate = time + 6
 					pl:SetHealth(math.min(healmax, pl:Health() + 1))
 				end
@@ -1319,21 +1319,14 @@ function GM:Think()
 					pl:SetHealth(math.min(healmax, pl:Health() + 1))
 				end
 
-				if pl:IsSkillActive(SKILL_BLOODARMOR) and pl.MaxBloodArmor > 0 and time >= pl.NextBloodArmorRegen and pl:GetBloodArmor() < pl.MaxBloodArmor then
+				if pl:HasTrinket("hemospoofer") and pl.MaxBloodArmor > 0 and time >= pl.NextBloodArmorRegen and pl:GetBloodArmor() < pl.MaxBloodArmor then
 					pl.NextBloodArmorRegen = time + 8
 					pl:SetBloodArmor(math.min(pl.MaxBloodArmor, pl:GetBloodArmor() + (1 * pl.BloodarmorGainMul)))
 				end
 
-				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and pl:IsSkillActive(SKILL_CARDIOTONIC) then
+				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and pl:HasTrinket("cardiotonic") then
 					if pl:GetBloodArmor() > 0 then
 						pl:SetBloodArmor(pl:GetBloodArmor() - 1)
-						if pl:GetBloodArmor() == 0 and pl:IsSkillActive(SKILL_BLOODLETTER) then
-							local bleed = pl:GiveStatus("bleed")
-							if bleed and bleed:IsValid() then
-								bleed:AddDamage(5)
-								bleed.Damager = pl
-							end
-						end
 					else
 						pl:ResetSpeed()
 					end
@@ -1372,8 +1365,8 @@ function GM:Think()
 					pl.OldWeaponToReload = nil
 				end
 
-				if pl:IsSkillActive(SKILL_STOWAGE) and self:GetWave() > 0 and time > (pl.NextResupplyUse or 0) then
-					local stockpiling = pl:IsSkillActive(SKILL_STOCKPILE)
+				if pl:HasTrinket("stockpilesys") and self:GetWave() > 0 and time > (pl.NextResupplyUse or 0) then
+					local stockpiling = pl:HasTrinket("bulkstocker")
 
 					pl.NextResupplyUse = time + self.ResupplyBoxCooldown * (pl.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
 					pl.StowageCaches = (pl.StowageCaches or 0) + (stockpiling and 2 or 1)
@@ -3040,6 +3033,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	local dmg = dmginfo:GetDamage()
 	if dmg > 0 then
 		local holder, status = ent:GetHolder()
+		-- TODO: Deal with Taut
 		if holder and not holder.BuffTaut then status:Remove() end
 
 		local dmgpos = dmginfo:GetDamagePosition()
@@ -3366,9 +3360,7 @@ function GM:WeaponDeployed(pl, wep)
 	if speed < pl:GetMaxSpeed() then
 		pl:SetSpeed(speed)
 	elseif pl:GetMaxSpeed() < speed then
-		local unbound = pl:IsSkillActive(SKILL_UNBOUND) and 0.4 or 1
-
-		timer.Create(timername, (0.333 / (pl.DeploySpeedMultiplier or 1)) * unbound, 1, function() if pl:IsValid() then pl:SetHumanSpeed(speed) end end)
+		timer.Create(timername, 0.333 / (pl.DeploySpeedMultiplier or 1), 1, function() if pl:IsValid() then pl:SetHumanSpeed(speed) end end)
 	end
 end
 
@@ -3387,16 +3379,9 @@ function GM:KeyPress(pl, key)
 			if pl:Team() == TEAM_HUMAN then
 				pl:DispatchAltUse()
 
-				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:IsSkillActive(SKILL_CARDIOTONIC) and pl:GetBloodArmor() > 0 then
+				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:HasTrinket("cardiotonic") and pl:GetBloodArmor() > 0 then
 					pl:SetBloodArmor(pl:GetBloodArmor() - 1)
 					pl:EmitSound("player/suit_sprint.wav", 50)
-					if pl:GetBloodArmor() == 0 and pl:IsSkillActive(SKILL_BLOODLETTER) then
-						local bleed = pl:GiveStatus("bleed")
-						if bleed and bleed:IsValid() then
-							bleed:AddDamage(5)
-							bleed.Damager = pl
-						end
-					end
 					pl:ResetSpeed()
 				end
 			elseif pl:Team() == TEAM_UNDEAD then
@@ -3589,7 +3574,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 			end
 		end
 
-		if #self.Food > 0 and pl.ChefMarkTime and pl.ChefMarkTime > CurTime() and pl.ChefMarkOwner == attacker then
+		if #self.Food > 0 and pl.ChefMarkTime and pl.ChefMarkTime > CurTime() and pl.ChefMarkOwner == attacker and math.random(9) == 1 then
 			local rfood = self.Food[math.random(#self.Food)]
 			if not attacker:HasWeapon(rfood) then
 				attacker:Give(rfood)
