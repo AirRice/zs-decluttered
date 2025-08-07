@@ -63,8 +63,6 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 						net.WriteEntity(eHitEntity)
 						net.WriteString(txt)
 					net.Send(owner)
-				else
-					self:DoRefund(owner)
 				end
 			end
 		else

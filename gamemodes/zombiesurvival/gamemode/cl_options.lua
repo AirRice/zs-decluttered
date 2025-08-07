@@ -231,6 +231,11 @@ cvars.AddChangeCallback("zs_weaponhudmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE.WeaponHUDMode = tonumber(newvalue) or 0
 end)
 
+GM.ItemLocatorMode = CreateClientConVar("zs_itemlocatormode", "0", true, false):GetInt()
+cvars.AddChangeCallback("zs_itemlocatormode", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ItemLocatorMode = tonumber(newvalue) or 0
+end)
+
 GM.HealthTargetDisplay = CreateClientConVar("zs_healthtargetdisplay", "0", true, false):GetInt()
 cvars.AddChangeCallback("zs_healthtargetdisplay", function(cvar, oldvalue, newvalue)
 	GAMEMODE.HealthTargetDisplay = tonumber(newvalue) or 0

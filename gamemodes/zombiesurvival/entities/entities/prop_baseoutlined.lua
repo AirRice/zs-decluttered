@@ -82,7 +82,7 @@ function ENT:DrawTranslucent()
 
 	render.SetBlend(0.1 + 0.05 * mul)
 	render.ModelMaterialOverride(matWhite)
-	if MySelf:IsSkillActive(SKILL_SCAVENGER) then
+	if (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_DROPPED or self.ItemLocatorMode == LOCATOR_ALL)) then
 		cam.IgnoreZ(true)
 	end
 	self:DrawPreciseModel(0.1 + 0.05 * mul, qcol)

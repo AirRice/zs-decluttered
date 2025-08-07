@@ -2,6 +2,14 @@ INVCAT_TRINKETS = 1
 INVCAT_COMPONENTS = 2
 INVCAT_CONSUMABLES = 3
 
+-- Item Locator
+LOCATOR_NONE = 0
+LOCATOR_DROPPED = 1
+LOCATOR_ARSENAL = 2
+LOCATOR_RESUPPLY = 3
+LOCATOR_REMANTLER = 4
+LOCATOR_ALL = 5
+
 GM.ZSInventoryItemData = {}
 GM.ZSInventoryCategories = {
 	[INVCAT_TRINKETS] = "Trinkets",
@@ -228,7 +236,7 @@ GM:AddSkillModifier(trinket, SKILLMOD_BLOODARMOR, 10)
 trinketwep.PermitDismantle = true
 
 -- SKILL_IRONBLOOD
-GM:AddTrinket("Subdermal Hemolattice", "ironblood" false, hpveles, hpweles, 3, "+25% blood armor damage absorption\nAdditional +25% blood armor damage absorption when health is 50% or less")
+GM:AddTrinket("Subdermal Hemolattice", "ironblood", false, hpveles, hpweles, 3, "+25% blood armor damage absorption\nAdditional +25% blood armor damage absorption when health is 50% or less")
 
 -- SKILL_BLOODLETTER (but not the bleeding part)
 trinket = GM:AddTrinket("Blood Bank", "cardpackageii", false, hpveles, hpweles, 4, "+30 maximum blood armor\n+100% blood armor gained from all sources")
@@ -562,7 +570,7 @@ end)
 GM:AddTrinket("Meal Tickets", "mealticket", false, supveles, supweles, nil, "25% chance to gain a food item when resupplying")
 
 --SKILL_ACUITY, SKILL_VISION, SKILL_INSIGHT, SKILL_SCAVENGER
-GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nVisibility of each can be toggled")
+GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nCycle through each item's visibility by left clicking while holding the tool")
 
 -- Boss Trinkets
 

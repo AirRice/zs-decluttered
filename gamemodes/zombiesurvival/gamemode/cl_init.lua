@@ -1049,7 +1049,7 @@ function GM:_PostDrawTranslucentRenderables()
 end
 
 function GM:DrawCrateIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_INSIGHT) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_ARSENAL or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
@@ -1085,7 +1085,7 @@ function GM:DrawCrateIndicators()
 end
 
 function GM:DrawResupplyIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_ACUITY) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_RESUPPLY or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
@@ -1123,7 +1123,7 @@ function GM:DrawResupplyIndicators()
 end
 
 function GM:DrawRemantlerIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_VISION) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_REMANTLER or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
