@@ -1026,38 +1026,15 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 	self:AddFrags(wholepoints)
 	self:SetPoints(self:GetPoints() + wholepoints)
 
-	if self.PointsVault then
-		self.PointsVault = self.PointsVault + wholepoints * GAMEMODE.PointSaving
-	end
-
 	if floatingscoreobject then
 		self:FloatingScore(floatingscoreobject, "floatingscore", wholepoints, fmtype or FM_NONE)
 	end
-
-	local xp = wholepoints
-	if GAMEMODE.HumanXPMulti and GAMEMODE.HumanXPMulti >= 0 then
-		xp = xp * GAMEMODE.HumanXPMulti
-		local wholexp = math.floor(xp)
-		local xpremainder = xp - wholexp
-		if xpremainder > 0 then
-			self.XPRemainder = self.XPRemainder + xpremainder
-			local xpcarryover = math.floor(self.XPRemainder)
-			xp = wholexp + xpcarryover
-			self.XPRemainder = self.XPRemainder - xpcarryover
-		end
-	end
-
-	self:AddZSXP(xp * (self.RedeemBonus and 1.15 or 1))
 
 	gamemode.Call("PlayerPointsAdded", self, wholepoints)
 end
 
 function meta:TakePoints(points)
 	self:SetPoints(self:GetPoints() - points)
-
-	if self.PointsVault then
-		self.PointsVault = self.PointsVault - points
-	end
 end
 
 function meta:UpdateAllZombieClasses()
@@ -1249,8 +1226,6 @@ function meta:Redeem(silent, noequip)
 
 	self:ChangeTeam(TEAM_HUMAN)
 	if not GAMEMODE.InitialVolunteers[self:UniqueID()] then
-		self:AddZSXP(50 * (GAMEMODE.ZombieXPMulti or 1))
-		self.RedeemBonus = true
 	end
 	if not noequip then self.m_PreRedeem = true end
 

@@ -60,9 +60,6 @@ include("sh_channel.lua")
 include("sh_weaponquality.lua")
 
 include("noxapi/noxapi.lua")
-
-include("vault/shared.lua")
-
 include("workshopfix.lua")
 
 include_library("perf")

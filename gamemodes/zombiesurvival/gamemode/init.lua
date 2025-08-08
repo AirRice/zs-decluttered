@@ -25,8 +25,6 @@ AddCSLuaFile("sh_sigils.lua")
 AddCSLuaFile("sh_channel.lua")
 AddCSLuaFile("sh_weaponquality.lua")
 
-AddCSLuaFile("vault/shared.lua")
-
 AddCSLuaFile("cl_draw.lua")
 AddCSLuaFile("cl_net.lua")
 AddCSLuaFile("cl_util.lua")
@@ -100,8 +98,6 @@ include("sv_sigils.lua")
 include("sv_concommands.lua")
 
 include("itemstocks/sv_stock.lua")
-
-include("vault/server.lua")
 
 include("skillweb/sv_registry.lua")
 include("skillweb/sv_skillweb.lua")
@@ -1646,7 +1642,6 @@ function GM:PostDoHonorableMentions()
 end
 
 function GM:PostEndRound(winner)
-	self:SaveAllVaults()
 end
 
 -- You can override or hook and return false in case you have your own map change system.
@@ -1932,11 +1927,6 @@ local function EndRoundSetupPlayerVisibility(pl)
 end
 
 function GM:OnPlayerWin(pl)
-	local xp = math.Clamp(#player.GetAll() * 6, 20, 200) * (GAMEMODE.WinXPMulti or 1)
-	if self.ZombieEscape then
-		xp = xp / 4
-	end
-	pl:AddZSXP(xp)
 end
 
 function GM:OnPlayerLose(pl)
@@ -2055,8 +2045,6 @@ end
 
 function GM:PlayerReady(pl)
 	gamemode.Call("PlayerReadyRound", pl)
-
-	self:PlayerReadyVault(pl)
 
 	pl.PlayerReady = true
 end
@@ -2189,8 +2177,6 @@ function GM:PlayerInitialSpawn(pl)
 	pl.m_LastWaveStartSpawn = 0
 	pl.m_LastGasHeal = 0
 
-	self:InitializeVault(pl)
-
 	gamemode.Call("PlayerInitialSpawnRound", pl)
 
 	self.PeakPopulation = math.max(self.PeakPopulation, #player.GetAll())
@@ -2261,8 +2247,6 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	--local nosend = not pl.DidInitPostEntity
 	pl.DamageVulnerability = nil
-
-	self:LoadVault(pl)
 
 	local uniqueid = pl:UniqueID()
 
@@ -2343,8 +2327,6 @@ function GM:PlayerDisconnected(pl)
 			PrintTranslatedMessage(HUD_PRINTCONSOLE, "disconnect_killed", pl:Name(), lastattacker:Name())
 		end
 	end
-
-	self:SaveVault(pl)
 
 	gamemode.Call("CalculateInfliction")
 end
@@ -3093,9 +3075,6 @@ function GM:SetRandomToZombie()
 end
 
 function GM:PreOnPlayerChangedTeam(pl, oldteam, newteam)
-	--[[if oldteam == TEAM_HUMAN then
-		self:SaveVault(pl)
-	end]]
 end
 
 function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
@@ -3111,11 +3090,7 @@ function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
 	elseif newteam == TEAM_HUMAN then
 		self.PreviouslyDied[pl:UniqueID()] = nil
 
-		if self.PointSaving > 0 and pl.PointsVault ~= nil and not self.ZombieEscape and not self:IsClassicMode() then
-			pl:SetPoints(math.floor(pl.PointsVault))
-		else
-			pl:SetPoints(0)
-		end
+		pl:SetPoints(0)
 
 		self:RefreshItemStocks(pl)
 	end
@@ -3451,7 +3426,6 @@ function GM:GetNearestSpawnDistance(pos, teamid)
 end
 
 function GM:ShutDown()
-	self:SaveAllVaults()
 end
 
 function GM:PlayerUse(pl, ent)
@@ -3613,7 +3587,6 @@ function GM:ZombieKilledHuman(pl, attacker, inflictor, dmginfo, headshot, suicid
 
 	attacker:AddBrains(1)
 	attacker:AddLifeBrainsEaten(1)
-	attacker:AddZSXP(self.InitialVolunteers[attacker:UniqueID()] and xp or math.floor(xp/4))
 
 	local classtab = attacker:GetZombieClassTable()
 	if classtab and classtab.Name then
