@@ -36,7 +36,12 @@ function meta:ApplyAssocModifiers(assoc)
 	end
 end
 
--- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.
+function meta:ResetAssocModifiers()
+	for modid, func in pairs(GAMEMODE.SkillModifierFunctions) do
+		func(self, 0)
+	end
+end
+
 function meta:ApplyTrinkets(override)
 	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
 

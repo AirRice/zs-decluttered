@@ -79,14 +79,14 @@ timer.Create("StatTrackingSaveTimer", 60, 0, function()
 			stattrack:IncreaseElementKV(STATTRACK_TYPE_WEAPON, activ:GetClass(), "HeldWeaponSaves", 1)
 		end
 
-		for i, j in pairs(v:GetActiveSkills()) do
+		--[[for i, j in pairs(v:GetActiveSkills()) do
 			skc[i] = (skc[i] or 0) + 1
-		end
+		end]]
 	end
 
-	for k,v in pairs(skc) do
+	--[[for k,v in pairs(skc) do
 		stattrack:IncreaseElementKV(STATTRACK_TYPE_SKILL, GAMEMODE.Skills[k].Name, "SkillMinutes", v)
-	end
+	end]]
 
 	stattrack:SaveStatTrackingFiles()
 end)

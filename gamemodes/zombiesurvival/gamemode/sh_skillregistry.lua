@@ -3,25 +3,6 @@ GM.SkillModifiers = {}
 GM.SkillFunctions = {}
 GM.SkillModifierFunctions = {}
 
-function GM:AddSkill(id, name, description)
-	local skill = {}
-	if CLIENT then
-		-- TODO: Dynamic skill descriptions based on modifiers on the skill.
-		skill.Description = description
-	end
-
-	if #name == 0 then
-		name = "Skill "..id
-		skill.Disabled = true
-	end
-
-	skill.Name = name
-
-	self.Skills[id] = skill
-
-	return skill
-end
-
 -- Use this after all skills have been added. It assigns dynamic IDs!
 function GM:AddTrinket(name, swepaffix, pairedweapon, veles, weles, tier, description, status, stocks)
 	local skill = {}
@@ -42,13 +23,27 @@ function GM:AddTrinket(name, swepaffix, pairedweapon, veles, weles, tier, descri
 	return #self.Skills, self.ZSInventoryItemData["trinket_" .. swepaffix]
 end
 
+function GM:AddDebuffTrinket(name, swepaffix, description, status)
+	local t_id, trinketwep = self:AddTrinket(name, swepaffix, false, nil, nil, nil, description, status)
+	trinketwep.IsDebuff = true
+
+	return t_id, trinketwep
+end
+
 -- I'll leave this here, but I don't think it's needed.
 function GM:GetTrinketSkillID(trinketname)
-	for skillid, skill in pairs(GM.Skills) do
+	for skillid, skill in pairs(self.Skills) do
 		if skill.Trinket and skill.Trinket == trinketname then
 			return skillid
 		end
 	end
+end
+
+function GM:GetIsTrinketDebuff(trinketname)
+	local trinketdata = self.ZSInventoryItemData["trinket_" .. trinketname]
+	local skilldata = self.Skills[self:GetTrinketSkillID(trinketname)]
+
+	return (trinketdata and skilldata and skilldata.Trinket == trinketname and trinketdata.IsDebuff) 
 end
 
 function GM:AddSkillModifier(skillid, modifier, amount)
@@ -218,10 +213,6 @@ end)
 
 GM:SetSkillModifierFunction(SKILLMOD_MEDKIT_COOLDOWN_MUL, function(pl, amount)
 	pl.MedicCooldownMul = math.Clamp(amount + 1.0, 0.0, 1000.0)
-end)
-
-GM:SetSkillModifierFunction(SKILLMOD_WORTH, function(pl, amount)
-	pl.ExtraStartingWorth = amount
 end)
 
 GM:SetSkillModifierFunction(SKILLMOD_FALLDAMAGE_THRESHOLD_MUL, function(pl, amount)
@@ -665,9 +656,7 @@ end)
 
 GM:AddSkillModifier(SKILL_D_CLUMSY, SKILLMOD_WORTH, 20)
 GM:AddSkillModifier(SKILL_D_CLUMSY, SKILLMOD_POINTS, 5)
-GM:AddSkillFunction(SKILL_D_CLUMSY, function(pl, active)
-	pl.IsClumsy = active
-end)
+
 
 GM:AddSkillModifier(SKILL_D_NOODLEARMS, SKILLMOD_WORTH, 5)
 GM:AddSkillModifier(SKILL_D_NOODLEARMS, SKILLMOD_SCRAP_START, 1)
@@ -677,9 +666,7 @@ end)
 
 GM:AddSkillModifier(SKILL_D_PALSY, SKILLMOD_WORTH, 10)
 GM:AddSkillModifier(SKILL_D_PALSY, SKILLMOD_RESUPPLY_DELAY_MUL, -0.03)
-GM:AddSkillFunction(SKILL_D_PALSY, function(pl, active)
-	pl.HasPalsy = active
-end)
+
 
 GM:AddSkillModifier(SKILL_D_HEMOPHILIA, SKILLMOD_WORTH, 10)
 GM:AddSkillModifier(SKILL_D_HEMOPHILIA, SKILLMOD_SCRAP_START, 3)

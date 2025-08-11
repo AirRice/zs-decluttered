@@ -17,14 +17,9 @@ hook.Add("SetWave", "CloseWorthOnWave1", function(wave)
 	end
 end)
 
-local ExtraStartingWorth = 0
 local function GetStartingWorth()
-	return GAMEMODE.StartingWorth -- + ExtraStartingWorth
+	return GAMEMODE.StartingWorth
 end
-
-net.Receive("zs_extrastartingworth", function(len)
-	ExtraStartingWorth = net.ReadUInt(16)
-end)
 
 local cvarDefaultCart = CreateClientConVar("zs_defaultcart", "", true, false)
 

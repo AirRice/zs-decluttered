@@ -37,7 +37,7 @@ function GM:Move(pl, move)
 	if P_Team(pl) == TEAM_HUMAN then
 		if P_GetBarricadeGhosting(pl) and not E_GetDTBool(pl, 1) then
 			-- Use 7, because friction will amount this to a velocity of 1 roughly.
-			phase = pt.NoGhosting and E_GetDTFloat(pl, DT_PLAYER_FLOAT_WIDELOAD) > curtime()
+			phase = pt:HasTrinket("d_overharness") and E_GetDTFloat(pl, DT_PLAYER_FLOAT_WIDELOAD) > curtime()
 			M_SetMaxClientSpeed(move, math_min(M_GetMaxClientSpeed(move), phase and 7 or (36 * (pt.BarricadePhaseSpeedMul or 1))))
 		elseif not pt.NoBWSpeedPenalty then
 			fw = M_GetForwardSpeed(move)

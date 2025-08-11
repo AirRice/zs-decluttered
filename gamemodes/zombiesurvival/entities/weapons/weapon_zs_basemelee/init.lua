@@ -14,7 +14,7 @@ end
 function SWEP:ServerMeleePostHitEntity(tr, hitent, damagemultiplier)
 	local owner = self:GetOwner()
 
-	if owner.GlassWeaponShouldBreak and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) and owner.GlassWeaponShouldBreak then
+	if owner.GlassWeaponShouldBreak and hitent:IsPlayer() and not self.NoGlassWeapons and owner:HasTrinket("d_crystallizer") and owner.GlassWeaponShouldBreak then
 		local effectdata = EffectData()
 		effectdata:SetOrigin(owner:EyePos())
 		effectdata:SetEntity(owner)

@@ -10,7 +10,7 @@ function SWEP:Eat()
 		end
 	end
 
-	local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+	local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 
 	if owner:HasTrinket("blooddigester") then
 		local healing = self.FoodHealth * (owner.FoodRecoveryMul or 1)

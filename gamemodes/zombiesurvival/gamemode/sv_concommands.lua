@@ -8,7 +8,7 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 	local usescrap = arguments[2]
 
 	local midwave = GAMEMODE:GetWave() < GAMEMODE:GetNumberOfWaves() / 2 or GAMEMODE:GetWave() == GAMEMODE:GetNumberOfWaves() / 2 and GAMEMODE:GetWaveActive() and CurTime() < GAMEMODE:GetWaveEnd() - (GAMEMODE:GetWaveEnd() - GAMEMODE:GetWaveStart()) / 2
-	if sender:IsSkillActive(SKILL_D_LATEBUYER) and not usescrap and midwave then
+	if sender:HasTrinket("d_hodl") and not usescrap and midwave then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "late_buyer_warning"))
 		return
 	end
@@ -376,7 +376,8 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 		end
 	end
 
-	if cost > GAMEMODE.StartingWorth + (sender.ExtraStartingWorth or 0) then return end
+	--TODO: Calculate debuff returned cost
+	if cost > GAMEMODE.StartingWorth then return end
 
 	hasalready = {}
 
@@ -433,6 +434,11 @@ concommand.Add("zsdropweapon", function(sender, command, arguments)
 	end
 	if invitem and not sender:HasInventoryItem(invitem) then return end
 
+	if invitem and GAMEMODE:GetIsTrinketDebuff(string.sub(invitem, 9)) then
+		self:CenterNotify(COLOR_RED, "You can't drop Debuff trinkets.")
+		return
+	end
+	
 	if invitem or (currentwep and currentwep:IsValid()) then
 		local ent = invitem and sender:DropInventoryItemByType(invitem) or sender:DropWeaponByType(currentwep:GetClass())
 		if ent and ent:IsValid() then

@@ -71,6 +71,7 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	GAMEMODE.HookGetLocal = GAMEMODE.HookGetLocal or function(g) end
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
+	MySelf:ResetAssocModifiers()
 end)
 
 -- Remove when model decal crash is fixed.

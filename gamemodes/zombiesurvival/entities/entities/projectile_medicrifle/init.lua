@@ -42,7 +42,7 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 			elseif eHitEntity:Team() == TEAM_HUMAN then
 				local ehithp, ehitmaxhp = eHitEntity:Health(), eHitEntity:GetMaxHealth()
 
-				if eHitEntity:IsSkillActive(SKILL_D_FRAIL) and ehithp >= ehitmaxhp * 0.25 then
+				if eHitEntity:HasTrinket("d_insured") and ehithp >= ehitmaxhp * 0.25 then
 					owner:CenterNotify(COLOR_RED, translate.Format("frail_healdart_warning", eHitEntity:GetName()))
 					self:EmitSound("buttons/button8.wav", 70, math.random(115,128))
 					self:DoRefund(owner)

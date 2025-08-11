@@ -46,7 +46,7 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsValidLivingHuman() and inflictor:IsValid() and inflictor == attacker:GetActiveWeapon() then
 			local damage = dmginfo:GetDamage()
 			local wep = attacker:GetActiveWeapon()
-			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:IsSkillActive(SKILL_D_FRAIL) and 0.25 or 1))
+			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:HasTrinket("d_insured") and 0.25 or 1))
 
 			if wep.IsMelee then
 				if attacker:HasTrinket("selfdefense") and math.abs(self:GetForward():Angle().yaw - attacker:GetForward():Angle().yaw) <= 90 then
@@ -57,12 +57,9 @@ function meta:ProcessDamage(dmginfo)
 					attacker:SetBloodArmor(math.min(attacker.MaxBloodArmor, attacker:GetBloodArmor() + math.min(damage, self:Health()) * attacker.MeleeDamageToBloodArmorMul * attacker.BloodarmorGainMul))
 				end
 
-				-- SKILL_HEAVYSTRIKES damage reflection clause
-				--[[
-				if attacker:IsSkillActive(SKILL_HEAVYSTRIKES) and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:HasTrinket("martialarts") or wep.MeleeKnockBack > 0) then
-					attacker:TakeSpecialDamage(damage * (wep.Unarmed and 1 or 0.08), DMG_SLASH, self, self:GetActiveWeapon())
+				if attacker:HasTrinket("d_swingamp") and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:HasTrinket("martialarts") or wep.MeleeKnockBack > 0) then
+					attacker:TakeSpecialDamage(damage * (wep.Unarmed and 1 or 0.2), DMG_SLASH, self, self:GetActiveWeapon())
 				end
-				]]
 
 				if attacker:HasTrinket("bbrally") and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
 					local toheal = math.min(attacker:GetPhantomHealth(), math.min(self:Health(), damage * 0.25))
@@ -191,7 +188,7 @@ function meta:ProcessDamage(dmginfo)
 				end]]
 			end
 
-			if self.HasHemophilia and (damage >= 4 and dmgtype == 0 or bit.band(dmgtype, DMG_TAKE_BLEED) ~= 0) then
+			if self:HasTrinket("d_razorwire") and (damage >= 4 and dmgtype == 0 or bit.band(dmgtype, DMG_TAKE_BLEED) ~= 0) then
 				local bleed = self:GiveStatus("bleed")
 				if bleed and bleed:IsValid() then
 					bleed:AddDamage(damage * 0.25)
@@ -1655,23 +1652,6 @@ function meta:SendDeployableOutOfAmmoMessage(deployable)
 	net.Send(self)
 end
 
--- TODO: Make these buyable worth items
-function meta:GetRandomStartingItem()
-	local pool = {}
-
-	if self:IsSkillActive(SKILL_PREPAREDNESS) and #GAMEMODE.Food > 0 then
-		pool[#pool + 1] = GAMEMODE.Food[math.random(#GAMEMODE.Food)]
-	end
-
-	if self:IsSkillActive(SKILL_EQUIPPED) then
-		pool[#pool + 1] = GAMEMODE.StarterTrinkets[math.random(#GAMEMODE.StarterTrinkets)]
-	end
-
-	if #pool > 0 then
-		return pool[math.random(#pool)]
-	end
-end
-
 function meta:PulseResonance(attacker, inflictor)
 	-- Weird things happen with multishot weapons..
 
@@ -1738,9 +1718,9 @@ function meta:BarricadeExpertPrecedence(otherpl)
 	local mygrade, myexpert = self:GetZSRemortLevelGraded(), self:HasBarricadeExpert()
 	local othergrade, otherexpert = otherpl:GetZSRemortLevelGraded(), otherpl:HasBarricadeExpert()
 
-	if (myexpert and not otherexpert) or mygrade > othergrade then
+	if (myexpert and not otherexpert) then
 		return 1
-	elseif (not myexpert and not otherexpert) or (myexpert and mygrade == othergrade) then
+	elseif (not myexpert and not otherexpert) then
 		return 0
 	end
 

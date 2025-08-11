@@ -162,8 +162,8 @@ function SWEP:DealDamage()
 			end
 		end
 
-		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-			damagemultiplier = damagemultiplier * 3.5
+		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:HasTrinket("d_crystallizer") then
+			damagemultiplier = damagemultiplier * 3
 			owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 		end
 

@@ -303,10 +303,10 @@ trinket = GM:AddTrinket("Martial Arts Manual", "martialarts", false, mveles, mwe
 GM:AddSkillModifier(trinket, SKILLMOD_UNARMED_DAMAGE_MUL, 0.5)
 
 --SKILL_MASTERCHEF
-GM:AddTrinket("Master's Cookbook", "masterchef", false, mveles, mweles, nil, "When zombies you attack with a culinary weapon die within 1 second of a successful hit, you may obtain a food item (1/9 chance)")
+GM:AddTrinket("Master's Cookbook", "masterchef", false, mveles, mweles, nil, "When zombies you attack with a culinary weapon die within 1 second of a successful hit, you have a chance of obtaining a food item")
 
 --SKILL_BLOODLUST (bloodborne reference)
-trinket = GM:AddTrinket("Gehrmanic Converter", "bbrally", false, mveles, mweles, 2, "When hit by zombies, gain Biobuffer energy (decays at a rate of 5/second) equivalent to 50% of damage taken\nYour melee attacks restore health equivalent to 25% of damage dealt by consuming biobuffer energy\nIncoming healing also consumes biobuffer energy equivalent to amount healed")
+trinket = GM:AddTrinket("Gehrmanic Converter", "bbrally", false, mveles, mweles, 3, "When hit by zombies, gain Biobuffer energy (decays at a rate of 5/second) equivalent to 50% of damage taken\nYour melee attacks restore health equivalent to 25% of damage dealt by consuming biobuffer energy\nIncoming healing also consumes biobuffer energy equivalent to amount healed")
 
 -- Performance Trinkets
 GM:AddTrinket("Oxygen Tank", "oxygentank", true, nil, {
@@ -350,7 +350,7 @@ trinket = GM:AddTrinket("Ammo Bandolier", "ammovestiii", false, ammoveles, ammow
 GM:AddSkillModifier(trinket, SKILLMOD_RELOADSPEED_MUL, 0.12)
 GM:AddSkillModifier(trinket, SKILLMOD_DEPLOYSPEED_MUL, 0.12)
 
-GM:AddTrinket("Automated Reloader", "autoreload", false, ammoveles, ammoweles, 2, "Reloads one weapon you switched away from 4 seconds ago automatically")
+GM:AddTrinket("Automated Reloader", "autoreload", false, ammoveles, ammoweles, 2, "Weapons you switch away from will be automatically reloaded after 4 seconds")
 
 --SKILL_SUGARRUSH
 GM:AddTrinket("Metabolic Booster", "metabooster", false, hpveles, hpweles, nil, "+35 speed boost for 14 seconds when food is consumed")
@@ -368,16 +368,23 @@ trinket = GM:AddTrinket("Cardiotonic Pump", "cardiotonic", false, pveles, pweles
 trinket = GM:AddTrinket("Targeting Visor", "targetingvisori", false, oveles, oweles, nil, "+5% tighter aiming reticule.")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
 
-trinket = GM:AddTrinket("Targeting Unifier", "targetingvisoriii", false, oveles, oweles, 4, "+11% tighter aiming reticule.\n-50% speed reduction from using ironsights")
+-- Targeting indicator moved here
+trinket = GM:AddTrinket("Targeting Unifier", "targetingvisoriii", false, oveles, oweles, 4, "+11% tighter aiming reticule.\n-50% speed reduction from using ironsights\nYou can now see the exact health of Zombies you look at")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.11)
-GM:AddSkillFunction(trinket, function(pl, active) pl.NoIronSightsSlow = active end)
+GM:AddSkillFunction(trinket, function(pl, active) 
+	pl.NoIronSightsSlow = active
+	pl.TargetLocus = active
+end)
 
 GM:AddTrinket("Refined Subscope", "refinedsub", false, oveles, oweles, 4, "+27% tighter aiming reticule with tier 3 or lower weapons")
 
-trinket = GM:AddTrinket("Aim Compensator", "aimcomp", false, oveles, oweles, 3, "-52% reduced effect of aim shake effects\n+5% tighter aiming reticule\nZombies you look at have an indicator showing their health")
+-- Given further aimcone reduction (similar to SKILL_ORPHICFOCUS)
+trinket = GM:AddTrinket("Aim Compensator", "aimcomp", false, oveles, oweles, 3, "-52% reduced effect of aim shake effects\n+5% tighter aiming reticule\n+15% tighter spread from using ironsights")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.52)
-GM:AddSkillFunction(trinket, function(pl, active) pl.TargetLocus = active end)
+GM:AddSkillFunction(trinket, function(pl, active) 
+	pl.OrphicCompensation = active
+end)
 
 GM:AddSkillModifier(GM:AddTrinket("Pulse Booster", "pulseampi", false, oveles, oweles, nil, "+14% slow from pulse weapons and stun batons"), SKILLMOD_PULSE_WEAPON_SLOW_MUL, 0.14)
 
@@ -388,11 +395,11 @@ GM:AddSkillModifier(trinket, SKILLMOD_EXP_DAMAGE_RADIUS, 0.07)
 trinket = GM:AddTrinket("Resonance Cascade Device", "resonance", false, oveles, oweles, 4, "Dealing enough pulse damage will cause a pulse explosion\n-25% slow from pulse weapons and stun batons")
 GM:AddSkillModifier(trinket, SKILLMOD_PULSE_WEAPON_SLOW_MUL, -0.25)
 
-trinket = GM:AddTrinket("Cryogenic Inductor", "cryoindu", false, oveles, oweles, 4, "Ice based weapons have a chance to shatter zombies based on how much health they have")
+trinket = GM:AddTrinket("Cryogenic Inductor", "cryoindu", false, oveles, oweles, 4, "Ice damage dealt to zombies has a chance to cause a shattering ice explosion based on how much health they have")
 
 trinket = GM:AddTrinket("Extended Magazine", "extendedmag", false, oveles, oweles, 3, "Increases the clip size of weapons with 8 or more clip size by +15%")
 
-trinket = GM:AddTrinket("Pulse Impedance Module", "pulseimpedance", false, oveles, oweles, 5, "Slow from pulse weapons and stun batons also slow zombie attack speed\n+24% slow from pulse weapons and stun batons")
+trinket = GM:AddTrinket("Pulse Impedance Module", "pulseimpedance", false, oveles, oweles, 5, "Slows from pulse weapons and stun batons also slow zombie attack speed\n+24% slow from pulse weapons and stun batons")
 GM:AddSkillFunction(trinket, function(pl, active) pl.PulseImpedance = active end)
 GM:AddSkillModifier(trinket, SKILLMOD_PULSE_WEAPON_SLOW_MUL, 0.24)
 
@@ -484,12 +491,12 @@ GM:AddSkillModifier(trinket, SKILLMOD_REPAIRRATE_MUL, 0.1)
 trinketwep.PermitDismantle = true
 
 -- SKILL_BARRICADEEXPERT added
-GM:AddSkillModifier(GM:AddTrinket("Advanced Blueprints", "blueprintsii", false, supveles, supweles, 4, "+20% repair rate\nProps recently repaired with a hammer take 8% less damage for the next 2 seconds"), SKILLMOD_REPAIRRATE_MUL, 0.2)
+GM:AddSkillModifier(GM:AddTrinket("Advanced Blueprints", "blueprintsii", false, supveles, supweles, 4, "+20% repair rate\nProps recently repaired with a hammer will take 8% less damage for the next 2 seconds"), SKILLMOD_REPAIRRATE_MUL, 0.2)
 
 GM:AddSkillModifier(GM:AddTrinket("Alloy Hammer", "alloyhammer", false, supveles, supweles, nil, "Carpenter's Hammers and related weapons can be swung 20% faster"), SKILLMOD_HAMMER_SWING_DELAY_MUL, -0.2)
 
 -- SKILL_RECLAIMSOL added
-trinket, trinketwep = GM:AddTrinket("Medical Processor", "processor", false, supveles, supweles, 2, "-5% medic kit cooldown\n-10% medic tool fire delay\nReprocess food into medical ammo with right click\nRecover 60% of medical energy wasted due to invalid medic tool targets")
+trinket, trinketwep = GM:AddTrinket("Medical Processor", "processor", false, supveles, supweles, 2, "-5% medic kit cooldown\n-10% medic tool fire delay\nReprocess food into medical ammo with SECONDARY FIRE\nRecover 60% of medical energy wasted due to invalid medic tool targets")
 GM:AddSkillModifier(trinket, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_MEDGUN_FIRE_DELAY_MUL, -0.1)
 
@@ -501,7 +508,7 @@ trinket = GM:AddTrinket("Remedial Booster", "remedy", false, supveles, supweles,
 GM:AddSkillModifier(trinket, SKILLMOD_MEDKIT_EFFECTIVENESS_MUL, 0.08)
 
 --SKILL_SMARTTARGETING
-trinket = GM:AddTrinket("Iatric Auto-reticle", "automedtarget", false, supveles, supweles, 2, "Projectile-based medical weapons can now auto-lock onto a target using right click")
+trinket = GM:AddTrinket("Iatric Auto-reticle", "automedtarget", false, supveles, supweles, 2, "Projectile-based medical weapons can now auto-lock onto a target using SECONDARY FIRE")
 
 --SKILL_LOADEDHULL
 GM:AddTrinket("Loaded Hulls", "loadedhull", false, supveles, supweles, nil, "Controllables now explode when destroyed, dealing area damage")
@@ -567,10 +574,57 @@ GM:AddSkillFunction(trinket, function(pl, active)
 end)
 
 --SKILL_FORAGER
-GM:AddTrinket("Meal Tickets", "mealticket", false, supveles, supweles, nil, "25% chance to gain a food item when resupplying")
+GM:AddTrinket("Meal Tickets", "mealticket", false, supveles, supweles, nil, "25% chance to gain a food item when resupplying\nGain a food item when a wave ends")
 
 --SKILL_ACUITY, SKILL_VISION, SKILL_INSIGHT, SKILL_SCAVENGER
-GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nCycle through each item's visibility by left clicking while holding the tool")
+GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nCycle through each item's visibility with PRIMARY FIRE while holding the tool")
+
+-- DEBUFF TRINKETS
+local GOOD = "^"..COLORID_GREEN
+local BAD = "^"..COLORID_RED
+
+GM:AddDebuffTrinket("DEBUFF: Crystallizer", "d_crystallizer", GOOD.."3x melee damage vs. zombies\n"..BAD.."Melee weapons have a 50% chance of shattering when hitting a zombie")
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Mercury Injector", "d_mercury", GOOD.."+5 starting points\n"..BAD.."Almost all knockback will cause you to fall on the ground and become incapacitated")
+GM:AddSkillModifier(trinket, SKILLMOD_POINTS, 5)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Stimulant Trial", "d_stimtrial", GOOD.."-3% resupply delay\n"..BAD.."Severely impaired aiming when health is not full")
+GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.03)
+
+GM:AddDebuffTrinket("DEBUFF: Gimbal-assisted Aiming", "d_gimbalaim", "Accuracy becomes completely unaffected by crouching, ironsighting, jumping, or moving")
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Late Buyer", "d_hodl", GOOD.."2% arsenal discount\n"..BAD.."Unable to spend points at arsenal crates until the second half of the round")
+GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, -0.02)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Broken Exoskeleton", "d_brokenexo", GOOD.."+1 starting scrap\n"..BAD.."Unable to carry props")
+GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 1)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Frail", "d_insured", GOOD.."+5 starting points\n"..BAD.."Cannot heal by any means beyond 25% maximum health")
+GM:AddSkillModifier(trinket, SKILLMOD_POINTS, 5)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Oversized Harnesses", "d_overharness", GOOD.."-5% resupply delay\n"..BAD.."After beginning to phase through a barricade, you become unable to move for 6 seconds")
+GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.05)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Reclaimed Razor Wire", "d_razorwire", GOOD.."+3 starting scrap\n"..BAD.."When you get hit, you will take an additional 25% of the damage over time via bleeding")
+GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 3)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Blood Donation", "d_blooddonor", GOOD.."+1 end of wave points\n"..BAD.."-45 maximum health")
+GM:AddSkillModifier(trinket, SKILLMOD_ENDWAVE_POINTS, 1)
+GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, -45)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Bulky Purse", "d_bulkpurse", GOOD.."+1 end of wave points\n"..BAD.."-33.75 movement speed")
+GM:AddSkillModifier(trinket, SKILLMOD_ENDWAVE_POINTS, 1)
+GM:AddSkillModifier(trinket, SKILLMOD_SPEED, -33.75)
+
+--SKILL_HEAVYSTRIKES
+trinket = GM:AddDebuffTrinket("DEBUFF: Swing Amplifier", "d_swingamp", GOOD.."+100% melee knockback\n"..BAD.."If an attack knocks a zombie backwards, 20% of melee damage dealt is reflected back to you\n"..BAD.."100% reflection rate if using unarmed strikes")
+GM:AddSkillModifier(trinket, SKILLMOD_MELEE_KNOCKBACK_MUL, 1)
+
+trinket = GM:AddDebuffTrinket("DEBUFF: Predatory Loan", "d_predloan", BAD.."-20 starting points\n"..BAD.."2% arsenal markup")
+GM:AddSkillModifier(trinket, SKILLMOD_POINTS, -20)
+GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, 0.02)
+
+GM:AddDebuffTrinket("DEBUFF: Recycling Contract", "d_recycling", GOOD.."Earn scrap at the end of waves\n"..BAD.."You will receive no points at the end of waves")
 
 -- Boss Trinkets
 

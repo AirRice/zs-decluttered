@@ -176,7 +176,7 @@ function GM:DisallowHumanPickup(pl, entity)
 end
 
 function GM:TryHumanPickup(pl, entity)
-	if self.ZombieEscape or pl.NoObjectPickup or not pl:Alive() or pl:Team() ~= TEAM_HUMAN or (entity.NoPickupsTime and CurTime() < entity.NoPickupsTime and entity.NoPickupsOwner ~= pl) then return end
+	if self.ZombieEscape or pl:HasTrinket("d_brokenexo") or not pl:Alive() or pl:Team() ~= TEAM_HUMAN or (entity.NoPickupsTime and CurTime() < entity.NoPickupsTime and entity.NoPickupsOwner ~= pl) then return end
 
 	if gamemode.Call("DisallowHumanPickup", pl, entity) or pl:GetInfo("zs_nopickupprops") == "1" then return end
 
@@ -457,7 +457,6 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_dmg_prop")
 	util.AddNetworkString("zs_legdamage")
 	util.AddNetworkString("zs_armdamage")
-	util.AddNetworkString("zs_extrastartingworth")
 	util.AddNetworkString("zs_ammopickup")
 	util.AddNetworkString("zs_ammogive")
 	util.AddNetworkString("zs_ammogiven")
@@ -1282,7 +1281,7 @@ function GM:Think()
 					pl:GiveStatus("drown")
 				end
 
-				local healmax = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+				local healmax = pl:HasTrinket("d_insured") and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 
 				if pl:HasTrinket("regenenzyme") and time >= pl.NextRegenerate and pl:Health() < math.min(healmax, pl:GetMaxHealth() * 0.6) then
 					pl.NextRegenerate = time + 6
@@ -1307,7 +1306,7 @@ function GM:Think()
 					end
 				end
 
-				if pl:IsSkillActive(SKILL_D_LATEBUYER) and not pl.LateBuyerMessage then
+				if pl:HasTrinket("d_hodl") and not pl.LateBuyerMessage then
 					local midwave = self:GetWave() < self:GetNumberOfWaves() / 2 or self:GetWave() == self:GetNumberOfWaves() / 2 and self:GetWaveActive() and time < self:GetWaveEnd() - (self:GetWaveEnd() - self:GetWaveStart()) / 2
 					if not midwave then
 						pl:CenterNotify(COLOR_CYAN, translate.ClientGet(pl, "late_buyer_finished"))
@@ -2152,7 +2151,6 @@ function GM:PlayerInitialSpawn(pl)
 	pl.NextFlashlightSwitch = 0
 	pl.NextPainSound = 0
 	pl.NextFlinch = 0
-	pl.LastSentESW = 0
 	pl.m_LastWaveStartSpawn = 0
 	pl.m_LastGasHeal = 0
 
@@ -3075,7 +3073,7 @@ function GM:OnPlayerChangedTeam(pl, oldteam, newteam)
 	end
 
 	if newteam ~= TEAM_HUMAN then
-		pl:RemoveSkills()
+		pl:ResetAssocModifiers()
 	end
 
 	pl:SetLastAttacker(nil)
@@ -3421,7 +3419,7 @@ function GM:PlayerUse(pl, ent)
 	elseif entclass == "item_healthcharger" then
 		if pl:Team() == TEAM_UNDEAD then
 			return false
-		elseif pl:IsSkillActive(SKILL_D_FRAIL) and pl:Health() >= math.floor(pl:GetMaxHealth() * 0.25) then
+		elseif pl:HasTrinket("d_insured") and pl:Health() >= math.floor(pl:GetMaxHealth() * 0.25) then
 			return false
 		end
 	elseif pl:Team() == TEAM_HUMAN and not pl:IsCarrying() and pl:KeyPressed(IN_USE) then
@@ -3811,7 +3809,7 @@ function GM:PlayerCanPickupWeapon(pl, ent)
 end
 
 function GM:PlayerCanPickupItem(pl, ent)
-	if pl:IsSkillActive(SKILL_D_FRAIL) then
+	if pl:HasTrinket("d_insured") then
 		local class = ent:GetClass()
 		if class == "item_healthkit" or class == "item_healthvial" then
 			local healamount = #class == 14 and 25 or 10
@@ -3880,6 +3878,7 @@ function GM:PlayerSpawn(pl)
 	pl.SpawnedTime = CurTime()
 
 	pl:ShouldDropWeapon(false)
+	pl:ResetAssocModifiers()
 
 	pl:SetLegDamage(0)
 	pl:SetLastAttacker()
@@ -3889,8 +3888,9 @@ function GM:PlayerSpawn(pl)
 	pcol.y = math.Clamp(pcol.y, 0, 2.5)
 	pcol.z = math.Clamp(pcol.z, 0, 2.5)
 	pl:SetPlayerColor(pcol)
-
+	
 	if pl:Team() == TEAM_UNDEAD then
+		
 		if not pl.Revived then
 			pl.DamagedBy = {}
 		end
@@ -4027,9 +4027,7 @@ function GM:PlayerSpawn(pl)
 		pl:SetMaxHealth(100)
 		--pl:SetCustomCollisionCheck(false)
 		pl:CollisionRulesChanged()
-
 		if not self.NoSkills then
-			pl.ActivatedHumanSkills = true
 			pl.AdjustedStartPointsSkill = nil
 			pl.AdjustedStartScrapSkill = nil
 		end
@@ -4056,12 +4054,6 @@ function GM:PlayerSpawn(pl)
 			pl:Give(randomprimary)
 			pl:Give(randomsecondary)
 		else
-			local start = pl:GetRandomStartingItem()
-			if start then
-				local func = self:GetInventoryItemType(start) == INVCAT_TRINKETS and pl.AddInventoryItem or pl.Give
-				func(pl, start)
-			end
-
 			pl:Give("weapon_zs_fists")
 
 			if self.StartingLoadout then
@@ -4321,11 +4313,15 @@ function GM:WaveStateChanged(newstate)
 				if pointsbonus then
 					local pointsreward = pointsbonus + (pl.EndWavePointsExtra or 0)
 
-					if pl:IsSkillActive(SKILL_SCOURER) then
+					if pl:HasTrinket("d_recycling") then
 						pl:GiveAmmo(math.ceil(pointsreward), "scrap")
 					else
 						pl:AddPoints(pointsreward, nil, nil, true)
 					end
+				end
+				
+				if pl:HasTrinket("mealticket") and #GAMEMODE.Food > 0 then
+					pl:Give(GAMEMODE.Food[math.random(#GAMEMODE.Food)])
 				end
 			elseif pl:Team() == TEAM_UNDEAD and not pl:Alive() and not pl.Revive then
 				local curclass = pl.DeathClass or pl:GetZombieClass()

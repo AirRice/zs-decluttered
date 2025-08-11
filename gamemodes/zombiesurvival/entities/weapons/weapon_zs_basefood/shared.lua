@@ -51,7 +51,7 @@ function SWEP:CanEat()
 		return owner:GetBloodArmor() < owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)
 	end
 
-	local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+	local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 	return owner:Health() < max
 end
 
@@ -119,7 +119,7 @@ function SWEP:Think()
 
 		if owner:HasTrinket("blooddigester") or owner:HasTrinket("metabooster") then return end
 
-		local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+		local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 		if owner:Health() >= max then
 			self:SetEatEndTime(0)
 		end

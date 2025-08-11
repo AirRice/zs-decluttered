@@ -565,7 +565,7 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 end
 
 function GM:PlayerCanBeHealed(pl)
-	local maxhp = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+	local maxhp = pl:HasTrinket("d_insured") and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 
 	return pl:Health() < maxhp or pl:GetPoisonDamage() > 0 or pl:GetBleedDamage() > 0
 end
