@@ -161,12 +161,12 @@ function SWEP:GetCone()
 	local conedelta = self.ConeMax - basecone
 
 	-- SKILL_ORPHICFOCUS is now default
-	local ironsightsmul = self:GetIronsights() and 0.9 or 1
+	local ironsightsmul = self:GetIronsights() and (owner.OrphicCompensation and 0.75 or 0.9) or 1
 	local tiervalid = (self.Tier or 1) <= 3
 	local spreadmul = (owner.AimSpreadMul or 1) - ((tiervalid and owner:HasTrinket("refinedsub")) and 0.27 or 0)
 
-	if owner.TrueWooism then
-		return (basecone + conedelta * 0.5 ^ self.ConeRamp) * spreadmul * ironsightsmul
+	if owner:HasTrinket("d_gimbalaim") then
+		return (basecone + conedelta * 0.5 ^ self.ConeRamp) * spreadmul
 	end
 
 	if not owner:OnGround() or self.ConeMax == basecone then return self.ConeMax end

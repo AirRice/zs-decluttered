@@ -2,7 +2,7 @@ SWEP.Base = "weapon_zs_zombie"
 
 SWEP.MeleeReach = 52
 SWEP.MeleeDelay = 0.36
-SWEP.MeleeSize = 4.5
+SWEP.MeleeSize = 1.5 --4.5
 SWEP.MeleeDamage = 24
 SWEP.SlowDownScale = 3
 SWEP.MeleeDamageType = DMG_SLASH

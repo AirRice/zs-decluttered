@@ -154,7 +154,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier, damage)
 
 	local owner = self:GetOwner()
 
-	if SERVER and hitent:IsPlayer() and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
+	if SERVER and hitent:IsPlayer() and owner:HasTrinket("d_crystallizer") then
 		damagemultiplier = damagemultiplier * 3.5
 		owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 	end

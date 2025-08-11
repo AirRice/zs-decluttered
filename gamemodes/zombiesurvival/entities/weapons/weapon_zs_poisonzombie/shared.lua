@@ -4,7 +4,7 @@ SWEP.PrintName = "Poison Zombie"
 
 SWEP.MeleeReach = 48
 SWEP.MeleeDelay = 0.9
-SWEP.MeleeSize = 4.5
+SWEP.MeleeSize = 2.5 --4.5
 SWEP.MeleeDamage = 40
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.MeleeAnimationDelay = 0.35
