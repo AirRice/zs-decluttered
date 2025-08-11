@@ -101,12 +101,6 @@ function MakepOptions()
 	list:AddItem(check)
 
 	check = vgui.Create("DCheckBoxLabel", Window)
-	check:SetText("Display experience")
-	check:SetConVar("zs_drawxp")
-	check:SizeToContents()
-	list:AddItem(check)
-
-	check = vgui.Create("DCheckBoxLabel", Window)
 	check:SetText("Don't show point floaters")
 	check:SetConVar("zs_nofloatingscore")
 	check:SizeToContents()

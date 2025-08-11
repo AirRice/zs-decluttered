@@ -49,9 +49,7 @@ include("sh_translate.lua")
 include("sh_colors.lua")
 include("sh_serialization.lua")
 include("sh_util.lua")
-
-include("skillweb/sh_skillweb.lua")
-
+include("sh_skillregistry.lua")
 include("sh_options.lua")
 include("sh_zombieclasses.lua")
 include("sh_animations.lua")

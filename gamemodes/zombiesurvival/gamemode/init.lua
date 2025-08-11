@@ -23,6 +23,7 @@ AddCSLuaFile("sh_zombieclasses.lua")
 AddCSLuaFile("sh_animations.lua")
 AddCSLuaFile("sh_sigils.lua")
 AddCSLuaFile("sh_channel.lua")
+AddCSLuaFile("sh_skillregistry.lua")
 AddCSLuaFile("sh_weaponquality.lua")
 
 AddCSLuaFile("cl_draw.lua")
@@ -38,10 +39,6 @@ AddCSLuaFile("cl_dermaskin.lua")
 AddCSLuaFile("cl_hint.lua")
 AddCSLuaFile("cl_thirdperson.lua")
 AddCSLuaFile("cl_voicesets.lua")
-
-AddCSLuaFile("skillweb/sh_skillweb.lua")
-AddCSLuaFile("skillweb/cl_skillweb.lua")
-AddCSLuaFile("skillweb/registry.lua")
 
 AddCSLuaFile("obj_vector_extend.lua")
 AddCSLuaFile("obj_entity_extend.lua")
@@ -98,9 +95,6 @@ include("sv_sigils.lua")
 include("sv_concommands.lua")
 
 include("itemstocks/sv_stock.lua")
-
-include("skillweb/sv_registry.lua")
-include("skillweb/sv_skillweb.lua")
 
 include("sv_zombieescape.lua")
 
@@ -399,7 +393,6 @@ function GM:AddResources()
 end
 
 function GM:Initialize()
-	self:FixSkillConnections()
 	self:RegisterPlayerSpawnEntities()
 	self:AddResources()
 	self:PrecacheResources()
@@ -492,20 +485,6 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_invgiven")
 	util.AddNetworkString("zs_wipeinventory")
 
-	util.AddNetworkString("zs_skills_active")
-	util.AddNetworkString("zs_skills_unlocked")
-	util.AddNetworkString("zs_skills_desired")
-	util.AddNetworkString("zs_skill_is_desired")
-	util.AddNetworkString("zs_skill_is_unlocked")
-	util.AddNetworkString("zs_skills_all_desired")
-	util.AddNetworkString("zs_skill_set_desired")
-	util.AddNetworkString("zs_skills_init")
-	util.AddNetworkString("zs_skills_reset")
-	util.AddNetworkString("zs_skills_remort")
-	util.AddNetworkString("zs_skills_nextreset")
-	util.AddNetworkString("zs_skills_notify")
-	util.AddNetworkString("zs_skills_refunded")
-
 	util.AddNetworkString("zs_crow_kill_crow")
 	util.AddNetworkString("zs_pl_kill_pl")
 	util.AddNetworkString("zs_pls_kill_pl")
@@ -560,7 +539,7 @@ function GM:ShowSpare1(pl)
 			pl:SendLua("GAMEMODE:OpenClassSelect()")
 		end
 	elseif pl:Team() == TEAM_HUMAN then
-		pl:SendLua("GAMEMODE:ToggleSkillWeb()")
+		--pl:SendLua("GAMEMODE:ToggleSkillWeb()")
 	end
 end
 
@@ -3912,11 +3891,6 @@ function GM:PlayerSpawn(pl)
 	pl:SetPlayerColor(pcol)
 
 	if pl:Team() == TEAM_UNDEAD then
-		if pl.ActivatedHumanSkills then
-			pl.ActivatedHumanSkills = false
-			pl:ApplySkills({})
-		end
-
 		if not pl.Revived then
 			pl.DamagedBy = {}
 		end
@@ -4058,7 +4032,6 @@ function GM:PlayerSpawn(pl)
 			pl.ActivatedHumanSkills = true
 			pl.AdjustedStartPointsSkill = nil
 			pl.AdjustedStartScrapSkill = nil
-			pl:ApplySkills()
 		end
 
 		pl.StowageCaches = 0

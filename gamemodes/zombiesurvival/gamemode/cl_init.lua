@@ -22,7 +22,6 @@ include("cl_targetid.lua")
 include("cl_postprocess.lua")
 include("cl_voicesets.lua")
 include("cl_net.lua")
-include("skillweb/cl_skillweb.lua")
 
 include("vgui/dteamcounter.lua")
 include("vgui/dmodelpanelex.lua")
@@ -72,8 +71,6 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	GAMEMODE.HookGetLocal = GAMEMODE.HookGetLocal or function(g) end
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
-
-	--MySelf:ApplySkills()
 end)
 
 -- Remove when model decal crash is fixed.
@@ -1467,7 +1464,6 @@ function GM:CreateLateVGUI()
 end
 
 function GM:Initialize()
-	self:FixSkillConnections()
 	self:CreateFonts()
 	self:PrecacheResources()
 	self:CreateVGUI()
