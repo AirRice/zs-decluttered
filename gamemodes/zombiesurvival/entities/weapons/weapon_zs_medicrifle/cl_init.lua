@@ -64,7 +64,7 @@ function SWEP:Draw2DHUD()
 	BaseClass.Draw2DHUD(self)
 
 	local owner = self:GetOwner()
-	if not owner:HasTrinket("automedtarget") then return end
+	if not owner:HasTrinket("curativeii") then return end
 
 	local player = self:GetSeekedPlayer()
 	local screenscale = BetterScreenScale()
@@ -79,7 +79,7 @@ function SWEP:Draw3DHUD(vm, pos, ang)
 	BaseClass.Draw3DHUD(self, vm, pos, ang)
 
 	local owner = self:GetOwner()
-	if not owner:HasTrinket("automedtarget") then return end
+	if not owner:HasTrinket("curativeii") then return end
 
 	local wid, hei = 180, 200
 	local x, y = wid * 1.25, hei * -2.25

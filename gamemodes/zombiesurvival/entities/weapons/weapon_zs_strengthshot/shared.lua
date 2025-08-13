@@ -45,7 +45,7 @@ GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Defence Shot Gun", "Provides players wit
 	if SERVER then
 		wept.EntModify = function(self, ent)
 			ent:SetDTBool(0, true)
-			ent:SetSeeked(self:GetSeekedPlayer() or nil)
+			ent:SetSeeked(self:GetSeekedPlayer() or NULL)
 			ent.BuffDuration = wept.BuffDuration
 		end
 	else
@@ -79,7 +79,7 @@ function SWEP:SecondaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self:GetFireDelay()/2)
 
 	local owner = self:GetOwner()
-	if not owner:HasTrinket("automedtarget") then return end
+	if not owner:HasTrinket("curativeii") then return end
 
 	local targetent = owner:CompensatedMeleeTrace(2048, 2, nil, nil, true).Entity
 	local locked = targetent and targetent:IsValidLivingHuman()
@@ -87,5 +87,5 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or NULL)
 end

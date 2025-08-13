@@ -160,8 +160,6 @@ function SWEP:GetCone()
 	local basecone = self.ConeMin
 	local conedelta = self.ConeMax - basecone
 
-	-- SKILL_ORPHICFOCUS is now default
-	local ironsightsmul = self:GetIronsights() and (owner.OrphicCompensation and 0.75 or 0.9) or 1
 	local tiervalid = (self.Tier or 1) <= 3
 	local spreadmul = (owner.AimSpreadMul or 1) - ((tiervalid and owner:HasTrinket("refinedsub")) and 0.27 or 0)
 
@@ -180,7 +178,7 @@ function SWEP:GetCone()
 	if not owner:Crouching() then multiplier = multiplier + 0.25 end
 	if not self:GetIronsights() then multiplier = multiplier + ironsightmul end
 
-	return (basecone + conedelta * (self.FixedAccuracy and 0.6 or multiplier) ^ self.ConeRamp) * spreadmul * ironsightsmul
+	return (basecone + conedelta * (self.FixedAccuracy and 0.6 or multiplier) ^ self.ConeRamp) * spreadmul
 end
 
 function SWEP:GetWalkSpeed()

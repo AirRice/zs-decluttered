@@ -208,6 +208,13 @@ function meta:ProcessDamage(dmginfo)
 	if self:GetBloodArmor() > 0 then
 		local damage = dmginfo:GetDamage()
 		if damage > 0 then
+			if damage >= self:GetBloodArmor() and self:HasTrinket("hemospoofer") then
+				local bleed = self:GiveStatus("bleed")
+				if bleed and bleed:IsValid() then
+					bleed:AddDamage(5)
+					bleed.Damager = self
+				end
+			end
 			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (self:HasTrinket("ironblood") and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0)
 			local absorb = math.min(self:GetBloodArmor(), damage * ratio)
 			dmginfo:SetDamage(damage - absorb)
@@ -347,16 +354,7 @@ function meta:SetPoints(points)
 end
 
 function meta:SetBloodArmor(armor)
-	local max = self.MaxBloodArmor or 20
-	local toset = math.Clamp(armor, 0, max)
-	self:SetDTInt(DT_PLAYER_INT_BLOODARMOR, toset)
-	if toset <= 0 and self:HasTrinket("hemospoofer") then
-		local bleed = self:GiveStatus("bleed")
-		if bleed and bleed:IsValid() then
-			bleed:AddDamage(5)
-			bleed.Damager = self
-		end
-	end
+	self:SetDTInt(DT_PLAYER_INT_BLOODARMOR, armor)
 end
 
 function meta:WouldDieFrom(damage, hitpos)
@@ -923,7 +921,7 @@ function meta:Resupply(owner, obj)
 	if GAMEMODE:GetWave() <= 0 then return end
 
 	local stockpiling = self:HasTrinket("bulkstocker")
-	local stowage = self:HasTrinket("stockpilesys")
+	local stowage = self:HasTrinket("promanifest")
 
 	if (stowage and (self.StowageCaches or 0) <= 0) or (not stowage and CurTime() < (self.NextResupplyUse or 0)) then
 		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "no_ammo_here"))
@@ -955,7 +953,7 @@ function meta:Resupply(owner, obj)
 
 		self:GiveAmmo(amount, ammotype)
 
-		if self:HasTrinket("mealticket") and math.random(4) == 1 and #GAMEMODE.Food > 0 then
+		if self:HasTrinket("acqmanifest") and math.random(4) == 1 and #GAMEMODE.Food > 0 then
 			self:Give(GAMEMODE.Food[math.random(#GAMEMODE.Food)])
 		end
 
@@ -1680,7 +1678,7 @@ function meta:PulseResonance(attacker, inflictor)
 end
 
 function meta:CryogenicInduction(attacker, inflictor, damage)
-	if self:Health() > self:GetMaxHealthEx() * (damage/100) or math.random(50) > damage then return end
+	if self:Health() > self:GetMaxHealthEx() * (damage/50) or math.random(50) > damage then return end
 
 	timer.Create("Cryogenic" .. attacker:UniqueID(), 0.06, 1, function()
 		if not attacker:IsValid() or not self:IsValid() then return end

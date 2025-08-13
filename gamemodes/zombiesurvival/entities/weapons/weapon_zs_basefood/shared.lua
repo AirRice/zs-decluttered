@@ -43,7 +43,7 @@ function SWEP:CanEat()
 
 	if owner:GetStatus("sickness") then return false end
 
-	if owner:HasTrinket("metabooster") then
+	if owner:HasTrinket("cutlery") then
 		return true
 	end
 
@@ -117,7 +117,7 @@ function SWEP:Think()
 			self:SetEatEndTime(0)
 		end
 
-		if owner:HasTrinket("blooddigester") or owner:HasTrinket("metabooster") then return end
+		if owner:HasTrinket("blooddigester") or owner:HasTrinket("cutlery") then return end
 
 		local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 		if owner:Health() >= max then

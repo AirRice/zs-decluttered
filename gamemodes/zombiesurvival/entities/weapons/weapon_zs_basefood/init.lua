@@ -3,7 +3,7 @@ INC_SERVER()
 function SWEP:Eat()
 	local owner = self:GetOwner()
 
-	if owner:HasTrinket("metabooster") then
+	if owner:HasTrinket("cutlery") then
 		local boost = owner:GiveStatus("adrenalineamp", 14)
 		if boost and boost:IsValid() then
 			boost:SetSpeed(35)
@@ -13,15 +13,13 @@ function SWEP:Eat()
 	local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 
 	if owner:HasTrinket("blooddigester") then
-		local healing = self.FoodHealth * (owner.FoodRecoveryMul or 1)
-
-		owner:SetBloodArmor(math.min(owner:GetBloodArmor() + (math.min(30, healing) * owner.BloodarmorGainMul), owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)))
-	else
-		local healing = self.FoodHealth * (owner:GetTotalAdditiveModifier("FoodRecoveryMul", "HealingReceived") - (owner:GetPhantomHealth() > 0.5 and 0.5 or 0))
-
-		owner:SetHealth(math.min(owner:Health() + healing, max))
-		owner:SetPhantomHealth(math.max(0, math.floor(owner:GetPhantomHealth() - healing)))
+		local togive = self.FoodHealth * (owner.FoodRecoveryMul or 1)
+		owner:SetBloodArmor(math.min(owner:GetBloodArmor() + (math.min(30, togive) * owner.BloodarmorGainMul), owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)))
 	end
+	local healing = self.FoodHealth * (owner:GetTotalAdditiveModifier("FoodRecoveryMul", "HealingReceived") - (owner:GetPhantomHealth() > 0.5 and 0.5 or 0))
+
+	owner:SetHealth(math.min(owner:Health() + healing, max))
+	owner:SetPhantomHealth(math.max(0, math.floor(owner:GetPhantomHealth() - healing)))
 
 	self:TakePrimaryAmmo(1)
 	if self:GetPrimaryAmmoCount() <= 0 then

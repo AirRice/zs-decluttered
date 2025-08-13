@@ -1284,12 +1284,12 @@ function GM:Think()
 				local healmax = pl:HasTrinket("d_insured") and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 
 				if pl:HasTrinket("regenenzyme") and time >= pl.NextRegenerate and pl:Health() < math.min(healmax, pl:GetMaxHealth() * 0.6) then
-					pl.NextRegenerate = time + 6
+					pl.NextRegenerate = time + 12
 					pl:SetHealth(math.min(healmax, pl:Health() + 1))
 				end
 
 				if pl:HasTrinket("regenimplant") and time >= pl.NextRegenTrinket and pl:Health() < healmax then
-					pl.NextRegenTrinket = time + 12
+					pl.NextRegenTrinket = time + 6
 					pl:SetHealth(math.min(healmax, pl:Health() + 1))
 				end
 
@@ -1301,6 +1301,13 @@ function GM:Think()
 				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and pl:HasTrinket("cardiotonic") then
 					if pl:GetBloodArmor() > 0 then
 						pl:SetBloodArmor(pl:GetBloodArmor() - 1)
+						if pl:GetBloodArmor() == 0 and pl:HasTrinket("hemospoofer") then
+							local bleed = pl:GiveStatus("bleed")
+							if bleed and bleed:IsValid() then
+								bleed:AddDamage(5)
+								bleed.Damager = pl
+							end
+						end
 					else
 						pl:ResetSpeed()
 					end
@@ -1339,7 +1346,7 @@ function GM:Think()
 					pl.OldWeaponToReload = nil
 				end
 
-				if pl:HasTrinket("stockpilesys") and self:GetWave() > 0 and time > (pl.NextResupplyUse or 0) then
+				if pl:HasTrinket("promanifest") and self:GetWave() > 0 and time > (pl.NextResupplyUse or 0) then
 					local stockpiling = pl:HasTrinket("bulkstocker")
 
 					pl.NextResupplyUse = time + self.ResupplyBoxCooldown * (pl.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
@@ -3335,6 +3342,13 @@ function GM:KeyPress(pl, key)
 					pl:SetBloodArmor(pl:GetBloodArmor() - 1)
 					pl:EmitSound("player/suit_sprint.wav", 50)
 					pl:ResetSpeed()
+					if pl:GetBloodArmor() == 0 and pl:HasTrinket("hemospoofer") then
+						local bleed = pl:GiveStatus("bleed")
+						if bleed and bleed:IsValid() then
+							bleed:AddDamage(5)
+							bleed.Damager = pl
+						end
+					end
 				end
 			elseif pl:Team() == TEAM_UNDEAD then
 				pl:CallZombieFunction0("AltUse")
@@ -3525,7 +3539,7 @@ function GM:HumanKilledZombie(pl, attacker, inflictor, dmginfo, headshot, suicid
 			end
 		end
 
-		if #self.Food > 0 and pl.ChefMarkTime and pl.ChefMarkTime > CurTime() and pl.ChefMarkOwner == attacker and math.random(9) == 1 then
+		if #self.Food > 0 and pl.ChefMarkTime and pl.ChefMarkTime > CurTime() and pl.ChefMarkOwner == attacker and math.random(4) == 1 then
 			local rfood = self.Food[math.random(#self.Food)]
 			if not attacker:HasWeapon(rfood) then
 				attacker:Give(rfood)
@@ -4320,7 +4334,7 @@ function GM:WaveStateChanged(newstate)
 					end
 				end
 				
-				if pl:HasTrinket("mealticket") and #GAMEMODE.Food > 0 then
+				if pl:HasTrinket("acqmanifest") and #GAMEMODE.Food > 0 then
 					pl:Give(GAMEMODE.Food[math.random(#GAMEMODE.Food)])
 				end
 			elseif pl:Team() == TEAM_UNDEAD and not pl:Alive() and not pl.Revive then
