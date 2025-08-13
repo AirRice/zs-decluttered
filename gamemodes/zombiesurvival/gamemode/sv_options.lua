@@ -1,17 +1,20 @@
 -- Weapon sets that humans can start with if they choose RANDOM.
 GM.StartLoadouts = {
-	{"pshtr", "3pcp", "2pcp", "2sgcp", "3sgcp"},
-	{"btlax", "3pcp", "2pcp", "2arcp", "3arcp"},
-	{"stbbr", "3rcp", "2rcp", "2pcp", "3pcp"},
-	{"tossr", "3smgcp", "2smgcp", "zpplnk", "stone"},
-	{"blstr", "3sgcp", "2sgcp", "csknf"},
-	{"owens", "3pcp", "2pcp", "2pls", "3pls"},
-	{"curativei", "medkit", "90mkit", "60mkit"},
-	{"minelayer", "4mines", "6mines"},
-	{"crklr", "3arcp", "2arcp", "xbow1", "xbow2"},
-	{"junkpack", "12nails", "crphmr", "loadingframe"},
-	{"z9000", "3pls", "2pls", "stnbtn"},
-	{"sling", "xbow1", "xbow2", "2sgcp", "3sgcp"}
+	{"pshtr","2pcp","3pcp","csknf","portablehole"},
+	{"btlax","3pcp","ladel","momentumsupsysii"},
+	{"stbbr","3rcp","zpplnk","aimcompens"},
+	{"tossr", "3smgcp", "2smgcp", "zpplnk", "grenade"},
+	{"blstr","2sgcp","3sgcp","brassknuckles","boxingtraining"},
+	{"owens", "3pcp", "2pcp", "zpfryp"},
+	{"60mkit","medkit","processor","stone"},
+	{"minelayer", "4mines", "6mines", "flashbomb"},
+	{"crklr", "3arcp", "2arcp", "zpcpot"},
+	{"8nails","crphmr","junkpack","alloyhammer"},
+	{"z9000", "3pls", "stnbtn"},
+	{"sling","xbow1","xbow2","agimagni"},
+	{"infturret","wrench","stone"},
+	{"barricadekit","wrench"},
+	{"crwbar","manhack","wrench"}
 }
 
 

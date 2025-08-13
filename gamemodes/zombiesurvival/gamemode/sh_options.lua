@@ -167,17 +167,17 @@ GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			20,				nil,			"12 nails",						n
 GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			15,				nil,			"60 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(60, "Battery", true) end)
 GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			25,				nil,			"90 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
 
-GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			20,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
-GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			40,				"weapon_zs_axe")
-GM:AddStartingItem("crwbar",			ITEMCAT_MELEE,			40,				"weapon_zs_crowbar")
-GM:AddStartingItem("stnbtn",			ITEMCAT_MELEE,			40,				"weapon_zs_stunbaton")
-GM:AddStartingItem("csknf",				ITEMCAT_MELEE,			20,				"weapon_zs_swissarmyknife")
-GM:AddStartingItem("zpplnk",			ITEMCAT_MELEE,			20,				"weapon_zs_plank")
-GM:AddStartingItem("zpfryp",			ITEMCAT_MELEE,			30,				"weapon_zs_fryingpan")
-GM:AddStartingItem("zpcpot",			ITEMCAT_MELEE,			30,				"weapon_zs_pot")
-GM:AddStartingItem("ladel",				ITEMCAT_MELEE,			30,				"weapon_zs_ladel")
-GM:AddStartingItem("pipe",				ITEMCAT_MELEE,			40,				"weapon_zs_pipe")
-GM:AddStartingItem("hook",				ITEMCAT_MELEE,			40,				"weapon_zs_hook")
+GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
+GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			30,				"weapon_zs_axe")
+GM:AddStartingItem("crwbar",			ITEMCAT_MELEE,			30,				"weapon_zs_crowbar")
+GM:AddStartingItem("stnbtn",			ITEMCAT_MELEE,			35,				"weapon_zs_stunbaton")
+GM:AddStartingItem("csknf",				ITEMCAT_MELEE,			10,				"weapon_zs_swissarmyknife")
+GM:AddStartingItem("zpplnk",			ITEMCAT_MELEE,			10,				"weapon_zs_plank")
+GM:AddStartingItem("zpfryp",			ITEMCAT_MELEE,			20,				"weapon_zs_fryingpan")
+GM:AddStartingItem("zpcpot",			ITEMCAT_MELEE,			20,				"weapon_zs_pot")
+GM:AddStartingItem("ladel",				ITEMCAT_MELEE,			20,				"weapon_zs_ladel")
+GM:AddStartingItem("pipe",				ITEMCAT_MELEE,			30,				"weapon_zs_pipe")
+GM:AddStartingItem("hook",				ITEMCAT_MELEE,			25,				"weapon_zs_hook")
 
 local item
 GM:AddStartingItem("medkit",			ITEMCAT_TOOLS,			60,				"weapon_zs_medicalkit")
@@ -240,13 +240,13 @@ GM:AddStartingItem("arsenalpack",		ITEMCAT_TRINKETS,		55,				"trinket_arsenalpac
 GM:AddStartingItem("resupplypack",		ITEMCAT_TRINKETS,		55,				"trinket_resupplypack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("oxtank",			ITEMCAT_TRINKETS,		5,				"trinket_oxygentank").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddStartingItem("boxingtraining",	ITEMCAT_TRINKETS,		10,				"trinket_boxingtraining").SubCategory =			ITEMSUBCAT_TRINKETS_MELEE
-GM:AddStartingItem("cutlery",			ITEMCAT_TRINKETS,		10,				"trinket_cutlery").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
+--GM:AddStartingItem("cutlery",			ITEMCAT_TRINKETS,		10,				"trinket_cutlery").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddStartingItem("portablehole",		ITEMCAT_TRINKETS,		10,				"trinket_portablehole").SubCategory =			ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddStartingItem("agimagni",			ITEMCAT_TRINKETS,		20,				"trinket_pathfinder").SubCategory=				ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddStartingItem("nightvision",		ITEMCAT_TRINKETS,		15,				"trinket_nightvision").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddStartingItem("aimcompens",		ITEMCAT_TRINKETS,		25,				"trinket_aimcomp").SubCategory =				ITEMSUBCAT_TRINKETS_OFFENSIVE
 GM:AddStartingItem("pulseampii",		ITEMCAT_TRINKETS,		20,				"trinket_pulseampii").SubCategory =				ITEMSUBCAT_TRINKETS_OFFENSIVE
-GM:AddStartingItem("blueprintsii",		ITEMCAT_TRINKETS,		15,				"trinket_blueprintsii").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("alloyhammer",		ITEMCAT_TRINKETS,		15,				"trinket_alloyhammer").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("loadingframe",		ITEMCAT_TRINKETS,		15,				"trinket_loadingex").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddStartingItem("kevlar",			ITEMCAT_TRINKETS,		15,				"trinket_kevlar").SubCategory =					ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddStartingItem("momentumsupsysii",	ITEMCAT_TRINKETS,		15,				"trinket_momentumsupsysii").SubCategory =		ITEMSUBCAT_TRINKETS_MELEE

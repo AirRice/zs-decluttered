@@ -612,7 +612,7 @@ GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 1)
 trinket = GM:AddDebuffTrinket("DEBUFF: Frail", "d_insured", "+5 starting points\nCannot heal by any means beyond 25% maximum health")
 GM:AddSkillModifier(trinket, SKILLMOD_POINTS, 5)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Oversized Harnesses", "d_overharness", "-5% resupply delay\nAfter beginning to phase through a barricade, you become unable to move for 6 seconds")
+trinket = GM:AddDebuffTrinket("DEBUFF: Oversized Harnesses", "d_overharness", "-5% resupply delay\nFor the first 6 seconds after initiating barricade phasing, you cannot move")
 GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.05)
 GM:AddSkillFunction(trinket, function(pl, active)
 	pl.SlowGhosting = active

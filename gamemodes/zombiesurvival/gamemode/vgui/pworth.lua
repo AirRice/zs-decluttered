@@ -587,6 +587,37 @@ end
 
 --[[function PANEL:OnCursorExited()
 end]]
+local warnedaboutdebuffs = CreateClientConVar("_zs_warnedaboutdebuffs", "0", true, false)
+
+local function DoDebuffWarningMessage()
+	local wide, tall = 500, 480
+	local Window = vgui.Create( "DFrame" )
+	Window:SetSize(wide, tall)
+	Window:Center()
+	Window:SetTitle("WARNING: Debuff Trinkets")
+	Window:SetDraggable( false )
+	Window:ShowCloseButton( false )
+	Window:SetBackgroundBlur( true )
+	Window:SetDrawOnTop( true )
+	Window:SetKeyboardInputEnabled(false)
+
+	Window:SetCursor("pointer")
+
+	local Text = EasyLabel(Window, "Debuffs are special trinkets that SIGNIFICANTLY change gameplay, often harming the player, and cannot be removed during the round.\nHowever, they provide additional worth to spend and can be useful in specific situations.\n\nThey are not recommended for beginners!"	, "ZSHUDFontSmallerNS", color_white)
+	Text:SetContentAlignment( 5 )
+	Text:StretchToParent(5, 52, 5, 64)
+	Text:SetWrap(true)
+
+	
+	local button = EasyButton(Window, "Understood", 8, 4)
+	button:SetPos((wide - button:GetWide())/2, tall - button:GetTall() - 12)
+	button.DoClick = function() Window:Close() end
+
+	Window:MakePopup()
+	Window:DoModal()
+
+	return Window
+end
 
 function PANEL:DoClick(silent, force)
 	local id = self.ID
@@ -606,7 +637,7 @@ function PANEL:DoClick(silent, force)
 			remainingworth = remainingworth + tab.Price
 		end
 	else
-		if remainingworth < tab.Price then
+		if remainingworth < tab.Price and not tab.TrinketIsDebuff then
 			if not force then
 				surface.PlaySound("buttons/button8.wav")
 				return
@@ -619,6 +650,10 @@ function PANEL:DoClick(silent, force)
 			surface.PlaySound("buttons/button17.wav")
 		end
 		if tab.TrinketIsDebuff then
+			if !warnedaboutdebuffs:GetBool() then
+				RunConsoleCommand("_zs_warnedaboutdebuffs", "1")
+				DoDebuffWarningMessage()
+			end
 			remainingworth = remainingworth + tab.Price
 		else
 			remainingworth = remainingworth - tab.Price
