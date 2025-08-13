@@ -5,7 +5,7 @@ function meta:AddInventoryItem(item)
 
 	self.ZSInventory[item] = self.ZSInventory[item] and self.ZSInventory[item] + 1 or 1
 
-	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS or GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
 		self:ApplyTrinkets()
 	end
 
@@ -27,7 +27,7 @@ function meta:TakeInventoryItem(item)
 		self.ZSInventory[item] = nil
 	end
 
-	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS or GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
 		self:ApplyTrinkets()
 	end
 
@@ -172,8 +172,12 @@ end
 function meta:GiveInventoryItemByType(itype, plyr)
 	if GAMEMODE.ZombieEscape then return end
 	if not self:HasInventoryItem(itype) then return end
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
+		self:CenterNotify(COLOR_RED, "You cannot remove debuffs this way.")
+		return 
+	end
 
-	if GAMEMODE:GetInventoryItemType(itype) == INVCAT_TRINKETS and plyr:HasInventoryItem(itype) then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS and plyr:HasInventoryItem(itype) then
 		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "they_already_have_this_trinket"))
 		return
 	end

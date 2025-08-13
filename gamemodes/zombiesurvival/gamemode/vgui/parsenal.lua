@@ -695,6 +695,7 @@ function GM:OpenArsenalMenu()
 	propertysheet:CenterHorizontal(0.33)
 
 	for catid, catname in ipairs(GAMEMODE.ItemCategories) do
+		if catid == ITEMCAT_DEBUFF then continue end
 		local hasitems = false
 		for i, tab in ipairs(GAMEMODE.Items) do
 			if tab.Category == catid and tab.PointShop then

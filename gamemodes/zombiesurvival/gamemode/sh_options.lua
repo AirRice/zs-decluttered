@@ -236,6 +236,8 @@ GM:AddStartingItem("barricadekit",		ITEMCAT_DEPLOYABLES,			80,				"weapon_zs_bar
 GM:AddStartingItem("camera",			ITEMCAT_DEPLOYABLES,			15,				"weapon_zs_camera").Countables = "prop_camera"
 GM:AddStartingItem("tv",				ITEMCAT_DEPLOYABLES,			35,				"weapon_zs_tv").Countables = "prop_tv"
 
+GM:AddStartingItem("arsenalpack",		ITEMCAT_TRINKETS,		55,				"trinket_arsenalpack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("resupplypack",		ITEMCAT_TRINKETS,		55,				"trinket_resupplypack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("oxtank",			ITEMCAT_TRINKETS,		5,				"trinket_oxygentank").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddStartingItem("boxingtraining",	ITEMCAT_TRINKETS,		10,				"trinket_boxingtraining").SubCategory =			ITEMSUBCAT_TRINKETS_MELEE
 GM:AddStartingItem("cutlery",			ITEMCAT_TRINKETS,		10,				"trinket_cutlery").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
@@ -255,8 +257,7 @@ GM:AddStartingItem("bloodpack",			ITEMCAT_TRINKETS,		20,				"trinket_bloodpack")
 GM:AddStartingItem("biocleanser",		ITEMCAT_TRINKETS,		20,				"trinket_biocleanser").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddStartingItem("reactiveflasher",	ITEMCAT_TRINKETS,		25,				"trinket_reactiveflasher").SubCategory =		ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddStartingItem("magnet",			ITEMCAT_TRINKETS,		25,				"trinket_magnet").SubCategory =					ITEMSUBCAT_TRINKETS_SPECIAL
-GM:AddStartingItem("arsenalpack",		ITEMCAT_TRINKETS,		55,				"trinket_arsenalpack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
-GM:AddStartingItem("resupplypack",		ITEMCAT_TRINKETS,		55,				"trinket_resupplypack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("logiradar",			ITEMCAT_TRINKETS,		30,				"trinket_logisticsrad").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
 
 GM:AddStartingItem("stone",				ITEMCAT_OTHER,			5,				"weapon_zs_stone")
 GM:AddStartingItem("grenade",			ITEMCAT_OTHER,			10,				"weapon_zs_grenade")
@@ -278,6 +279,20 @@ item.SkillRequirement = SKILL_U_CORRUPTEDFRAGMENT]]
 GM:AddStartingItem("medcloud",			ITEMCAT_OTHER,			15,				"weapon_zs_mediccloudbomb")
 GM:AddStartingItem("nanitecloud",		ITEMCAT_OTHER,			15,				"weapon_zs_nanitecloudbomb")
 GM:AddStartingItem("bloodshot",			ITEMCAT_OTHER,			20,				"weapon_zs_bloodshotbomb")
+
+GM:AddStartingItem("d_swingamp",		ITEMCAT_DEBUFF,			0,				"trinket_d_swingamp").TrinketIsDebuff = true
+GM:AddStartingItem("d_gimbalaim",		ITEMCAT_DEBUFF,			0,				"trinket_d_gimbalaim").TrinketIsDebuff = true
+GM:AddStartingItem("d_crystallizer",	ITEMCAT_DEBUFF,			0,				"trinket_d_crystallizer").TrinketIsDebuff = true
+GM:AddStartingItem("d_predloan",		ITEMCAT_DEBUFF,			20,				"trinket_d_predloan").TrinketIsDebuff = true
+GM:AddStartingItem("d_bulkpurse",		ITEMCAT_DEBUFF,			15,				"trinket_d_bulkpurse").TrinketIsDebuff = true
+GM:AddStartingItem("d_blooddonor",		ITEMCAT_DEBUFF,			15,				"trinket_d_blooddonor").TrinketIsDebuff = true
+GM:AddStartingItem("d_razorwire",		ITEMCAT_DEBUFF,			10,				"trinket_d_razorwire").TrinketIsDebuff = true
+GM:AddStartingItem("d_overharness",		ITEMCAT_DEBUFF,			20,				"trinket_d_overharness").TrinketIsDebuff = true
+GM:AddStartingItem("d_insured",			ITEMCAT_DEBUFF,			20,				"trinket_d_insured").TrinketIsDebuff = true
+GM:AddStartingItem("d_hodl",			ITEMCAT_DEBUFF,			20,				"trinket_d_hodl").TrinketIsDebuff = true
+GM:AddStartingItem("d_brokenexo",		ITEMCAT_DEBUFF,			5,				"trinket_d_brokenexo").TrinketIsDebuff = true
+GM:AddStartingItem("d_stimtrial",		ITEMCAT_DEBUFF,			10,				"trinket_d_stimtrial").TrinketIsDebuff = true
+GM:AddStartingItem("d_mercury",			ITEMCAT_DEBUFF,			20,				"trinket_d_mercury").TrinketIsDebuff = true
 
 ------------
 -- Points --

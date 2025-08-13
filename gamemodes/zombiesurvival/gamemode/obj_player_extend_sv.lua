@@ -997,7 +997,7 @@ function meta:ScrapReactorCashOut(ent)
 	local togive = math.floor(dmgremainder/200)
 	if togive >= 1 and P_Team(self) == TEAM_HUMAN then
 		self.ScrapReactorDmgRemainder = self.ScrapReactorDmgRemainder - (togive * 200)
-		activator:GiveAmmo(togive, "scrap")
+		self:GiveAmmo(togive, "scrap")
 		self:FloatingScore(ent or self.LastDamageDealtPos or vector_origin, "floatingscore_scrap", togive, FM_NONE)
 	end
 end

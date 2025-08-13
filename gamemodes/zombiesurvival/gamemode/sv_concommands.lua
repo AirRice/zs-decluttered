@@ -182,7 +182,7 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		potinv = GAMEMODE.Breakdowns[contents]
 	else
 		itypecat = GAMEMODE:GetInventoryItemType(invitem)
-		if itypecat ~= INVCAT_TRINKETS or GAMEMODE.ZSInventoryItemData[invitem].PermitDismantle then
+		if itypecat ~= INVCAT_TRINKETS or GAMEMODE.ZSInventoryItemData[invitem].NoDismantle then
 			GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "cannot_dismantle"))
 			return
 		end
@@ -371,12 +371,15 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 
 		local tab = FindStartingItem(id)
 		if tab and not hasalready[id] then
-			cost = cost + tab.Price
+			if tab.TrinketIsDebuff then
+				cost = cost - tab.Price
+			else
+				cost = cost + tab.Price
+			end
 			hasalready[id] = true
 		end
 	end
 
-	--TODO: Calculate debuff returned cost
 	if cost > GAMEMODE.StartingWorth then return end
 
 	hasalready = {}
@@ -435,7 +438,7 @@ concommand.Add("zsdropweapon", function(sender, command, arguments)
 	if invitem and not sender:HasInventoryItem(invitem) then return end
 
 	if invitem and GAMEMODE:GetIsTrinketDebuff(string.sub(invitem, 9)) then
-		self:CenterNotify(COLOR_RED, "You can't drop Debuff trinkets.")
+		GAMEMODE:ConCommandErrorMessage(sender, "You can't drop Debuff trinkets.")
 		return
 	end
 	

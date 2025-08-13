@@ -4330,11 +4330,10 @@ function GM:WaveStateChanged(newstate)
 				if pointsbonus then
 					local pointsreward = pointsbonus + (pl.EndWavePointsExtra or 0)
 
-					if pl:HasTrinket("d_recycling") then
-						pl:GiveAmmo(math.ceil(pointsreward), "scrap")
-					else
-						pl:AddPoints(pointsreward, nil, nil, true)
+					if pl:HasTrinket("scrapreactor") then
+						pl:GiveAmmo(math.ceil(GAMEMODE.EndWavePointsBonus), "scrap")
 					end
+					pl:AddPoints(pointsreward, nil, nil, true)
 				end
 				
 				if pl:HasTrinket("acqmanifest") and #GAMEMODE.Food > 0 then

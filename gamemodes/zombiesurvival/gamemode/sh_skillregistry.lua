@@ -26,6 +26,7 @@ end
 function GM:AddDebuffTrinket(name, swepaffix, description, status)
 	local t_id, trinketwep = self:AddTrinket(name, swepaffix, false, nil, nil, nil, description, status)
 	trinketwep.IsDebuff = true
+	trinketwep.NoDismantle = true
 
 	return t_id, trinketwep
 end

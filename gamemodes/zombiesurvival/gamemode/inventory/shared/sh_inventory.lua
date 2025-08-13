@@ -1,6 +1,7 @@
 INVCAT_TRINKETS = 1
 INVCAT_COMPONENTS = 2
 INVCAT_CONSUMABLES = 3
+INVCAT_DEBUFF = 4
 
 -- Item Locator
 LOCATOR_NONE = 0
@@ -14,7 +15,8 @@ GM.ZSInventoryItemData = {}
 GM.ZSInventoryCategories = {
 	[INVCAT_TRINKETS] = "Trinkets",
 	[INVCAT_COMPONENTS] = "Components",
-	[INVCAT_CONSUMABLES] = "Consumables"
+	[INVCAT_CONSUMABLES] = "Consumables",
+	[INVCAT_DEBUFF] = "Debuffs"
 }
 GM.ZSInventoryPrefix = {
 	[INVCAT_TRINKETS] = "trin",
@@ -26,6 +28,9 @@ GM.Assemblies = {}
 GM.Breakdowns = {}
 
 function GM:GetInventoryItemType(item)
+	if string.sub(item, 1, 10) == "trinket_d_" then
+		return INVCAT_DEBUFF
+	end
 	for typ, aff in pairs(self.ZSInventoryPrefix) do
 		if string.sub(item, 1, 4) == aff then
 			return typ
@@ -190,32 +195,32 @@ local supweles = {
 trinket, trinketwep = GM:AddTrinket("Armband", "armband", false, mveles, mweles, nil, "-10% melee swing impact delay\n-6% melee damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_SWING_DELAY_MUL, -0.1)
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.06)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Escape Manual", "emanual", false, develes, deweles, nil, "+20% phasing speed\n-12% low health slow intensity")
 GM:AddSkillModifier(trinket, SKILLMOD_BARRICADE_PHASE_SPEED_MUL, 0.20)
 GM:AddSkillModifier(trinket, SKILLMOD_LOW_HEALTH_SLOW_MUL, -0.12)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Aiming Aid", "aimaid", false, develes, deweles, nil, "+5% tighter aiming reticule\n-7% reduced effect of aim shake effects")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.06)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Vitamin Capsules", "vitamins", false, hpveles, hpweles, nil, "+5 maximum health\n-12% poison damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 5)
 GM:AddSkillModifier(trinket, SKILLMOD_POISON_DAMAGE_TAKEN_MUL, -0.12)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Welfare Shield", "welfare", false, hpveles, hpweles, nil, "-5% resupply delay\n-7% self damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_SELF_DAMAGE_MUL, -0.07)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Chemistry Set", "chemistry", false, hpveles, hpweles, nil, "+6% medic tool effectiveness\n+12% cloud bomb time")
 GM:AddSkillModifier(trinket, SKILLMOD_MEDKIT_EFFECTIVENESS_MUL, 0.06)
 GM:AddSkillModifier(trinket, SKILLMOD_CLOUD_TIME, 0.12)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 
 -- Health Trinkets
@@ -223,18 +228,18 @@ trinketwep.PermitDismantle = true
 --[[trinket, trinketwep = GM:AddTrinket("Health Package", "vitpackagei", false, hpveles, hpweles, 2, "+10 maximum health\n+5% healing received")
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 10)
 GM:AddSkillModifier(trinket, SKILLMOD_HEALING_RECEIVED, 0.05)
-trinketwep.PermitDismantle = true]]
+trinketwep.NoDismantle = true]]
 
 trinket = GM:AddTrinket("Vitality Bank", "vitpackageii", false, hpveles, hpweles, 4, "+21 maximum health\n+6% healing received")
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 21)
 GM:AddSkillModifier(trinket, SKILLMOD_HEALING_RECEIVED, 0.06)
 
 trinket, trinketwep = GM:AddTrinket("Blood Transfusion Pack", "bloodpack", false, hpveles, hpweles, 2, "Generates 20 blood armor if health falls below 50%\nConsumes itself on activation.", nil, 15)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 --[[trinket, trinketwep = GM:AddTrinket("Blood Package", "cardpackagei", false, hpveles, hpweles, 2, "+10 maximum blood armor")
 GM:AddSkillModifier(trinket, SKILLMOD_BLOODARMOR, 10)
-trinketwep.PermitDismantle = true]]
+trinketwep.NoDismantle = true]]
 
 -- SKILL_IRONBLOOD
 GM:AddTrinket("Subdermal Hemolattice", "ironblood", false, hpveles, hpweles, 3, "+25% blood armor damage absorption\nAdditional +25% blood armor damage absorption when health is 50% or less")
@@ -254,7 +259,7 @@ GM:AddTrinket("Regeneration Implant", "regenimplant", false, hpveles, hpweles, 3
 
 -- SKILL_HAEMOSTASIS added
 trinket, trinketwep = GM:AddTrinket("Bio Cleanser", "biocleanser", false, hpveles, hpweles, 2, "While possessing at least 2 blood armor, expends 2 blood armor to block one harmful status effect\nAlso passively blocks one harmful status effect every 20 seconds")
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 --SKILL_SUGARRUSH
 trinket = GM:AddTrinket("Cutlery Set", "cutlery", false, hpveles, hpweles, 2, "-80% time to eat food\n+35 speed boost for 14 seconds when food is consumed")
@@ -273,7 +278,7 @@ GM:AddSkillFunction(trinket, function(pl, active) pl.BoxingTraining = active end
 trinket, trinketwep = GM:AddTrinket("Momentum Support", "momentumsupsysii", false, mveles, mweles, 2, "-13% melee swing impact delay\n+10% melee knockback")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_SWING_DELAY_MUL, -0.13)
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_KNOCKBACK_MUL, 0.1)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 -- SKILL_LANKY added
 trinket = GM:AddTrinket("Momentum Scaffold", "momentumsupsysiii", false, mveles, mweles, 3, "-20% melee swing impact delay\n+12% melee knockback\n+20% melee range")
@@ -325,7 +330,7 @@ GM:AddSkillFunction(trinket, function(pl, active)
 		GAMEMODE.m_NightVision = false
 	end
 end)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket = GM:AddTrinket("Portable Weapons Satchel", "portablehole", false, pveles, pweles, nil, "+15% weapon draw speed\n+5% reload speed")
 GM:AddSkillModifier(trinket, SKILLMOD_DEPLOYSPEED_MUL, 0.15)
@@ -418,7 +423,7 @@ GM:AddSkillModifier(trinket, SKILLMOD_WEAPON_WEIGHT_SLOW_MUL, -0.35)
 trinket, trinketwep = GM:AddTrinket("Kevlar Underlay", "kevlar", false, develes, deweles, 2, "-11% melee damage taken\n-11% projectile damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.11)
 GM:AddSkillModifier(trinket, SKILLMOD_PROJECTILE_DAMAGE_TAKEN_MUL, -0.11)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket = GM:AddTrinket("Barbed Armor", "barbedarmor", false, develes, deweles, 3, "100% of melee damage taken reflected back to melee attackers\nAdditional 14 damage reflected back to melee attackers\nMelee attackers take 14 arm damage\n-4% melee damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_ATTACKER_DMG_REFLECT, 14)
@@ -464,7 +469,7 @@ GM:AddSkillModifier(GM:AddTrinket("Force Dampening Field Emitter", "forcedamp", 
 GM:AddSkillFunction(GM:AddTrinket("Necrotic Senses Distorter", "necrosense", false, develes, deweles, 2, "Hides aura from zombies in close proximity"), function(pl, active) pl:SetDTBool(DT_PLAYER_BOOL_NECRO, active) end)
 
 trinket, trinketwep = GM:AddTrinket("Reactive Flasher", "reactiveflasher", false, develes, deweles, 2, "Blinds and disorients melee attacker for 2 seconds\nRecharges every 75 seconds")
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket = GM:AddTrinket("Composite Underlay", "composite", false, develes, deweles, 4, "-16% melee damage taken\n-16% projectile damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.16)
@@ -476,12 +481,12 @@ trinket, trinketwep = GM:AddTrinket("Arsenal Pack", "arsenalpack", false, {
 }, {
 	["base"] = { type = "Model", model = "models/Items/item_item_crate.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 2, -1), angle = Angle(0, -90, 180), size = Vector(0.35, 0.35, 0.35), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }, 4, "Allows nearby humans to purchase from the arsenal menu.", "arsenalpack", 3)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 trinket, trinketwep = GM:AddTrinket("Resupply Pack", "resupplypack", true, nil, {
 	["base"] = { type = "Model", model = "models/Items/ammocrate_ar2.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(4, 2, -1), angle = Angle(0, -90, 180), size = Vector(0.35, 0.35, 0.35), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
 }, 4, "Allows humans to resupply from you\nPress LMB with the pack in your hand to resupply yourself.", "resupplypack", 3)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 GM:AddTrinket("Magnet", "magnet", true, supveles, supweles, nil, "Slowly pulls ammo and weapons towards you\nMust be equipped to take effect", "magnet")
 GM:AddTrinket("Electromagnet", "electromagnet", true, supveles, supweles, nil, "Pulls ammo and weapons towards you quickly\nMust be equipped to take effect", "magnet_electro")
@@ -489,11 +494,11 @@ GM:AddTrinket("Electromagnet", "electromagnet", true, supveles, supweles, nil, "
 trinket, trinketwep = GM:AddTrinket("Loading Exoskeleton", "loadingex", false, supveles, supweles, 2, "-55% prop carrying slow down\n-20% deployable pack time")
 GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_SLOW_MUL, -0.55)
 GM:AddSkillModifier(trinket, SKILLMOD_DEPLOYABLE_PACKTIME_MUL, -0.2)
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
 --trinket, trinketwep = GM:AddTrinket("Blueprints", "blueprintsi", false, supveles, supweles, 2, "+10% repair rate")
 --GM:AddSkillModifier(trinket, SKILLMOD_REPAIRRATE_MUL, 0.1)
---trinketwep.PermitDismantle = true
+--trinketwep.NoDismantle = true
 
 -- SKILL_BARRICADEEXPERT added
 GM:AddSkillModifier(GM:AddTrinket("Advanced Blueprints", "blueprintsii", false, supveles, supweles, 4, "+20% repair rate\nProps recently repaired with a hammer will take 8% less damage for the next 2 seconds"), SKILLMOD_REPAIRRATE_MUL, 0.2)
@@ -518,7 +523,6 @@ GM:AddSkillModifier(trinket, SKILLMOD_MEDKIT_EFFECTIVENESS_MUL, 0.2)
 
 --SKILL_LOADEDHULL
 trinket, trinketwep = GM:AddTrinket("Loaded Hulls", "loadedhull", false, supveles, supweles, nil, "Controllables now explode when destroyed, dealing area damage")
-trinketwep.PermitDismantle = true
 
 -- SKILL_TURRETOVERLOAD added
 trinket = GM:AddTrinket("Maintenance Suite", "mainsuite", false, supveles, supweles, 2, "+10% zapper and repair field range\n-7% zapper and repair field delay\n+10% turret range\nTurrets rotate and scan for targets 100% faster")
@@ -536,7 +540,6 @@ GM:AddSkillModifier(trinket, SKILLMOD_MANHACK_DAMAGE_MUL, 0.2)
 
 --SKILL_TWINVOLLEY
 trinket, trinketwep = GM:AddTrinket("MRSI Allocator", "mrsiallocator", false, supveles, supweles, nil, "Turrets will now fire two bullets/projectiles at once while manually controlled\n+50% shot delay while manually controlled")
-trinketwep.PermitDismantle = true
 
 trinket = GM:AddTrinket("Projectile Guidance", "projguide", false, supveles, supweles, 2, "+25% projectile speed")
 GM:AddSkillModifier(trinket, SKILLMOD_PROJ_SPEED, 0.25)
@@ -582,63 +585,57 @@ end)
 
 --SKILL_STOCKPILE
 trinket, trinketwep = GM:AddTrinket("Bulk Resupply Module", "bulkstocker", false, supveles, supweles, nil, "Resupplies will provide +100% resources at a +100% longer delay time")
-trinketwep.PermitDismantle = true
 
 --SKILL_ACUITY, SKILL_VISION, SKILL_INSIGHT, SKILL_SCAVENGER
 trinket, trinketwep = GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nCycle through each item's visibility with PRIMARY FIRE while holding the tool")
-trinketwep.PermitDismantle = true
+trinketwep.NoDismantle = true
 
-trinket = GM:AddTrinket("Scrap Reactor", "scrapreactor", false, supveles, supweles, 2, "Earn 1 scrap per 200 damage dealt to zombies")
+trinket = GM:AddTrinket("Scrap Reactor", "scrapreactor", false, supveles, supweles, 2, "Earn 1 scrap per 200 damage dealt to zombies\nAlso receive additional scrap at the end of waves")
 
 -- DEBUFF TRINKETS
-local GOOD = "^"..COLORID_GREEN
-local BAD = "^"..COLORID_RED
+GM:AddDebuffTrinket("DEBUFF: Crystallizer", "d_crystallizer", "3x melee damage vs. zombies\nMelee weapons have a 50% chance of shattering when hitting a zombie")
 
-GM:AddDebuffTrinket("DEBUFF: Crystallizer", "d_crystallizer", GOOD.."3x melee damage vs. zombies\n"..BAD.."Melee weapons have a 50% chance of shattering when hitting a zombie")
-
-trinket = GM:AddDebuffTrinket("DEBUFF: Mercury Injector", "d_mercury", GOOD.."+5 starting points\n"..BAD.."Almost all knockback will cause you to fall on the ground and become incapacitated")
+trinket = GM:AddDebuffTrinket("DEBUFF: Mercury Injector", "d_mercury", "+5 starting points\nAlmost all knockback will cause you to fall on the ground and become incapacitated")
 GM:AddSkillModifier(trinket, SKILLMOD_POINTS, 5)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Stimulant Trial", "d_stimtrial", GOOD.."-3% resupply delay\n"..BAD.."Severely impaired aiming when health is not full")
+trinket = GM:AddDebuffTrinket("DEBUFF: Stimulant Trial", "d_stimtrial", "-3% resupply delay\nSeverely impaired aiming when health is not full")
 GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.03)
 
 GM:AddDebuffTrinket("DEBUFF: Gimbal-assisted Aiming", "d_gimbalaim", "Accuracy becomes completely unaffected by crouching, ironsighting, jumping, or moving")
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Late Buyer", "d_hodl", GOOD.."2% arsenal discount\n"..BAD.."Unable to spend points at arsenal crates until the second half of the round")
+trinket = GM:AddDebuffTrinket("DEBUFF: Late Buyer", "d_hodl", "2% arsenal discount\nUnable to spend points at arsenal crates until the second half of the round")
 GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, -0.02)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Broken Exoskeleton", "d_brokenexo", GOOD.."+1 starting scrap\n"..BAD.."Unable to carry props")
+trinket = GM:AddDebuffTrinket("DEBUFF: Broken Exoskeleton", "d_brokenexo", "+1 starting scrap\nUnable to carry props")
 GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 1)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Frail", "d_insured", GOOD.."+5 starting points\n"..BAD.."Cannot heal by any means beyond 25% maximum health")
+trinket = GM:AddDebuffTrinket("DEBUFF: Frail", "d_insured", "+5 starting points\nCannot heal by any means beyond 25% maximum health")
 GM:AddSkillModifier(trinket, SKILLMOD_POINTS, 5)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Oversized Harnesses", "d_overharness", GOOD.."-5% resupply delay\n"..BAD.."After beginning to phase through a barricade, you become unable to move for 6 seconds")
+trinket = GM:AddDebuffTrinket("DEBUFF: Oversized Harnesses", "d_overharness", "-5% resupply delay\nAfter beginning to phase through a barricade, you become unable to move for 6 seconds")
 GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.05)
 GM:AddSkillFunction(trinket, function(pl, active)
 	pl.SlowGhosting = active
 end)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Reclaimed Razor Wire", "d_razorwire", GOOD.."+3 starting scrap\n"..BAD.."When you get hit, you will take an additional 25% of the damage over time via bleeding")
+trinket = GM:AddDebuffTrinket("DEBUFF: Reclaimed Razor Wire", "d_razorwire", "+3 starting scrap\nWhen you get hit, you will take an additional 25% of the damage over time via bleeding")
 GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 3)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Blood Donation", "d_blooddonor", GOOD.."+1 end of wave points\n"..BAD.."-45 maximum health")
+trinket = GM:AddDebuffTrinket("DEBUFF: Blood Donation", "d_blooddonor", "+1 end of wave points\n-45 maximum health")
 GM:AddSkillModifier(trinket, SKILLMOD_ENDWAVE_POINTS, 1)
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, -45)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Bulky Purse", "d_bulkpurse", GOOD.."+1 end of wave points\n"..BAD.."-33.75 movement speed")
+trinket = GM:AddDebuffTrinket("DEBUFF: Bulky Purse", "d_bulkpurse", "+1 end of wave points\n-33.75 movement speed")
 GM:AddSkillModifier(trinket, SKILLMOD_ENDWAVE_POINTS, 1)
 GM:AddSkillModifier(trinket, SKILLMOD_SPEED, -33.75)
 
 --SKILL_HEAVYSTRIKES
-trinket = GM:AddDebuffTrinket("DEBUFF: Swing Amplifier", "d_swingamp", GOOD.."+100% melee knockback\n"..BAD.."If an attack knocks a zombie backwards, 20% of melee damage dealt is reflected back to you\n"..BAD.."100% reflection rate if using unarmed strikes")
+trinket = GM:AddDebuffTrinket("DEBUFF: Swing Amplifier", "d_swingamp", "+100% melee knockback\nIf an attack knocks a zombie backwards, 20% of melee damage dealt is reflected back to you\n100% reflection rate if using unarmed strikes")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_KNOCKBACK_MUL, 1)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Predatory Loan", "d_predloan", BAD.."-20 starting points\n"..BAD.."2% arsenal markup")
+trinket = GM:AddDebuffTrinket("DEBUFF: Predatory Loan", "d_predloan", "-20 starting points\n+2% higher arsenal prices")
 GM:AddSkillModifier(trinket, SKILLMOD_POINTS, -20)
 GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, 0.02)
-
-GM:AddDebuffTrinket("DEBUFF: Recycling Contract", "d_recycling", GOOD.."Earn scrap at the end of waves\n"..BAD.."You will receive no points at the end of waves")
 
 -- Boss Trinkets
 

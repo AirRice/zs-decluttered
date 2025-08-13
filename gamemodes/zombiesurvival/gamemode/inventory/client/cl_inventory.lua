@@ -3,6 +3,7 @@ GM.ZSInventory = {}
 INVCAT_TRINKETS = 1
 INVCAT_COMPONENTS = 2
 INVCAT_CONSUMABLES = 3
+INVCAT_DEBUFF = 4
 
 local meta = FindMetaTable("Player")
 function meta:GetInventoryItems()
@@ -175,9 +176,10 @@ local function ItemPanelDoClick(self)
 end
 
 local categorycolors = {
-	[INVCAT_TRINKETS] = {COLOR_RED, COLOR_DARKRED},
+	[INVCAT_TRINKETS] = {COLOR_ORANGE, COLOR_RORANGE},
 	[INVCAT_COMPONENTS] = {COLOR_BLUE, COLOR_DARKBLUE},
-	[INVCAT_CONSUMABLES] = {COLOR_YELLOW, COLOR_DARKYELLOW}
+	[INVCAT_CONSUMABLES] = {COLOR_YELLOW, COLOR_DARKYELLOW},
+	[INVCAT_DEBUFF] = {COLOR_RED, COLOR_DARKRED}
 }
 local colBG = Color(10, 10, 10, 252)
 local colBGH = Color(200, 200, 200, 5)
@@ -274,7 +276,7 @@ function GM:InventoryAddGridItem(item, category)
 		trintier:CenterVertical(0.8)
 	end
 
-	local kitbl = killicon.Get(category == INVCAT_TRINKETS and "weapon_zs_trinket" or "weapon_zs_craftables")
+	local kitbl = killicon.Get(category == INVCAT_DEBUFF and "debuff_trinket" or category == INVCAT_TRINKETS and "weapon_zs_trinket" or "weapon_zs_craftables")
 	if kitbl then
 		self:AttachKillicon(kitbl, itempan, mdlframe)
 	end

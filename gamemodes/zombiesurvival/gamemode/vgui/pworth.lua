@@ -502,10 +502,10 @@ function PANEL:SetWorthID(id)
 
 	local nottrinkets = tab.Category ~= ITEMCAT_TRINKETS
 	self:SetTall((nottrinkets and 100 or 60) * screenscale)
-
+	
 	if nottrinkets then
 		self.ModelFrame:SetVisible(true)
-		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and "weapon_zs_craftables" or tab.SWEP or tab.Model)
+		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and (tab.Category == ITEMCAT_DEBUFF and "debuff_trinket" or "weapon_zs_craftables") or tab.SWEP or tab.Model)
 		if kitbl then
 			GAMEMODE:AttachKillicon(kitbl, self, self.ModelFrame, tab.Category == ITEMCAT_AMMO)
 		elseif tab.Model then
@@ -526,7 +526,11 @@ function PANEL:SetWorthID(id)
 	end
 
 	if tab.Price then
-		self.PriceLabel:SetText(tostring(tab.Price).." Worth")
+		if tab.TrinketIsDebuff then
+			self.PriceLabel:SetText("+ "..tostring(tab.Price).." Worth")
+		else
+			self.PriceLabel:SetText(tostring(tab.Price).." Worth")
+		end
 	else
 		self.PriceLabel:SetText("")
 	end
@@ -596,7 +600,11 @@ function PANEL:DoClick(silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button18.wav")
 		end
-		remainingworth = remainingworth + tab.Price
+		if tab.TrinketIsDebuff then
+			remainingworth = remainingworth - tab.Price
+		else
+			remainingworth = remainingworth + tab.Price
+		end
 	else
 		if remainingworth < tab.Price then
 			if not force then
@@ -610,7 +618,11 @@ function PANEL:DoClick(silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button17.wav")
 		end
-		remainingworth = remainingworth - tab.Price
+		if tab.TrinketIsDebuff then
+			remainingworth = remainingworth + tab.Price
+		else
+			remainingworth = remainingworth - tab.Price
+		end
 	end
 
 	pWorth.WorthLab:SetText("Worth: ".. remainingworth)
