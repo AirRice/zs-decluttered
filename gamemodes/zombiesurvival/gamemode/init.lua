@@ -2195,8 +2195,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.BarricadeDamage = 0
 
 	pl.PointsRemainder = 0
-
-	pl.XPRemainder = 0
+	pl.ScrapReactorDmgRemainder = 0
 
 	pl.LegDamage = 0
 	pl.ArmDamage = 0
@@ -2743,6 +2742,10 @@ function GM:EntityTakeDamage(ent, dmginfo)
 								end
 								attacker.PointQueue = attacker.PointQueue + points
 
+								if attacker:HasTrinket("scrapreactor") then
+									attacker.ScrapReactorDmgRemainder = attacker.ScrapReactorDmgRemainder + damage
+									attacker:ScrapReactorCashOut(ent)
+								end
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "PointsEarned", points)
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "Damage", damage)
 							end

@@ -962,7 +962,7 @@ function meta:Resupply(owner, obj)
 				owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
 			end
 
-			owner:AddPoints(0.15, nil, nil, true)
+			owner:AddPoints(0.25, nil, nil, true)
 
 			net.Start("zs_commission")
 				net.WriteEntity(obj)
@@ -989,6 +989,16 @@ function meta:PointCashOut(ent, fmtype)
 		self.PointQueue = self.PointQueue - points
 
 		self:AddPoints(points, ent or self.LastDamageDealtPos or vector_origin, fmtype)
+	end
+end
+
+function meta:ScrapReactorCashOut(ent)
+	local dmgremainder = self.ScrapReactorDmgRemainder
+	local togive = math.floor(dmgremainder/200)
+	if togive >= 1 and P_Team(self) == TEAM_HUMAN then
+		self.ScrapReactorDmgRemainder = self.ScrapReactorDmgRemainder - (togive * 200)
+		activator:GiveAmmo(togive, "scrap")
+		self:FloatingScore(ent or self.LastDamageDealtPos or vector_origin, "floatingscore_scrap", togive, FM_NONE)
 	end
 end
 
@@ -1709,16 +1719,20 @@ function meta:SetPhantomHealth(amount)
 end
 
 function meta:HasBarricadeExpert()
-	return self:GetZSRemortLevel() > 0
+	return self:HasTrinket("alloyhammer") or self:HasTrinket("blueprintsii")
 end
 
 function meta:BarricadeExpertPrecedence(otherpl)
-	local mygrade, myexpert = self:GetZSRemortLevelGraded(), self:HasBarricadeExpert()
-	local othergrade, otherexpert = otherpl:GetZSRemortLevelGraded(), otherpl:HasBarricadeExpert()
+	local myexpert = 0
+	if self:HasTrinket("alloyhammer") then myexpert = myexpert +1 end
+	if self:HasTrinket("blueprintsii") then myexpert = myexpert +1 end 
+	local otherexpert = 0
+	if otherpl:HasTrinket("alloyhammer") then otherexpert = myexpert +1 end
+	if otherpl:HasTrinket("blueprintsii") then otherexpert = myexpert +1 end 	
 
-	if (myexpert and not otherexpert) then
+	if (myexpert > otherexpert) then
 		return 1
-	elseif (not myexpert and not otherexpert) then
+	elseif (myexpert == otherexpert) then
 		return 0
 	end
 

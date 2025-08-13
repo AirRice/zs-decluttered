@@ -681,7 +681,7 @@ function meta:RecalculateNailBonuses()
 	self.OriginalMaxBarricadeRepairs = self.OriginalMaxBarricadeRepairs or max_repairs
 
 	local health = self:GetBarricadeHealth()
-	local new_max_health = self.OriginalMaxHealth + num_extra_nails * GAMEMODE.ExtraHealthPerExtraNail
+	local new_max_health = self.OriginalMaxHealth + num_extra_nails * math.floor(self.OriginalMaxHealth * GAMEMODE.ExtraHealthRatioPerExtraNail) -- GAMEMODE.ExtraHealthPerExtraNail
 	self:SetMaxBarricadeHealth(new_max_health)
 	self:SetBarricadeHealth(health / max_health * new_max_health)
 

@@ -112,7 +112,8 @@ GM.ArsenalCrateCommission = 0.04
 GM.BaseDeploySpeed = 1 -- Put this back to 1 to increase the value of it
 
 GM.ExtraHealthPerExtraNail = 75
-GM.MaxNails = 4
+GM.ExtraHealthRatioPerExtraNail = 0.15
+GM.MaxNails = 6
 
 -- Moved from options to globals because the game is now balanced around it being static. The gamemode will BREAK if this is not 6!!
 GM.NumberOfWaves = 6

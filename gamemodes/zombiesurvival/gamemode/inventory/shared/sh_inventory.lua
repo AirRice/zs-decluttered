@@ -384,7 +384,7 @@ GM:AddTrinket("Refined Subscope", "refinedsub", false, oveles, oweles, 4, "+27% 
 trinket = GM:AddTrinket("Aim Compensator", "aimcomp", false, oveles, oweles, 3, "-52% reduced effect of aim shake effects\n+5% tighter aiming reticule\n+50% tighter spread from using ironsights")
 GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.52)
-GM:AddSkillModifier(trinket, SKILLMOD_IRONSIGHT_EFF_MUL, -0.5)
+GM:AddSkillModifier(trinket, SKILLMOD_IRONSIGHT_EFF_MUL, 0.5)
 
 --GM:AddSkillModifier(GM:AddTrinket("Pulse Booster", "pulseampi", false, oveles, oweles, nil, "+14% slow from pulse weapons and stun batons"), SKILLMOD_PULSE_WEAPON_SLOW_MUL, 0.14)
 
@@ -498,7 +498,9 @@ trinketwep.PermitDismantle = true
 -- SKILL_BARRICADEEXPERT added
 GM:AddSkillModifier(GM:AddTrinket("Advanced Blueprints", "blueprintsii", false, supveles, supweles, 4, "+20% repair rate\nProps recently repaired with a hammer will take 8% less damage for the next 2 seconds"), SKILLMOD_REPAIRRATE_MUL, 0.2)
 
-GM:AddSkillModifier(GM:AddTrinket("Alloy Hammer", "alloyhammer", false, supveles, supweles, nil, "Carpenter's Hammers and related weapons can be swung 20% faster"), SKILLMOD_HAMMER_SWING_DELAY_MUL, -0.2)
+trinket = GM:AddTrinket("Alloy Hammer", "alloyhammer", false, supveles, supweles, 2, "+10% repair rate\nCarpenter's Hammers and related weapons can be swung 20% faster")
+GM:AddSkillModifier(trinket, SKILLMOD_HAMMER_SWING_DELAY_MUL, -0.2)
+GM:AddSkillModifier(trinket, SKILLMOD_REPAIRRATE_MUL, 0.1)
 
 -- SKILL_RECLAIMSOL added
 trinket, trinketwep = GM:AddTrinket("Medical Processor", "processor", false, supveles, supweles, 2, "-5% medic kit cooldown\n-10% medic tool fire delay\nReprocess food into medical ammo with SECONDARY FIRE\nRecover 60% of medical energy wasted due to invalid medic tool targets")
@@ -585,6 +587,8 @@ trinketwep.PermitDismantle = true
 --SKILL_ACUITY, SKILL_VISION, SKILL_INSIGHT, SKILL_SCAVENGER
 trinket, trinketwep = GM:AddTrinket("Logistics Radar", "logisticsrad", true, supveles, supweles, 2, "Can locate all resupply boxes, remantlers, arsenal crates, or dropped weapons/ammo/items through walls\nCan also locate unplaced and handheld versions of these\nCycle through each item's visibility with PRIMARY FIRE while holding the tool")
 trinketwep.PermitDismantle = true
+
+trinket = GM:AddTrinket("Scrap Reactor", "scrapreactor", false, supveles, supweles, 2, "Earn 1 scrap per 200 damage dealt to zombies")
 
 -- DEBUFF TRINKETS
 local GOOD = "^"..COLORID_GREEN
