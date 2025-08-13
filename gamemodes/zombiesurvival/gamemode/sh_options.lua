@@ -258,16 +258,16 @@ GM:AddStartingItem("magnet",			ITEMCAT_TRINKETS,		25,				"trinket_magnet").SubCa
 GM:AddStartingItem("arsenalpack",		ITEMCAT_TRINKETS,		55,				"trinket_arsenalpack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("resupplypack",		ITEMCAT_TRINKETS,		55,				"trinket_resupplypack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 
-GM:AddStartingItem("stone",				ITEMCAT_OTHER,			10,				"weapon_zs_stone")
-GM:AddStartingItem("grenade",			ITEMCAT_OTHER,			30,				"weapon_zs_grenade")
-GM:AddStartingItem("flashbomb",			ITEMCAT_OTHER,			15,				"weapon_zs_flashbomb")
-GM:AddStartingItem("molotov",			ITEMCAT_OTHER,			30,				"weapon_zs_molotov")
-GM:AddStartingItem("betty",				ITEMCAT_OTHER,			30,				"weapon_zs_proxymine")
-GM:AddStartingItem("corgasgrenade",		ITEMCAT_OTHER,			40,				"weapon_zs_corgasgrenade")
-GM:AddStartingItem("crygasgrenade",		ITEMCAT_OTHER,			35,				"weapon_zs_crygasgrenade")
-GM:AddStartingItem("detpck",			ITEMCAT_OTHER,			35,				"weapon_zs_detpack").Countables = "prop_detpack"
+GM:AddStartingItem("stone",				ITEMCAT_OTHER,			5,				"weapon_zs_stone")
+GM:AddStartingItem("grenade",			ITEMCAT_OTHER,			10,				"weapon_zs_grenade")
+GM:AddStartingItem("flashbomb",			ITEMCAT_OTHER,			5,				"weapon_zs_flashbomb")
+GM:AddStartingItem("molotov",			ITEMCAT_OTHER,			10,				"weapon_zs_molotov")
+GM:AddStartingItem("betty",				ITEMCAT_OTHER,			10,				"weapon_zs_proxymine")
+GM:AddStartingItem("corgasgrenade",		ITEMCAT_OTHER,			15,				"weapon_zs_corgasgrenade")
+GM:AddStartingItem("crygasgrenade",		ITEMCAT_OTHER,			15,				"weapon_zs_crygasgrenade")
+GM:AddStartingItem("detpck",			ITEMCAT_OTHER,			15,				"weapon_zs_detpack").Countables = "prop_detpack"
 item =
-GM:AddStartingItem("sigfragment",		ITEMCAT_OTHER,			25,				"weapon_zs_sigilfragment")
+GM:AddStartingItem("sigfragment",		ITEMCAT_OTHER,			10,				"weapon_zs_sigilfragment")
 item.NoClassicMode = true
 --[[
 -- I fucking hate this item
@@ -275,9 +275,9 @@ item =
 GM:AddStartingItem("corfragment",		ITEMCAT_OTHER,			35,				"weapon_zs_corruptedfragment")
 item.NoClassicMode = true
 item.SkillRequirement = SKILL_U_CORRUPTEDFRAGMENT]]
-GM:AddStartingItem("medcloud",			ITEMCAT_OTHER,			25,				"weapon_zs_mediccloudbomb")
-GM:AddStartingItem("nanitecloud",		ITEMCAT_OTHER,			25,				"weapon_zs_nanitecloudbomb")
-GM:AddStartingItem("bloodshot",			ITEMCAT_OTHER,			35,				"weapon_zs_bloodshotbomb")
+GM:AddStartingItem("medcloud",			ITEMCAT_OTHER,			15,				"weapon_zs_mediccloudbomb")
+GM:AddStartingItem("nanitecloud",		ITEMCAT_OTHER,			15,				"weapon_zs_nanitecloudbomb")
+GM:AddStartingItem("bloodshot",			ITEMCAT_OTHER,			20,				"weapon_zs_bloodshotbomb")
 
 ------------
 -- Points --
@@ -358,6 +358,7 @@ GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							"3 explosive
 GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							"20 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
 GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
 GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end).NoClassicMode = true
+GM:AddPointShopItem("woodboard",		ITEMCAT_AMMO,			16,				nil,							"Wooden Board",					nil,									"ammo_woodboard",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end).NoClassicMode = true
 
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
@@ -537,17 +538,17 @@ GM:AddPointShopItem("pulseimpedance",	ITEMCAT_TRINKETS,		70,				"trinket_pulseim
 GM:AddPointShopItem("resonance",		ITEMCAT_TRINKETS,		70,				"trinket_resonance").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
 GM:AddPointShopItem("cryoindu",			ITEMCAT_TRINKETS,		70,				"trinket_cryoindu").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
 
-GM:AddPointShopItem("flashbomb",		ITEMCAT_OTHER,			25,				"weapon_zs_flashbomb")
-GM:AddPointShopItem("molotov",			ITEMCAT_OTHER,			30,				"weapon_zs_molotov")
-GM:AddPointShopItem("grenade",			ITEMCAT_OTHER,			35,				"weapon_zs_grenade")
-GM:AddPointShopItem("betty",			ITEMCAT_OTHER,			35,				"weapon_zs_proxymine")
-GM:AddPointShopItem("detpck",			ITEMCAT_OTHER,			40,				"weapon_zs_detpack")
-GM:AddPointShopItem("crygasgrenade",	ITEMCAT_OTHER,			40,				"weapon_zs_crygasgrenade")
-GM:AddPointShopItem("corgasgrenade",	ITEMCAT_OTHER,			45,				"weapon_zs_corgasgrenade")
-GM:AddPointShopItem("sigfragment",		ITEMCAT_OTHER,			30,				"weapon_zs_sigilfragment")
-GM:AddPointShopItem("bloodshot",		ITEMCAT_OTHER,			45,				"weapon_zs_bloodshotbomb")
-GM:AddPointShopItem("medcloud",			ITEMCAT_OTHER,			40,				"weapon_zs_mediccloudbomb")
-GM:AddPointShopItem("nanitecloud",		ITEMCAT_OTHER,			40,				"weapon_zs_nanitecloudbomb")
+GM:AddPointShopItem("flashbomb",		ITEMCAT_OTHER,			15,				"weapon_zs_flashbomb")
+GM:AddPointShopItem("molotov",			ITEMCAT_OTHER,			20,				"weapon_zs_molotov")
+GM:AddPointShopItem("grenade",			ITEMCAT_OTHER,			25,				"weapon_zs_grenade")
+GM:AddPointShopItem("betty",			ITEMCAT_OTHER,			25,				"weapon_zs_proxymine")
+GM:AddPointShopItem("detpck",			ITEMCAT_OTHER,			30,				"weapon_zs_detpack")
+GM:AddPointShopItem("crygasgrenade",	ITEMCAT_OTHER,			25,				"weapon_zs_crygasgrenade")
+GM:AddPointShopItem("corgasgrenade",	ITEMCAT_OTHER,			30,				"weapon_zs_corgasgrenade")
+GM:AddPointShopItem("sigfragment",		ITEMCAT_OTHER,			45,				"weapon_zs_sigilfragment")
+GM:AddPointShopItem("bloodshot",		ITEMCAT_OTHER,			30,				"weapon_zs_bloodshotbomb")
+GM:AddPointShopItem("medcloud",			ITEMCAT_OTHER,			30,				"weapon_zs_mediccloudbomb")
+GM:AddPointShopItem("nanitecloud",		ITEMCAT_OTHER,			30,				"weapon_zs_nanitecloudbomb")
 --[[ Dogshit balance destroying item
 item =
 GM:AddPointShopItem("corruptedfragment",ITEMCAT_OTHER,			55,				"weapon_zs_corruptedfragment")
