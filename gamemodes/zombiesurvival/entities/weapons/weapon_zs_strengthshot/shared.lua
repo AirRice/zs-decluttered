@@ -37,8 +37,6 @@ SWEP.IronSightsAng = Vector(-0.15, -1, 2)
 
 SWEP.AllowQualityWeapons = true
 
-SWEP.Alternate = "weapon_zs_antidoteshot"
-
 GAMEMODE:SetPrimaryWeaponModifier(SWEP, WEAPON_MODIFIER_CLIP_SIZE, 5)
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_BUFF_DURATION, 2)
 GAMEMODE:AddNewRemantleBranch(SWEP, 1, "Defence Shot Gun", "Provides players with a defence boost instead of a strength boost", function(wept)

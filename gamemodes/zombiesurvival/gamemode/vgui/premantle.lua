@@ -69,10 +69,11 @@ function PANEL:Init()
 		self.GunTab = weapons.Get(self.MainMenu.m_WepClass)
 		local gtbl = self.GunTab
 		local curqua = gtbl.QualityTier
-
-		if gtbl.AllowQualityWeapons or gtbl.Alternate then
+		local altclass = GAMEMODE:GetAlternateWeapon(self.MainMenu.m_WepClass)
+		self.GunTab.AltClass = altclass
+		if gtbl.AllowQualityWeapons or altclass then
 			qualityweps = gtbl.AllowQualityWeapons
-			altForm = weapons.Get(gtbl.Alternate)
+			local altForm = weapons.Get(altclass)
 			local altFormBranch = 1
 			local branches = gtbl.Branches
 			if branches then
@@ -477,7 +478,9 @@ net.Receive("zs_remantlealtformconf", function()
 	local wepclass = ri.m_WepClass
 	local lastwep = weapons.Get(wepclass)
 	if not lastwep then return end
-	GAMEMODE.GunTab = weapons.Get(lastwep.Alternate)
+	local altclass = GAMEMODE:GetAlternateWeapon(wepclass)
+	if not altclass then return end
+	GAMEMODE.GunTab = weapons.Get(altclass)
 	local gtbl = GAMEMODE.GunTab
 
 	ri.m_ContentsLabel:SetText(gtbl.PrintName)
@@ -535,9 +538,11 @@ function PANEL:OnMousePressed(mc)
 
 		local current = self.RemantleNodes[hovbranch][hovquality]
 		local prev = self.RemantleNodes[hovbranch][hovquality - 1] or hovquality == 1 and self.RemantleNodes[0][0]
+		GAMEMODE:GetAlternateWeapon(wepclass)
+		
 		if cqua and hovquality > cqua and prev and prev.Unlocked and not current.Locked then
-			if current.AltConvert and gtbl.Alternate then
-				altForm = weapons.Get(gtbl.Alternate)
+			if current.AltConvert and gtbl.AltClass then
+				altForm = weapons.Get(gtbl.AltClass)
 				if altForm then
 					RunConsoleCommand("zs_upgrade_altform")
 					local pan = GAMEMODE.RemantlerInterface
@@ -605,9 +610,10 @@ function GM:OpenRemantlerMenu(remantler)
 	else
 		self.GunTab = GAMEMODE.ZSInventoryItemData[frame.m_WepClass]
 	end
-
+	
+	
 	local gtbl = self.GunTab
-	if not SelectedInv() and not (gtbl.AllowQualityWeapons or gtbl.PermitDismantle or gtbl.Alternate) then
+	if not SelectedInv() and not (gtbl.AllowQualityWeapons or gtbl.PermitDismantle or GAMEMODE:GetAlternateWeapon(frame.m_WepClass)) then
 		frame.m_WepClass, gtbl = nil, nil
 	elseif SelectedInv() and ((gtbl.PermitDismantle ~= nil and not gtbl.PermitDismantle) or (self:GetInventoryItemType(mytarget) ~= INVCAT_TRINKETS)) then
 		frame.m_WepClass, gtbl = nil, nil

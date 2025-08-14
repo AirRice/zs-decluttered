@@ -15,6 +15,4 @@ SWEP.TurretSpread = 5
 
 SWEP.Primary.Ammo = "turret_buckshot"
 
-SWEP.Alternate = "weapon_zs_gunturret"
-
 GAMEMODE:AttachWeaponModifier(SWEP, WEAPON_MODIFIER_TURRET_SPREAD, -0.9)

@@ -44,7 +44,7 @@ function ENT:Think()
 end
 
 function ENT:DoRefund(owner)
-	if self.Refunded or not owner:HasTrinket("processor") then return end
+	if self.Refunded or not (owner and owner:IsPlayer() and owner:Team() == TEAM_HUMAN and owner:HasTrinket("processor")) then return end
 
 	self.Refunded = true
 	owner:GiveAmmo(2, "Battery")
@@ -55,7 +55,7 @@ function ENT:PhysicsCollide(data, phys)
 	self.Done = true
 
 	if not self.HealedSomething then
-		self:DoRefund(owner)
+		self:DoRefund(self:GetOwner())
 	end
 
 	self:Fire("kill", "", 0.1)

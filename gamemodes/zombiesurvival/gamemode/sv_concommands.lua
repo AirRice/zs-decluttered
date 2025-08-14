@@ -231,11 +231,10 @@ concommand.Add("zs_upgrade_altform", function(sender, command, arguments)
 	local nearest = sender:NearestRemantler()
 	local contents = sender:GetActiveWeapon():GetClass()
 	local contentstbl = weapons.Get(contents)
-	if not contentstbl.Alternate then return end
-
+	local upgclass = GAMEMODE:GetAlternateWeapon(contents)
+	if not upgclass then return end
 	if not (nearest and nearest:IsValid() and contents) then return end
 
-	upgclass = contentstbl.Alternate
 	local classtbl = weapons.Get(upgclass)
 	if not classtbl then return end
 
@@ -260,10 +259,10 @@ concommand.Add("zs_upgrade_altform", function(sender, command, arguments)
 		sender:UpdateAltSelectedWeapon()
 
 		if contentstbl.AmmoIfHas then
-			sender:RemoveAmmo(1, contentstbl.Primary.Ammo)
+			sender:RemoveAmmo(contentstbl.Primary.DefaultClip, contentstbl.Primary.Ammo)
 		end
 		if wep.AmmoIfHas then
-			sender:GiveAmmo(1, wep.Primary.Ammo)
+			sender:GiveAmmo(wep.Primary.DefaultClip, wep.Primary.Ammo)
 		end
 		sender:SelectWeapon(upgclass)
 		net.Start("zs_remantlealtformconf")

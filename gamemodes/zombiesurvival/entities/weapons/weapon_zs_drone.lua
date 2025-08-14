@@ -55,8 +55,6 @@ SWEP.MaxStock = 6
 SWEP.DeployClass = "prop_drone"
 SWEP.DeployAmmoType = "smg1"
 
-SWEP.Alternate = "weapon_zs_drone_pulse"
-
 function SWEP:Initialize()
 	self:SetWeaponHoldType("grenade")
 	GAMEMODE:DoChangeDeploySpeed(self)

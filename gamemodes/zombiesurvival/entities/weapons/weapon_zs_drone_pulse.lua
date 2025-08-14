@@ -11,5 +11,3 @@ SWEP.Primary.Ammo = "pulse_cutter"
 SWEP.DeployClass = "prop_drone_pulse"
 SWEP.DeployAmmoType = "pulse"
 SWEP.ResupplyAmmoType = "pulse"
-
-SWEP.Alternate = "weapon_zs_drone"

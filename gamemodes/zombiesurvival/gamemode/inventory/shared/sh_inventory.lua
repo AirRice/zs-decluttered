@@ -26,7 +26,7 @@ GM.ZSInventoryPrefix = {
 
 GM.Assemblies = {}
 GM.Breakdowns = {}
-
+GM.AlternateWeps = {}
 function GM:GetInventoryItemType(item)
 	if string.sub(item, 1, 10) == "trinket_d_" then
 		return INVCAT_DEBUFF
@@ -115,6 +115,20 @@ GM.Assemblies["weapon_zs_gunturret_rocket"]						= {"comp_turretassembly", 	"wea
 GM.Assemblies["weapon_zs_zeus"]									= {"comp_pwrcapacitor", 	"weapon_zs_charon"}
 GM.Assemblies["weapon_zs_gluon"]								= {"comp_pulsespool", 		"weapon_zs_tithonus"}
 GM.Assemblies["weapon_zs_smelter"]								= {"comp_flak", 			"weapon_zs_barrage"}
+
+GM.AlternateWeps["weapon_zs_drone"]								= "weapon_zs_drone_pulse"
+GM.AlternateWeps["weapon_zs_gunturret"]							= "weapon_zs_gunturret_buckshot"
+GM.AlternateWeps["weapon_zs_antidoteshot"]						= "weapon_zs_strengthshot"
+
+function GM:GetAlternateWeapon(wepname)
+	local out = nil
+	for k, v in pairs(self.AlternateWeps) do
+		if k == wepname then out = v break
+		elseif v == wepname then out = k break end
+	end
+	print(out)
+	return out
+end
 
 GM:AddInventoryItemData("comp_modbarrel",		"Modular Barrel",			"A modular barrel suited for pairing up with another gun barrel.",								"models/props_c17/trappropeller_lever.mdl")
 GM:AddInventoryItemData("comp_burstmech",		"Burst Fire Mechanism",		"A mechanism that could be used to make a gun burst fire.",										"models/props_c17/trappropeller_lever.mdl")
