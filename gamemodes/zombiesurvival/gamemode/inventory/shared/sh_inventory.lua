@@ -435,6 +435,10 @@ GM:AddSkillModifier(trinket, SKILLMOD_PROP_THROW_STRENGTH_MUL, 1)
 GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_SLOW_MUL, -0.25)
 GM:AddSkillModifier(trinket, SKILLMOD_WEAPON_WEIGHT_SLOW_MUL, -0.35)
 
+trinket = GM:AddTrinket("Loading Clamps", "loadingclamp", false, oveles, oweles, 3, "+30% maximum carryable prop weight limit\n-25% prop carrying slow down\nPrevents dropping held props when zombies hit them, although you will take 20% of the damage instead")
+GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_CAPACITY_MUL, 0.3)
+GM:AddSkillModifier(trinket, SKILLMOD_PROP_CARRY_SLOW_MUL, -0.25)
+
 -- Defensive Trinkets
 trinket, trinketwep = GM:AddTrinket("Kevlar Underlay", "kevlar", false, develes, deweles, 2, "-11% melee damage taken\n-11% projectile damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_DAMAGE_TAKEN_MUL, -0.11)

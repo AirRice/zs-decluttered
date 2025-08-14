@@ -3003,8 +3003,13 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	local dmg = dmginfo:GetDamage()
 	if dmg > 0 then
 		local holder, status = ent:GetHolder()
-		-- TODO: Deal with Taut
-		if holder and not holder.BuffTaut then status:Remove() end
+		if holder and status then
+			if holder:HasTrinket("loadingclamp") then
+				holder:TakeSpecialDamage(math.floor(dmg * 0.2), DMG_SLASH, attacker, inflictor)
+			else
+				status:Remove()
+			end
+		end
 
 		local dmgpos = dmginfo:GetDamagePosition()
 		local hasdmgsess = attacker:IsPlayer() and attacker:HasDamageNumberSession()

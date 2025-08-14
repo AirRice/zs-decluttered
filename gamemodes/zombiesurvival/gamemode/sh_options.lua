@@ -540,7 +540,7 @@ GM:AddPointShopItem("hemavoric",		ITEMCAT_TRINKETS,		30,				"trinket_blooddigest
 GM:AddPointShopItem("curativeii",		ITEMCAT_TRINKETS,		30,				"trinket_curativeii").SubCategory =								ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddPointShopItem("widerangeaero",	ITEMCAT_TRINKETS,		30,				"trinket_widerange").SubCategory =								ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddPointShopItem("controlplat",		ITEMCAT_TRINKETS,		30,				"trinket_controlplat").SubCategory =							ITEMSUBCAT_TRINKETS_SUPPORT
-
+GM:AddPointShopItem("loadingclamp",		ITEMCAT_TRINKETS,		30,				"trinket_loadingclamp").SubCategory =							ITEMSUBCAT_TRINKETS_SUPPORT
 -- Tier 4
 GM:AddPointShopItem("hemoadrenalii",	ITEMCAT_TRINKETS,		50,				"trinket_hemoadrenalii").SubCategory =							ITEMSUBCAT_TRINKETS_MELEE
 GM:AddPointShopItem("cardiotonic",		ITEMCAT_TRINKETS,		50,				"trinket_cardiotonic").SubCategory =							ITEMSUBCAT_TRINKETS_PERFORMANCE
