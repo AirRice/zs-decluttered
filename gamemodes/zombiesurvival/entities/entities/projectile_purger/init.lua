@@ -1,6 +1,7 @@
 INC_SERVER()
 
 function ENT:Initialize()
+	self.HealedSomething = nil
 	self.Touched = {}
 	self.Damaged = {}
 
@@ -25,6 +26,7 @@ function ENT:Think()
 			if ent:GetPoisonDamage() > 0 then
 				self.Damaged[ent] = true
 				owner:HealPlayer(ent, self.Heal, nil, nil, true)
+				self.HealedSomething = true
 			end
 
 			for _,v in ipairs(GAMEMODE.ResistableStatuses) do
@@ -33,6 +35,7 @@ function ENT:Think()
 
 					ent:RemoveStatus(v, false, true)
 					owner:AddPoints(0.2)
+					self.HealedSomething = true
 				end
 			end
 		end
@@ -40,9 +43,20 @@ function ENT:Think()
 	return true
 end
 
+function ENT:DoRefund(owner)
+	if self.Refunded or not (owner and owner:IsPlayer() and owner:Team() == TEAM_HUMAN and owner:HasTrinket("processor")) then return end
+
+	self.Refunded = true
+	owner:GiveAmmo(2, "Battery")
+end
+
 function ENT:PhysicsCollide(data, phys)
 	if self.Done then return end
 	self.Done = true
+
+	if not self.HealedSomething then
+		self:DoRefund(self:GetOwner())
+	end
 
 	self:Fire("kill", "", 0.1)
 	self:EmitSound("ambient/machines/steam_release_2.wav", 70, 175)

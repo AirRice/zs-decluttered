@@ -39,13 +39,13 @@ function ENT:Explode()
 
 	local owner = self:GetOwner()
 	local pos = self:GetPos()
-
-	for _, ent in pairs(ents.FindInSphere(pos, self.Radius)) do
+	local radius = self.Radius * (owner.ExpDamageRadiusMul or 1)
+	for _, ent in pairs(ents.FindInSphere(pos, radius)) do
 		if ent:IsValid() and ent:IsPlayer() and ent:Alive() and (ent:Team() == TEAM_UNDEAD or ent == owner) then
 			local eyepos = ent:EyePos()
 			if TrueVisibleFilters(pos, eyepos, self, ent) then
 				local eyevec = ent:GetAimVector()
-				local strength = (1 - eyepos:Distance(pos) / self.Radius) ^ 0.5 * (0.3 + math.Clamp((pos - eyepos):GetNormalized():Dot(eyevec), 0, 1) * 0.7)
+				local strength = (1 - eyepos:Distance(pos) / radius) ^ 0.5 * (0.3 + math.Clamp((pos - eyepos):GetNormalized():Dot(eyevec), 0, 1) * 0.7)
 
 				ent:AddLegDamage(strength)
 				local time = (0.5 + strength * 1.5) * (ent.VisionAlterDurationMul or 1)

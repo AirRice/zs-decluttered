@@ -17,14 +17,9 @@ hook.Add("SetWave", "CloseWorthOnWave1", function(wave)
 	end
 end)
 
-local ExtraStartingWorth = 0
 local function GetStartingWorth()
-	return GAMEMODE.StartingWorth + ExtraStartingWorth
+	return GAMEMODE.StartingWorth
 end
-
-net.Receive("zs_extrastartingworth", function(len)
-	ExtraStartingWorth = net.ReadUInt(16)
-end)
 
 local cvarDefaultCart = CreateClientConVar("zs_defaultcart", "", true, false)
 
@@ -505,16 +500,14 @@ function PANEL:SetWorthID(id)
 	self.Signature = tab.Signature
 	self.Price = tab.Price
 
-	local missing_skill = tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement)
-
 	local nottrinkets = tab.Category ~= ITEMCAT_TRINKETS
 	self:SetTall((nottrinkets and 100 or 60) * screenscale)
-
+	
 	if nottrinkets then
 		self.ModelFrame:SetVisible(true)
-		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and "weapon_zs_craftables" or tab.SWEP or tab.Model)
+		local kitbl = killicon.Get(GAMEMODE.ZSInventoryItemData[tab.SWEP] and (tab.Category == ITEMCAT_DEBUFF and "debuff_trinket" or "weapon_zs_craftables") or tab.SWEP or tab.Model)
 		if kitbl then
-			GAMEMODE:AttachKillicon(kitbl, self, self.ModelFrame, tab.Category == ITEMCAT_AMMO, missing_skill)
+			GAMEMODE:AttachKillicon(kitbl, self, self.ModelFrame, tab.Category == ITEMCAT_AMMO)
 		elseif tab.Model then
 			local mdlpanel = vgui.Create("DModelPanel", self.ModelFrame)
 			mdlpanel:SetSize(self.ModelFrame:GetSize())
@@ -532,11 +525,12 @@ function PANEL:SetWorthID(id)
 		self.ItemCounter:SetVisible(false)
 	end
 
-	if missing_skill then
-		self.PriceLabel:SetTextColor(COLOR_RED)
-		self.PriceLabel:SetText(GAMEMODE.Skills[tab.SkillRequirement].Name)
-	elseif tab.Price then
-		self.PriceLabel:SetText(tostring(tab.Price).." Worth")
+	if tab.Price then
+		if tab.TrinketIsDebuff then
+			self.PriceLabel:SetText("+ "..tostring(tab.Price).." Worth")
+		else
+			self.PriceLabel:SetText(tostring(tab.Price).." Worth")
+		end
 	else
 		self.PriceLabel:SetText("")
 	end
@@ -548,7 +542,7 @@ function PANEL:SetWorthID(id)
 
 	self:SetTooltip(tab.Description)
 
-	if missing_skill or tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
+	if tab.NoClassicMode and GAMEMODE:IsClassicMode() or tab.NoZombieEscape and GAMEMODE.ZombieEscape then
 		self:SetAlpha(120)
 		self.Locked = true
 	else
@@ -593,6 +587,37 @@ end
 
 --[[function PANEL:OnCursorExited()
 end]]
+local warnedaboutdebuffs = CreateClientConVar("_zs_warnedaboutdebuffs", "0", true, false)
+
+local function DoDebuffWarningMessage()
+	local wide, tall = 500, 480
+	local Window = vgui.Create( "DFrame" )
+	Window:SetSize(wide, tall)
+	Window:Center()
+	Window:SetTitle("WARNING: Debuff Trinkets")
+	Window:SetDraggable( false )
+	Window:ShowCloseButton( false )
+	Window:SetBackgroundBlur( true )
+	Window:SetDrawOnTop( true )
+	Window:SetKeyboardInputEnabled(false)
+
+	Window:SetCursor("pointer")
+
+	local Text = EasyLabel(Window, "Debuffs are special trinkets that SIGNIFICANTLY change gameplay, often harming the player, and cannot be removed during the round.\nHowever, they provide additional worth to spend and can be useful in specific situations.\n\nThey are not recommended for beginners!"	, "ZSBodyTextFont", color_white)
+	Text:SetContentAlignment( 5 )
+	Text:StretchToParent(5, 52, 5, 64)
+	Text:SetWrap(true)
+
+	
+	local button = EasyButton(Window, "Understood", 8, 4)
+	button:SetPos((wide - button:GetWide())/2, tall - button:GetTall() - 12)
+	button.DoClick = function() Window:Close() end
+
+	Window:MakePopup()
+	Window:DoModal()
+
+	return Window
+end
 
 function PANEL:DoClick(silent, force)
 	local id = self.ID
@@ -606,12 +631,13 @@ function PANEL:DoClick(silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button18.wav")
 		end
-		remainingworth = remainingworth + tab.Price
-	elseif tab.SkillRequirement and not MySelf:IsSkillActive(tab.SkillRequirement) then
-		surface.PlaySound("buttons/button8.wav")
-		return
+		if tab.TrinketIsDebuff then
+			remainingworth = remainingworth - tab.Price
+		else
+			remainingworth = remainingworth + tab.Price
+		end
 	else
-		if remainingworth < tab.Price then
+		if remainingworth < tab.Price and not tab.TrinketIsDebuff then
 			if not force then
 				surface.PlaySound("buttons/button8.wav")
 				return
@@ -623,7 +649,15 @@ function PANEL:DoClick(silent, force)
 		if not silent then
 			surface.PlaySound("buttons/button17.wav")
 		end
-		remainingworth = remainingworth - tab.Price
+		if tab.TrinketIsDebuff then
+			if !warnedaboutdebuffs:GetBool() then
+				RunConsoleCommand("_zs_warnedaboutdebuffs", "1")
+				DoDebuffWarningMessage()
+			end
+			remainingworth = remainingworth + tab.Price
+		else
+			remainingworth = remainingworth - tab.Price
+		end
 	end
 
 	pWorth.WorthLab:SetText("Worth: ".. remainingworth)

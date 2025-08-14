@@ -24,6 +24,8 @@ end
 function ENT:Draw()
 	local time = CurTime()
 	local pos = self:GetPos()
+	local owner = self:GetOwner()
+	local clr = (owner and owner.CloudRadius) and owner.CloudRadius or 1
 	--pos.z = pos.z + 32
 
 	local dlight = DynamicLight(self:EntIndex())
@@ -33,8 +35,8 @@ function ENT:Draw()
 		dlight.g = 255
 		dlight.b = 30
 		dlight.Brightness = 8
-		dlight.Size = self.Radius / 2
-		dlight.Decay = self.Radius * 2
+		dlight.Size = self.Radius * clr / 2
+		dlight.Decay = self.Radius * clr * 2
 		dlight.DieTime = time + 0.75
 	end
 

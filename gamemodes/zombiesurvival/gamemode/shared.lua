@@ -49,9 +49,7 @@ include("sh_translate.lua")
 include("sh_colors.lua")
 include("sh_serialization.lua")
 include("sh_util.lua")
-
-include("skillweb/sh_skillweb.lua")
-
+include("sh_skillregistry.lua")
 include("sh_options.lua")
 include("sh_zombieclasses.lua")
 include("sh_animations.lua")
@@ -60,9 +58,6 @@ include("sh_channel.lua")
 include("sh_weaponquality.lua")
 
 include("noxapi/noxapi.lua")
-
-include("vault/shared.lua")
-
 include("workshopfix.lua")
 
 include_library("perf")
@@ -570,7 +565,7 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 end
 
 function GM:PlayerCanBeHealed(pl)
-	local maxhp = pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+	local maxhp = pl:HasTrinket("d_insured") and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 
 	return pl:Health() < maxhp or pl:GetPoisonDamage() > 0 or pl:GetBleedDamage() > 0
 end

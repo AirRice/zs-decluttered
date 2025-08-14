@@ -22,7 +22,6 @@ include("cl_targetid.lua")
 include("cl_postprocess.lua")
 include("cl_voicesets.lua")
 include("cl_net.lua")
-include("skillweb/cl_skillweb.lua")
 
 include("vgui/dteamcounter.lua")
 include("vgui/dmodelpanelex.lua")
@@ -72,8 +71,7 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	GAMEMODE.HookGetLocal = GAMEMODE.HookGetLocal or function(g) end
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
-
-	MySelf:ApplySkills()
+	MySelf:ResetAssocModifiers()
 end)
 
 -- Remove when model decal crash is fixed.
@@ -1049,7 +1047,7 @@ function GM:_PostDrawTranslucentRenderables()
 end
 
 function GM:DrawCrateIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_INSIGHT) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_ARSENAL or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
@@ -1085,7 +1083,7 @@ function GM:DrawCrateIndicators()
 end
 
 function GM:DrawResupplyIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_ACUITY) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_RESUPPLY or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
@@ -1123,7 +1121,7 @@ function GM:DrawResupplyIndicators()
 end
 
 function GM:DrawRemantlerIndicators()
-	if P_Team(MySelf) ~= TEAM_HUMAN or not MySelf:IsSkillActive(SKILL_VISION) then return end
+	if P_Team(MySelf) ~= TEAM_HUMAN or not (MySelf:HasTrinket("logisticsrad") and (self.ItemLocatorMode == LOCATOR_REMANTLER or self.ItemLocatorMode == LOCATOR_ALL)) then return end
 
 	local pos, distance, ang, deployable, alpha
 	local eyepos = EyePos()
@@ -1416,11 +1414,7 @@ function GM:EvaluateFilmMode()
 	if self.CenterNotificationHUD and self.CenterNotificationHUD:IsValid() then
 		self.CenterNotificationHUD:SetVisible(visible)
 	end
-
-	if self.XPHUD and self.XPHUD:IsValid() then
-		self.XPHUD:SetVisible(visible and self.DisplayXPHUD)
-	end
-
+	
 	if self.HealthHUD and self.HealthHUD:IsValid() then
 		self.HealthHUD:SetVisible(visible)
 	end
@@ -1468,16 +1462,9 @@ function GM:CreateLateVGUI()
 	if not self.StatusHUD then
 		self.StatusHUD = vgui.Create("ZSStatusArea")
 	end
-
-	if not self.XPHUD then
-		self.XPHUD = vgui.Create("ZSExperienceHUD")
-		self.XPHUD:ParentToHUD()
-		self.XPHUD:InvalidateLayout()
-	end
 end
 
 function GM:Initialize()
-	self:FixSkillConnections()
 	self:CreateFonts()
 	self:PrecacheResources()
 	self:CreateVGUI()

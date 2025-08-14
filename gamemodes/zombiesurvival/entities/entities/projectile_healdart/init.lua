@@ -54,7 +54,7 @@ function ENT:Think()
 end
 
 function ENT:DoRefund(owner)
-	if self.Refunded or not owner:IsSkillActive(SKILL_RECLAIMSOL) then return end
+	if self.Refunded or not owner:HasTrinket("processor") then return end
 
 	self.Refunded = true
 	owner:GiveAmmo(3, "Battery")
@@ -103,15 +103,13 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 		if eHitEntity:IsPlayer() and eHitEntity:Team() ~= TEAM_UNDEAD then
 			local ehithp, ehitmaxhp = eHitEntity:Health(), eHitEntity:GetMaxHealth()
 
-			if eHitEntity:IsSkillActive(SKILL_D_FRAIL) and ehithp >= ehitmaxhp * 0.25 then
+			if eHitEntity:HasTrinket("d_insured") and ehithp >= ehitmaxhp * 0.25 then
 				owner:CenterNotify(COLOR_RED, translate.Format("frail_healdart_warning", eHitEntity:GetName()))
 				self:EmitSound("buttons/button8.wav", 70, math.random(115,128))
 				self:DoRefund(owner)
-			elseif not (owner:IsSkillActive(SKILL_RECLAIMSOL) and ehithp >= ehitmaxhp) then
+			else
 				eHitEntity:GiveStatus("healdartboost", self.BuffDuration or 10)
 				owner:HealPlayer(eHitEntity, self.Heal)
-			else
-				self:DoRefund(owner)
 			end
 		else
 			self:DoRefund(owner)

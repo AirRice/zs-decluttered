@@ -46,10 +46,10 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsValidLivingHuman() and inflictor:IsValid() and inflictor == attacker:GetActiveWeapon() then
 			local damage = dmginfo:GetDamage()
 			local wep = attacker:GetActiveWeapon()
-			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:IsSkillActive(SKILL_D_FRAIL) and 0.25 or 1))
+			local attackermaxhp = math.floor(attacker:GetMaxHealth() * (attacker:HasTrinket("d_insured") and 0.25 or 1))
 
 			if wep.IsMelee then
-				if attacker:IsSkillActive(SKILL_CHEAPKNUCKLE) and math.abs(self:GetForward():Angle().yaw - attacker:GetForward():Angle().yaw) <= 90 then
+				if attacker:HasTrinket("selfdefense") and math.abs(self:GetForward():Angle().yaw - attacker:GetForward():Angle().yaw) <= 90 then
 					self:AddLegDamage(12)
 				end
 
@@ -57,11 +57,11 @@ function meta:ProcessDamage(dmginfo)
 					attacker:SetBloodArmor(math.min(attacker.MaxBloodArmor, attacker:GetBloodArmor() + math.min(damage, self:Health()) * attacker.MeleeDamageToBloodArmorMul * attacker.BloodarmorGainMul))
 				end
 
-				if attacker:IsSkillActive(SKILL_HEAVYSTRIKES) and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:IsSkillActive(SKILL_CRITICALKNUCKLE) or wep.MeleeKnockBack > 0) then
-					attacker:TakeSpecialDamage(damage * (wep.Unarmed and 1 or 0.08), DMG_SLASH, self, self:GetActiveWeapon())
+				if attacker:HasTrinket("d_swingamp") and not self:GetZombieClassTable().Boss and (wep.IsFistWeapon and attacker:HasTrinket("martialarts") or wep.MeleeKnockBack > 0) then
+					attacker:TakeSpecialDamage(damage * (wep.Unarmed and 1 or 0.2), DMG_SLASH, self, self:GetActiveWeapon())
 				end
 
-				if attacker:IsSkillActive(SKILL_BLOODLUST) and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
+				if attacker:HasTrinket("bbrally") and attacker:GetPhantomHealth() > 0 and attacker:Health() < attackermaxhp then
 					local toheal = math.min(attacker:GetPhantomHealth(), math.min(self:Health(), damage * 0.25))
 					attacker:SetHealth(math.min(attacker:Health() + toheal, attackermaxhp))
 					attacker:SetPhantomHealth(attacker:GetPhantomHealth() - toheal)
@@ -71,7 +71,7 @@ function meta:ProcessDamage(dmginfo)
 					dmginfo:SetDamage(dmginfo:GetDamage() * (1 + self:GetFlatLegDamage()/75))
 				end
 
-				if wep.Culinary and attacker:IsSkillActive(SKILL_MASTERCHEF) and math.random(9) == 1 then
+				if wep.Culinary and attacker:HasTrinket("masterchef") then
 					self.ChefMarkOwner = attacker
 					self.ChefMarkTime = CurTime() + 1
 				end
@@ -183,12 +183,12 @@ function meta:ProcessDamage(dmginfo)
 					dmginfo:SetDamage(dmginfo:GetDamage() * self.MeleeDamageTakenMul)
 				end
 
-				if self:IsSkillActive(SKILL_BACKPEDDLER) then
+				--[[if self:IsSkillActive(SKILL_BACKPEDDLER) then
 					self:AddLegDamage(8)
-				end
+				end]]
 			end
 
-			if self.HasHemophilia and (damage >= 4 and dmgtype == 0 or bit.band(dmgtype, DMG_TAKE_BLEED) ~= 0) then
+			if self:HasTrinket("d_razorwire") and (damage >= 4 and dmgtype == 0 or bit.band(dmgtype, DMG_TAKE_BLEED) ~= 0) then
 				local bleed = self:GiveStatus("bleed")
 				if bleed and bleed:IsValid() then
 					bleed:AddDamage(damage * 0.25)
@@ -208,15 +208,14 @@ function meta:ProcessDamage(dmginfo)
 	if self:GetBloodArmor() > 0 then
 		local damage = dmginfo:GetDamage()
 		if damage > 0 then
-			if damage >= self:GetBloodArmor() and self:IsSkillActive(SKILL_BLOODLETTER) then
+			if damage >= self:GetBloodArmor() and self:HasTrinket("hemospoofer") then
 				local bleed = self:GiveStatus("bleed")
 				if bleed and bleed:IsValid() then
 					bleed:AddDamage(5)
 					bleed.Damager = self
 				end
 			end
-
-			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (self:IsSkillActive(SKILL_IRONBLOOD) and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0)
+			local ratio = 0.5 + self.BloodArmorDamageReductionAdd + (self:HasTrinket("ironblood") and self:Health() <= self:GetMaxHealth() * 0.5 and 0.25 or 0)
 			local absorb = math.min(self:GetBloodArmor(), damage * ratio)
 			dmginfo:SetDamage(damage - absorb)
 			self:SetBloodArmor(self:GetBloodArmor() - absorb)
@@ -237,7 +236,7 @@ function meta:ProcessDamage(dmginfo)
 		end
 	end
 
-	if self:IsSkillActive(SKILL_BLOODLUST) and attacker:IsValid() and attacker:IsPlayer() and inflictor:IsValid() and attacker:Team() == TEAM_UNDEAD then
+	if self:HasTrinket("bbrally") and attacker:IsValid() and attacker:IsPlayer() and inflictor:IsValid() and attacker:Team() == TEAM_UNDEAD then
 		self:SetPhantomHealth(math.min(self:GetPhantomHealth() + dmginfo:GetDamage() / 2, self:GetMaxHealth()))
 	end
 
@@ -737,14 +736,17 @@ end
 function meta:GiveStatus(sType, fDie)
 	local resistable = table.HasValue(GAMEMODE.ResistableStatuses, sType)
 
-	if resistable and self:IsSkillActive(SKILL_HAEMOSTASIS) and self:GetBloodArmor() >= 2 then
-		self:SetBloodArmor(self:GetBloodArmor() - 2)
-		return
-	end
-
-	if resistable and self:HasTrinket("biocleanser") and (not self.LastBioCleanser or self.LastBioCleanser + 20 < CurTime()) then
-		self.LastBioCleanser = CurTime()
-		self.BioCleanserMessage = nil
+	if resistable and self:HasTrinket("biocleanser") then
+		local resisted = false
+		if self:GetBloodArmor() >= 2 then
+			self:SetBloodArmor(self:GetBloodArmor() - 2)
+			resisted = true
+		elseif (not self.LastBioCleanser or self.LastBioCleanser + 20 < CurTime()) then
+			self.LastBioCleanser = CurTime()
+			self.BioCleanserMessage = nil
+			resisted = true
+		end
+		if resisted then return end
 	end
 
 	local cur = self:GetStatus(sType)
@@ -918,8 +920,8 @@ end
 function meta:Resupply(owner, obj)
 	if GAMEMODE:GetWave() <= 0 then return end
 
-	local stockpiling = self:IsSkillActive(SKILL_STOCKPILE)
-	local stowage = self:IsSkillActive(SKILL_STOWAGE)
+	local stockpiling = self:HasTrinket("bulkstocker")
+	local stowage = self:HasTrinket("promanifest")
 
 	if (stowage and (self.StowageCaches or 0) <= 0) or (not stowage and CurTime() < (self.NextResupplyUse or 0)) then
 		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "no_ammo_here"))
@@ -927,7 +929,7 @@ function meta:Resupply(owner, obj)
 	end
 
 	if not stowage then
-		self.NextResupplyUse = CurTime() + GAMEMODE.ResupplyBoxCooldown * (self.ResupplyDelayMul or 1) * (stockpiling and 2.12 or 1)
+		self.NextResupplyUse = CurTime() + GAMEMODE.ResupplyBoxCooldown * (self.ResupplyDelayMul or 1) * (stockpiling and 2 or 1)
 
 		net.Start("zs_nextresupplyuse")
 			net.WriteFloat(self.NextResupplyUse)
@@ -951,7 +953,7 @@ function meta:Resupply(owner, obj)
 
 		self:GiveAmmo(amount, ammotype)
 
-		if self:IsSkillActive(SKILL_FORAGER) and math.random(4) == 1 and #GAMEMODE.Food > 0 then
+		if self:HasTrinket("acqmanifest") and math.random(4) == 1 and #GAMEMODE.Food > 0 then
 			self:Give(GAMEMODE.Food[math.random(#GAMEMODE.Food)])
 		end
 
@@ -960,7 +962,7 @@ function meta:Resupply(owner, obj)
 				owner.ResupplyBoxUsedByOthers = owner.ResupplyBoxUsedByOthers + 1
 			end
 
-			owner:AddPoints(0.15, nil, nil, true)
+			owner:AddPoints(0.25, nil, nil, true)
 
 			net.Start("zs_commission")
 				net.WriteEntity(obj)
@@ -987,6 +989,20 @@ function meta:PointCashOut(ent, fmtype)
 		self.PointQueue = self.PointQueue - points
 
 		self:AddPoints(points, ent or self.LastDamageDealtPos or vector_origin, fmtype)
+	end
+end
+
+function meta:ScrapReactorCashOut(ent)
+	local dmgremainder = self.ScrapReactorDmgRemainder
+	local togive = math.floor(dmgremainder/200)
+	if togive >= 1 and P_Team(self) == TEAM_HUMAN then
+		self.ScrapReactorDmgRemainder = self.ScrapReactorDmgRemainder - (togive * 200)
+		self:GiveAmmo(togive, "scrap")
+		net.Start("zs_ammopickup")
+			net.WriteUInt(togive, 16)
+			net.WriteString("scrap")
+		net.Send(activator)
+		self:FloatingScore(ent or self.LastDamageDealtPos or vector_origin, "floatingscore_scrap", togive, FM_NONE)
 	end
 end
 
@@ -1019,38 +1035,15 @@ function meta:AddPoints(points, floatingscoreobject, fmtype, nomul)
 	self:AddFrags(wholepoints)
 	self:SetPoints(self:GetPoints() + wholepoints)
 
-	if self.PointsVault then
-		self.PointsVault = self.PointsVault + wholepoints * GAMEMODE.PointSaving
-	end
-
 	if floatingscoreobject then
 		self:FloatingScore(floatingscoreobject, "floatingscore", wholepoints, fmtype or FM_NONE)
 	end
-
-	local xp = wholepoints
-	if GAMEMODE.HumanXPMulti and GAMEMODE.HumanXPMulti >= 0 then
-		xp = xp * GAMEMODE.HumanXPMulti
-		local wholexp = math.floor(xp)
-		local xpremainder = xp - wholexp
-		if xpremainder > 0 then
-			self.XPRemainder = self.XPRemainder + xpremainder
-			local xpcarryover = math.floor(self.XPRemainder)
-			xp = wholexp + xpcarryover
-			self.XPRemainder = self.XPRemainder - xpcarryover
-		end
-	end
-
-	self:AddZSXP(xp * (self.RedeemBonus and 1.15 or 1))
 
 	gamemode.Call("PlayerPointsAdded", self, wholepoints)
 end
 
 function meta:TakePoints(points)
 	self:SetPoints(self:GetPoints() - points)
-
-	if self.PointsVault then
-		self.PointsVault = self.PointsVault - points
-	end
 end
 
 function meta:UpdateAllZombieClasses()
@@ -1242,8 +1235,6 @@ function meta:Redeem(silent, noequip)
 
 	self:ChangeTeam(TEAM_HUMAN)
 	if not GAMEMODE.InitialVolunteers[self:UniqueID()] then
-		self:AddZSXP(50 * (GAMEMODE.ZombieXPMulti or 1))
-		self.RedeemBonus = true
 	end
 	if not noequip then self.m_PreRedeem = true end
 
@@ -1673,22 +1664,6 @@ function meta:SendDeployableOutOfAmmoMessage(deployable)
 	net.Send(self)
 end
 
-function meta:GetRandomStartingItem()
-	local pool = {}
-
-	if self:IsSkillActive(SKILL_PREPAREDNESS) and #GAMEMODE.Food > 0 then
-		pool[#pool + 1] = GAMEMODE.Food[math.random(#GAMEMODE.Food)]
-	end
-
-	if self:IsSkillActive(SKILL_EQUIPPED) then
-		pool[#pool + 1] = GAMEMODE.StarterTrinkets[math.random(#GAMEMODE.StarterTrinkets)]
-	end
-
-	if #pool > 0 then
-		return pool[math.random(#pool)]
-	end
-end
-
 function meta:PulseResonance(attacker, inflictor)
 	-- Weird things happen with multishot weapons..
 
@@ -1717,7 +1692,7 @@ function meta:PulseResonance(attacker, inflictor)
 end
 
 function meta:CryogenicInduction(attacker, inflictor, damage)
-	if self:Health() > self:GetMaxHealthEx() * (damage/100) or math.random(50) > damage then return end
+	if self:Health() > self:GetMaxHealthEx() * (damage/50) or math.random(50) > damage then return end
 
 	timer.Create("Cryogenic" .. attacker:UniqueID(), 0.06, 1, function()
 		if not attacker:IsValid() or not self:IsValid() then return end
@@ -1748,16 +1723,20 @@ function meta:SetPhantomHealth(amount)
 end
 
 function meta:HasBarricadeExpert()
-	return self:GetZSRemortLevel() > 0
+	return self:HasTrinket("alloyhammer") or self:HasTrinket("blueprintsii")
 end
 
 function meta:BarricadeExpertPrecedence(otherpl)
-	local mygrade, myexpert = self:GetZSRemortLevelGraded(), self:HasBarricadeExpert()
-	local othergrade, otherexpert = otherpl:GetZSRemortLevelGraded(), otherpl:HasBarricadeExpert()
+	local myexpert = 0
+	if self:HasTrinket("alloyhammer") then myexpert = myexpert +1 end
+	if self:HasTrinket("blueprintsii") then myexpert = myexpert +1 end 
+	local otherexpert = 0
+	if otherpl:HasTrinket("alloyhammer") then otherexpert = myexpert +1 end
+	if otherpl:HasTrinket("blueprintsii") then otherexpert = myexpert +1 end 	
 
-	if (myexpert and not otherexpert) or mygrade > othergrade then
+	if (myexpert > otherexpert) then
 		return 1
-	elseif (not myexpert and not otherexpert) or (myexpert and mygrade == othergrade) then
+	elseif (myexpert == otherexpert) then
 		return 0
 	end
 

@@ -67,7 +67,7 @@ function SWEP:PrimaryAttack(right)
 	self:SetNextIdleHoldType(time + 1.5)
 	owner:SetAnimation(PLAYER_ATTACK1)
 	self.OldWalkSpeed = math.max(self.OldWalkSpeed, self.WalkSpeed)
-	if not owner:IsSkillActive(SKILL_KNUCKLEMASTER) and self.Unarmed then
+	if not owner:HasTrinket("martialarts") and self.Unarmed then
 		self.WalkSpeed = 165
 		owner:ResetSpeed()
 	end
@@ -88,7 +88,7 @@ function SWEP:PrimaryAttack(right)
 	local armdelay = owner:GetMeleeSpeedMul()
 	local hitdelay = self.Primary.Delay / 3 * (owner.MeleeSwingDelayMul or 1) * armdelay
 	owner:GetViewModel():SetPlaybackRate(1 / armdelay)
-	if time < self.LastSwingStart + 1 and owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
+	if time < self.LastSwingStart + 1 and owner:HasTrinket("martialarts") then
 		if time < self.LastSwingHit + 0.75 then --if self:GetHitPrevious() then
 			hitdelay = hitdelay / 2
 			owner:GetViewModel():SetPlaybackRate(2 / armdelay)
@@ -143,14 +143,10 @@ function SWEP:DealDamage()
 	local delay = self.Primary.Delay * (owner.UnarmedDelayMul or 1) * armdelay
 	if tr.Hit then
 		self.LastSwingHit = time
-		if owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
+		if owner:HasTrinket("martialarts") then
 			delay = delay / 2
 		end
 	else
-		if owner:IsSkillActive(SKILL_COMBOKNUCKLE) then
-			delay = delay * 2
-		end
-
 		if owner.MeleePowerAttackMul and owner.MeleePowerAttackMul > 1 then
 			self:SetPowerCombo(0)
 		end
@@ -160,16 +156,14 @@ function SWEP:DealDamage()
 
 	if hitent:IsValid() then
 		local damagemultiplier = owner:GetTotalAdditiveModifier("UnarmedDamageMul", "MeleeDamageMultiplier")
-		if owner:IsSkillActive(SKILL_LASTSTAND) then
+		if owner:HasTrinket("selfdefense") then
 			if owner:Health() <= owner:GetMaxHealth() * 0.25 then
 				damagemultiplier = damagemultiplier * 2
-			else
-				damagemultiplier = damagemultiplier * 0.85
 			end
 		end
 
-		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:IsSkillActive(SKILL_GLASSWEAPONS) then
-			damagemultiplier = damagemultiplier * 3.5
+		if SERVER and hitent:IsPlayer() and not self.NoGlassWeapons and owner:HasTrinket("d_crystallizer") then
+			damagemultiplier = damagemultiplier * 3
 			owner.GlassWeaponShouldBreak = not owner.GlassWeaponShouldBreak
 		end
 
@@ -199,7 +193,7 @@ function SWEP:DealDamage()
 						dmginfo:SetDamageForce(owner:GetUp() * 5158 + owner:GetForward() * 10012)
 					end
 				else
-					if owner:IsSkillActive(SKILL_CRITICALKNUCKLE) then
+					if owner:HasTrinket("martialarts") then
 						hitent:ThrowFromPositionSetZ(tr.StartPos, 240 * (owner.MeleeKnockbackMultiplier or 1), nil, true)
 					end
 

@@ -43,15 +43,15 @@ function SWEP:CanEat()
 
 	if owner:GetStatus("sickness") then return false end
 
-	if owner:IsSkillActive(SKILL_SUGARRUSH) then
+	if owner:HasTrinket("cutlery") then
 		return true
 	end
 
-	if owner:IsSkillActive(SKILL_GLUTTON) then
+	if owner:HasTrinket("blooddigester") then
 		return owner:GetBloodArmor() < owner.MaxBloodArmor + (40 * owner.MaxBloodArmorMul)
 	end
 
-	local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+	local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 	return owner:Health() < max
 end
 
@@ -117,9 +117,9 @@ function SWEP:Think()
 			self:SetEatEndTime(0)
 		end
 
-		if owner:IsSkillActive(SKILL_GLUTTON) or owner:IsSkillActive(SKILL_SUGARRUSH) then return end
+		if owner:HasTrinket("blooddigester") or owner:HasTrinket("cutlery") then return end
 
-		local max = owner:IsSkillActive(SKILL_D_FRAIL) and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
+		local max = owner:HasTrinket("d_insured") and math.floor(owner:GetMaxHealth() * 0.25) or owner:GetMaxHealth()
 		if owner:Health() >= max then
 			self:SetEatEndTime(0)
 		end

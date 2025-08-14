@@ -5,7 +5,7 @@ function meta:AddInventoryItem(item)
 
 	self.ZSInventory[item] = self.ZSInventory[item] and self.ZSInventory[item] + 1 or 1
 
-	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS or GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
 		self:ApplyTrinkets()
 	end
 
@@ -27,7 +27,7 @@ function meta:TakeInventoryItem(item)
 		self.ZSInventory[item] = nil
 	end
 
-	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS or GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
 		self:ApplyTrinkets()
 	end
 
@@ -124,16 +124,24 @@ function meta:TryAssembleItem(component, heldclass)
 	GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, desiassembly, "Crafts", 1)
 end
 
-function meta:DropInventoryItemByType(itype)
+function meta:DropInventoryItemByType(itype, forceremove)
 	if GAMEMODE.ZombieEscape then return end
 	if not self:HasInventoryItem(itype) then return end
+
+	if forceremove then
+		self:TakeInventoryItem(itype)
+		self:UpdateAltSelectedWeapon()
+	end
+	
+	if GAMEMODE:GetIsTrinketDebuff(string.sub(itype, 9)) then
+		return nil
+	end
 
 	local ent = ents.Create("prop_invitem")
 	if ent:IsValid() then
 		ent:SetInventoryItemType(itype)
 		ent:Spawn()
 		ent.DroppedTime = CurTime()
-
 		self:TakeInventoryItem(itype)
 		self:UpdateAltSelectedWeapon()
 
@@ -147,7 +155,7 @@ function meta:DropAllInventoryItems()
 	local zmax = self:OBBMaxs().z * 0.75
 	for invitem, count in pairs(self:GetInventoryItems()) do
 		for i = 1, count do
-			local ent = self:DropInventoryItemByType(invitem)
+			local ent = self:DropInventoryItemByType(invitem, true)
 			if ent and ent:IsValid() then
 				ent:SetPos(vPos + Vector(math.Rand(-16, 16), math.Rand(-16, 16), math.Rand(2, zmax)))
 				ent:SetAngles(VectorRand():Angle())
@@ -164,8 +172,12 @@ end
 function meta:GiveInventoryItemByType(itype, plyr)
 	if GAMEMODE.ZombieEscape then return end
 	if not self:HasInventoryItem(itype) then return end
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_DEBUFF then
+		self:CenterNotify(COLOR_RED, "You cannot remove debuffs this way.")
+		return 
+	end
 
-	if GAMEMODE:GetInventoryItemType(itype) == INVCAT_TRINKETS and plyr:HasInventoryItem(itype) then
+	if GAMEMODE:GetInventoryItemType(item) == INVCAT_TRINKETS and plyr:HasInventoryItem(itype) then
 		self:CenterNotify(COLOR_RED, translate.ClientGet(self, "they_already_have_this_trinket"))
 		return
 	end

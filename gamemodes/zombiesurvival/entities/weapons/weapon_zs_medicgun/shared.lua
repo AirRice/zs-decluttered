@@ -65,7 +65,7 @@ function SWEP:SecondaryAttack()
 	self:SetNextSecondaryFire(CurTime() + 0.1)
 
 	local owner = self:GetOwner()
-	if not owner:IsSkillActive(SKILL_SMARTTARGETING) then return end
+	if not owner:HasTrinket("curativeii") then return end
 
 	local targetent = owner:CompensatedMeleeTrace(2048, 2, nil, nil, true).Entity
 	local locked = targetent and targetent:IsValidLivingHuman() and gamemode.Call("PlayerCanBeHealed", targetent)
@@ -73,7 +73,7 @@ function SWEP:SecondaryAttack()
 	if CLIENT then
 		self:EmitSound(locked and "npc/scanner/combat_scan4.wav" or "npc/scanner/scanner_scan5.wav", 65, locked and 75 or 200)
 	end
-	self:SetSeekedPlayer(locked and targetent)
+	self:SetSeekedPlayer(locked and targetent or NULL)
 end
 
 function SWEP:SetSeekedPlayer(ent)

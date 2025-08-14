@@ -59,7 +59,7 @@ function ENT:SetupPlayerSkills()
 		maxspeed = maxspeed * owner:GetTotalAdditiveModifier("ControllableSpeedMul", "DroneSpeedMul")
 		acceleration = acceleration * (owner.ControllableHandlingMul or 1)
 		carrymass = carrymass * (owner.DroneCarryMassMul or 1)
-		loaded = owner:IsSkillActive(SKILL_LOADEDHULL)
+		loaded = owner:HasTrinket("loadedhull")
 	end
 
 	newmaxhealth = math.ceil(newmaxhealth)
@@ -242,7 +242,7 @@ function ENT:Destroy()
 	util.Effect("sparks", effectdata)
 
 	local owner = self:GetObjectOwner()
-	if owner:IsValidLivingHuman() and owner:IsSkillActive(SKILL_LOADEDHULL) then
+	if owner:IsValidLivingHuman() and owner:HasTrinket("loadedhull") then
 		effectdata = EffectData()
 			effectdata:SetOrigin(pos)
 			effectdata:SetNormal(Vector(0, 0, -1))
@@ -388,7 +388,7 @@ function ENT:Think()
 		end
 	end
 
-	if ((not owner:IsSkillActive(SKILL_STABLEHULL) and data.Speed >= self.MaxSpeed * 0.75) or (self.LastShadeLaunch and self.LastShadeLaunch + 2 > CurTime())) and
+	if ((not owner:HasTrinket("controlplat") and data.Speed >= self.MaxSpeed * 0.75) or (self.LastShadeLaunch and self.LastShadeLaunch + 2 > CurTime())) and
 	 	ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
 		self:TakeDamage(math.Clamp(data.Speed * 0.11, 0, 40))
 	end

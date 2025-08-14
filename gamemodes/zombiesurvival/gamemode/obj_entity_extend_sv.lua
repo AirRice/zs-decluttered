@@ -27,7 +27,7 @@ end
 function meta:HealPlayer(pl, amount, pointmul, nobymsg, poisononly)
 	local healed, rmv = 0, 0
 
-	local health, maxhealth = pl:Health(), pl:IsSkillActive(SKILL_D_FRAIL) and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
+	local health, maxhealth = pl:Health(), pl:HasTrinket("d_insured") and math.floor(pl:GetMaxHealth() * 0.25) or pl:GetMaxHealth()
 	local missing_health = maxhealth - health
 	local poison = pl:GetPoisonDamage()
 	local bleed = pl:GetBleedDamage()
@@ -674,14 +674,14 @@ function meta:RecalculateNailBonuses()
 	local max_health = self:GetMaxBarricadeHealth()
 	if max_health == 0 then return end
 
-	local num_extra_nails = math.Clamp(self:NumLivingNails() - 1, 0, 3)
+	local num_extra_nails = math.Clamp(self:NumLivingNails() - 1, 0, GAMEMODE.MaxNails-1)
 	local repairs_frac = self:GetBarricadeRepairs() / self:GetMaxBarricadeRepairs()
 
 	self.OriginalMaxHealth = self.OriginalMaxHealth or max_health
 	self.OriginalMaxBarricadeRepairs = self.OriginalMaxBarricadeRepairs or max_repairs
 
 	local health = self:GetBarricadeHealth()
-	local new_max_health = self.OriginalMaxHealth + num_extra_nails * GAMEMODE.ExtraHealthPerExtraNail
+	local new_max_health = self.OriginalMaxHealth + num_extra_nails * math.floor(self.OriginalMaxHealth * GAMEMODE.ExtraHealthRatioPerExtraNail) -- GAMEMODE.ExtraHealthPerExtraNail
 	self:SetMaxBarricadeHealth(new_max_health)
 	self:SetBarricadeHealth(health / max_health * new_max_health)
 

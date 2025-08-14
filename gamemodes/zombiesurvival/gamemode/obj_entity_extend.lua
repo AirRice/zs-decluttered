@@ -450,7 +450,7 @@ function meta:ThrowFromPosition(pos, force, noknockdown)
 		self:SetGroundEntity(NULL)
 		if SERVER and not noknockdown and self:IsPlayer() then
 			local absforce = math.abs(force)
-			if absforce >= 512 or self.IsClumsy and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
+			if absforce >= 512 or self:HasTrinket("d_mercury") and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
 				self:KnockDown()
 			end
 		end
@@ -486,7 +486,7 @@ function meta:ThrowFromPositionSetZ(pos, force, zmul, noknockdown)
 		self:SetGroundEntity(NULL)
 		if SERVER and not noknockdown and self:IsPlayer() then
 			local absforce = math.max(math.abs(force) * math.abs(zmul), math.abs(force))
-			if absforce >= 512 or self.IsClumsy and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
+			if absforce >= 512 or self:HasTrinket("d_mercury") and P_Team(self) == TEAM_HUMAN and absforce >= 32 then
 				self:KnockDown()
 			end
 		end

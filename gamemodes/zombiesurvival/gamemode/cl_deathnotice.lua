@@ -379,8 +379,12 @@ killicon.Add("status_poison", "zombiesurvival/killicons/projectile_poisonflesh")
 killicon.Add("env_fire", "zombiesurvival/killicons/burn")
 killicon.Add("entityflame", "zombiesurvival/killicons/burn")
 
+
+killicon.Add("debuff_trinket", "zombiesurvival/sickness.png", Color(155, 0, 0))
+
 killicon.Add("ammo_pistol", "zombiesurvival/killicons/pistol_ammo_icon", Color(255, 255, 200))
 killicon.Add("ammo_shotgun", "zombiesurvival/killicons/shotgun_ammo_icon", Color(255, 140, 120))
+killicon.Add("ammo_woodboard", "zombiesurvival/killicons/weapon_zs_boardpack", Color(207, 185, 151))
 killicon.Add("ammo_pulse", "zombiesurvival/killicons/pulse_ammo_icon", Color(150, 200, 255))
 killicon.Add("ammo_rifle", "zombiesurvival/killicons/rifle_ammo_icon_2", Color(200, 200, 155))
 killicon.Add("ammo_scrap", "zombiesurvival/killicons/scrap_ammo_icon", Color(150, 150, 150))

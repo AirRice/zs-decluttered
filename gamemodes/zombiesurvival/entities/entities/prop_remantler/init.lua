@@ -121,7 +121,7 @@ function ENT:Use(activator, caller)
 		return
 	end
 
-	if (heldtbl.AllowQualityWeapons or heldtbl.PermitDismantle) then
+	if (heldtbl.AllowQualityWeapons or GAMEMODE:GetAlternateWeapon(currentwepclass) or heldtbl.PermitDismantle) then
 		activator:SendLua("surface.PlaySound(\"ambient/misc/shutter1.wav\")")
 	end
 

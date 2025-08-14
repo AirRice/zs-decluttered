@@ -42,11 +42,11 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 			elseif eHitEntity:Team() == TEAM_HUMAN then
 				local ehithp, ehitmaxhp = eHitEntity:Health(), eHitEntity:GetMaxHealth()
 
-				if eHitEntity:IsSkillActive(SKILL_D_FRAIL) and ehithp >= ehitmaxhp * 0.25 then
+				if eHitEntity:HasTrinket("d_insured") and ehithp >= ehitmaxhp * 0.25 then
 					owner:CenterNotify(COLOR_RED, translate.Format("frail_healdart_warning", eHitEntity:GetName()))
 					self:EmitSound("buttons/button8.wav", 70, math.random(115,128))
 					self:DoRefund(owner)
-				elseif not (owner:IsSkillActive(SKILL_RECLAIMSOL) and ehithp >= ehitmaxhp) then
+				else
 					local status = eHitEntity:GiveStatus(alt and "strengthdartboost" or "medrifledefboost", (alt and 1 or 2) * (self.BuffDuration or 10))
 					status.Applier = owner
 
@@ -63,8 +63,6 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 						net.WriteEntity(eHitEntity)
 						net.WriteString(txt)
 					net.Send(owner)
-				else
-					self:DoRefund(owner)
 				end
 			end
 		else

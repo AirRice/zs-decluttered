@@ -246,4 +246,52 @@ function SKIN:PaintComboDownArrowClassSel(panel, w, h)
 	self.tex.Input.Slider.H.Normal(0, y, w, h)
 end
 
+function SKIN:PaintNumSlider( panel, w, h )
+	draw.RoundedBox(8, 0, 0, w, h, color_white_alpha90)
+	surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+	surface.DrawRect( 8, h / 2 - 1, w - 15, 1 )
+	if ( !panel.m_iNotches ) then return end
+
+	local space = (w - 16) / panel.m_iNotches
+
+	for i=0, panel.m_iNotches do
+		surface.DrawRect( 8 + i * space, h / 2 + 3, 1, 10 )
+	end
+end
+--[[---------------------------------------------------------
+	MenuOption
+-----------------------------------------------------------]]
+function SKIN:PaintMenuOption( panel, w, h )
+
+	if ( panel.m_bBackground && !panel:IsEnabled() ) then
+		surface.SetDrawColor( Color( 0, 0, 0, 50 ) )
+		surface.DrawRect( 0, 0, w, h )
+	end
+
+	if not panel.m_bBackground then return end
+
+	local outlinecol
+	if panel:GetDisabled() then
+		outlinecol = Color(5, 5, 5, 90)
+	elseif panel:GetChecked() then
+		outlinecol = COLOR_LIMEGREEN
+	elseif panel.Hovered || panel.Highlight then
+		outlinecol = COLOR_DARKGREEN
+	else
+		outlinecol = COLOR_DARKGRAY
+	end
+
+	local selectcol = color_black
+
+	if ( panel:GetChecked() ) then
+		selectcol = COLOR_GRAY
+	end
+
+	surface.SetDrawColor(outlinecol)
+	surface.DrawRect(0, 0, w , h)
+
+	surface.SetDrawColor(selectcol)
+	surface.DrawRect(2, 2, w-4 , h-4)
+end
+
 derma.DefineSkin("zombiesurvival", "The default Derma skin for Zombie Survival", SKIN, "Default")

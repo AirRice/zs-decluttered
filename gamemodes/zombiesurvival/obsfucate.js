@@ -32,7 +32,6 @@ function replace_block_str(match, m, offset, string) {
 }
 
 function replace_locals(str) {
-	// TODO
 
 	/*var varName
 	var varId = 1

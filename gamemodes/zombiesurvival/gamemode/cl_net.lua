@@ -149,17 +149,12 @@ net.Receive("zs_waveend", function(length)
 		GAMEMODE:CenterNotify(translate.Get("wave_x_is_over_sub"))
 
 		if MySelf:IsValid() and P_Team(MySelf) == TEAM_HUMAN then
-			if MySelf:GetZSSPRemaining() > 0 then
-				GAMEMODE:CenterNotify(translate.Format("unspent_skill_points_press_x", input.LookupBinding("gm_showspare1") or "F3"))
-			end
-
 			if GAMEMODE.EndWavePointsBonus > 0 then
 				local pointsbonus = GAMEMODE.EndWavePointsBonus + (GAMEMODE:GetWave() - 1) * GAMEMODE.EndWavePointsBonusPerWave + (MySelf.EndWavePointsExtra or 0)
-
-				if not MySelf.Scourer then
-					GAMEMODE:CenterNotify(COLOR_CYAN, translate.Format("points_for_surviving", pointsbonus))
-				else
-					GAMEMODE:CenterNotify(COLOR_ORANGE, translate.Format("scrap_for_surviving", pointsbonus))
+				GAMEMODE:CenterNotify(COLOR_CYAN, translate.Format("points_for_surviving", pointsbonus))
+	
+				if MySelf:HasTrinket("scrapreactor") then
+					GAMEMODE:CenterNotify(COLOR_ORANGE, translate.Format("scrap_for_surviving", GAMEMODE.EndWavePointsBonus))
 				end
 			end
 		end

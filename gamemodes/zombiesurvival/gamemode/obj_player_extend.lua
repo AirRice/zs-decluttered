@@ -323,7 +323,7 @@ function meta:AddLegDamageExt(damage, attacker, inflictor, type)
 		if SERVER and attacker:HasTrinket("resonance") then
 			attacker.AccuPulse = (attacker.AccuPulse or 0) + (self:GetFlatLegDamage() - startleg)
 
-			if attacker.AccuPulse > 80 then
+			if attacker.AccuPulse > 50 then
 				self:PulseResonance(attacker, inflictor)
 			end
 		end
@@ -506,7 +506,7 @@ end
 function meta:SetSpeed(speed)
 	if not speed then speed = 200 end
 
-	local runspeed = self:GetBloodArmor() > 0 and self:IsSkillActive(SKILL_CARDIOTONIC) and speed + 40 or speed
+	local runspeed = self:GetBloodArmor() > 0 and self:HasTrinket("cardiotonic") and speed + 40 or speed
 
 	self:SetWalkSpeed(speed)
 	self:SetRunSpeed(runspeed)
@@ -546,7 +546,7 @@ function meta:ResetSpeed(noset, health)
 		speed = speed + self.SkillSpeedAdd
 	end
 
-	if self:IsSkillActive(SKILL_LIGHTWEIGHT) and wep:IsValid() and wep.IsMelee then
+	if self:HasTrinket("sharpkit") and wep:IsValid() and wep.IsMelee then
 		speed = speed + 6
 	end
 
@@ -605,7 +605,7 @@ end
 function meta:SetBarricadeGhosting(b, fullspeed)
 	if self == NULL then return end --???
 
-	if b and self.NoGhosting and not self:GetBarricadeGhosting() then
+	if b and self:HasTrinket("d_overharness") and not self:GetBarricadeGhosting() then
 		self:SetDTFloat(DT_PLAYER_FLOAT_WIDELOAD, CurTime() + 6)
 	end
 
@@ -864,11 +864,11 @@ function meta:PenetratingMeleeTrace(distance, size, start, dir, hit_team_members
 	local t = {}
 	local onlyhitworld
 	for i=1, 50 do
-		tr = util_TraceLine(melee_trace)
+		--tr = util_TraceLine(melee_trace)
 
-		if not tr.Hit then
-			tr = util_TraceHull(melee_trace)
-		end
+		--if not tr.Hit then
+		tr = util_TraceHull(melee_trace)
+		--end
 
 		if not tr.Hit then break end
 

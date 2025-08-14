@@ -12,18 +12,6 @@ GM.ItemCategoryIcons = {
 	[ITEMCAT_RETURNS] = "icon16/user_delete.png"]]
 }
 
-GM.RemortColors = {
-	[9] = COLOR_TAN,
-	[8] = COLOR_BROWN,
-	[7] = COLOR_RPINK,
-	[6] = COLOR_RPURPLE,
-	[5] = COLOR_CYAN,
-	[4] = COLOR_GREEN,
-	[3] = COLOR_YELLOW,
-	[2] = COLOR_RORANGE,
-	[1] = COLOR_RED
-}
-
 GM.SpeedToText = {
 	[SPEED_NORMAL] = "Normal",
 	[SPEED_SLOWEST] = "Very Slow",
@@ -183,7 +171,6 @@ cvars.AddChangeCallback("zs_interfacesize", function(cvar, oldvalue, newvalue)
 
 	GAMEMODE.TopNotificationHUD:InvalidateLayout()
 	GAMEMODE.CenterNotificationHUD:InvalidateLayout()
-	GAMEMODE.XPHUD:InvalidateLayout()
 	GAMEMODE.StatusHUD:InvalidateLayout()
 
 	GAMEMODE.ArsenalInterface = nil
@@ -244,6 +231,11 @@ cvars.AddChangeCallback("zs_weaponhudmode", function(cvar, oldvalue, newvalue)
 	GAMEMODE.WeaponHUDMode = tonumber(newvalue) or 0
 end)
 
+GM.ItemLocatorMode = CreateClientConVar("zs_itemlocatormode", "0", true, false):GetInt()
+cvars.AddChangeCallback("zs_itemlocatormode", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ItemLocatorMode = tonumber(newvalue) or 0
+end)
+
 GM.HealthTargetDisplay = CreateClientConVar("zs_healthtargetdisplay", "0", true, false):GetInt()
 cvars.AddChangeCallback("zs_healthtargetdisplay", function(cvar, oldvalue, newvalue)
 	GAMEMODE.HealthTargetDisplay = tonumber(newvalue) or 0
@@ -252,12 +244,6 @@ end)
 GM.DrawPainFlash = CreateClientConVar("zs_drawpainflash", "1", true, false):GetBool()
 cvars.AddChangeCallback("zs_drawpainflash", function(cvar, oldvalue, newvalue)
 	GAMEMODE.DrawPainFlash = tonumber(newvalue) == 1
-end)
-
-GM.DisplayXPHUD = CreateClientConVar("zs_drawxp", "1", true, false):GetBool()
-cvars.AddChangeCallback("zs_drawxp", function(cvar, oldvalue, newvalue)
-	GAMEMODE.DisplayXPHUD = tonumber(newvalue) == 1
-	gamemode.Call("EvaluateFilmMode")
 end)
 
 GM.FontEffects = CreateClientConVar("zs_fonteffects", "0", true, false):GetBool()

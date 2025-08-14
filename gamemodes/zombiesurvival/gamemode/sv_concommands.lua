@@ -8,7 +8,7 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 	local usescrap = arguments[2]
 
 	local midwave = GAMEMODE:GetWave() < GAMEMODE:GetNumberOfWaves() / 2 or GAMEMODE:GetWave() == GAMEMODE:GetNumberOfWaves() / 2 and GAMEMODE:GetWaveActive() and CurTime() < GAMEMODE:GetWaveEnd() - (GAMEMODE:GetWaveEnd() - GAMEMODE:GetWaveStart()) / 2
-	if sender:IsSkillActive(SKILL_D_LATEBUYER) and not usescrap and midwave then
+	if sender:HasTrinket("d_hodl") and not usescrap and midwave then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "late_buyer_warning"))
 		return
 	end
@@ -29,7 +29,8 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 
 	if not itemtab or not itemtab.PointShop then return end
 	local itemcat = itemtab.Category
-	if usescrap and not (itemcat == ITEMCAT_TRINKETS or itemcat == ITEMCAT_AMMO) and not itemtab.CanMakeFromScrap then return end
+	if usescrap and (itemtab.PreventMakeFromScrap or (not (itemcat == ITEMCAT_TRINKETS or itemcat == ITEMCAT_AMMO) and not itemtab.OnlyFromScrap)) then return end
+	if not usescrap and itemtab.OnlyFromScrap then return end
 
 	local points = usescrap and sender:GetAmmoCount("scrap") or sender:GetPoints()
 	local cost = itemtab.Price
@@ -41,11 +42,6 @@ concommand.Add("zs_pointsshopbuy", function(sender, command, arguments)
 
 	if GAMEMODE.ZombieEscape and itemtab.NoZombieEscape then
 		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "cant_use_x_in_zombie_escape", itemtab.Name))
-		return
-	end
-
-	if itemtab.SkillRequirement and not sender:IsSkillActive(itemtab.SkillRequirement) then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", itemtab.Name))
 		return
 	end
 
@@ -186,7 +182,7 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		potinv = GAMEMODE.Breakdowns[contents]
 	else
 		itypecat = GAMEMODE:GetInventoryItemType(invitem)
-		if itypecat ~= INVCAT_TRINKETS or GAMEMODE.ZSInventoryItemData[invitem].PermitDismantle then
+		if itypecat ~= INVCAT_TRINKETS or GAMEMODE.ZSInventoryItemData[invitem].NoDismantle then
 			GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "cannot_dismantle"))
 			return
 		end
@@ -222,6 +218,57 @@ concommand.Add("zs_dismantle", function(sender, command, arguments)
 		net.Start("zs_invitem")
 			net.WriteString(potinv.Result)
 		net.Send(sender)
+	end
+end)
+
+concommand.Add("zs_upgrade_altform", function(sender, command, arguments)
+	if not (sender:IsValid() and sender:IsConnected() and sender:IsValidLivingHuman()) then return end
+
+	if not sender:NearRemantler() then
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "need_to_be_near_remantler"))
+		return
+	end
+	local nearest = sender:NearestRemantler()
+	local contents = sender:GetActiveWeapon():GetClass()
+	local contentstbl = weapons.Get(contents)
+	local upgclass = GAMEMODE:GetAlternateWeapon(contents)
+	if not upgclass then return end
+	if not (nearest and nearest:IsValid() and contents) then return end
+
+	local classtbl = weapons.Get(upgclass)
+	if not classtbl then return end
+
+	if contentstbl.AmmoIfHas and sender:GetAmmoCount(contentstbl.Primary.Ammo) == 0 then
+		sender:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+		return
+	end
+
+	if sender:HasWeapon(upgclass) then
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientGet(sender, "remantle_cannot"))
+		return
+	end
+
+	local upgname = classtbl.PrintName
+	sender:CenterNotify(COLOR_CYAN, translate.ClientGet(sender, "remantle_success"), color_white, " "..upgname)
+	sender:SendLua("surface.PlaySound(\"buttons/lever"..math.random(5)..".wav\")")
+
+	local wep = sender:GiveEmptyWeapon(upgclass)
+	if wep and wep:IsValid() then
+		sender:GetActiveWeapon():EmptyAll(true)
+		sender:StripWeapon(contents)
+		sender:UpdateAltSelectedWeapon()
+
+		if contentstbl.AmmoIfHas then
+			sender:RemoveAmmo(contentstbl.Primary.DefaultClip, contentstbl.Primary.Ammo)
+		end
+		if wep.AmmoIfHas then
+			sender:GiveAmmo(wep.Primary.DefaultClip, wep.Primary.Ammo)
+		end
+		sender:SelectWeapon(upgclass)
+		net.Start("zs_remantlealtformconf")
+		net.Send(sender)
+
+		GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, upgclass, "Upgrades", 1)
 	end
 end)
 
@@ -322,13 +369,17 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 		id = tonumber(id) or id
 
 		local tab = FindStartingItem(id)
-		if tab and not hasalready[id] and (not tab.SkillRequirement or sender:IsSkillActive(tab.SkillRequirement)) then
-			cost = cost + tab.Price
+		if tab and not hasalready[id] then
+			if tab.TrinketIsDebuff then
+				cost = cost - tab.Price
+			else
+				cost = cost + tab.Price
+			end
 			hasalready[id] = true
 		end
 	end
 
-	if cost > GAMEMODE.StartingWorth + (sender.ExtraStartingWorth or 0) then return end
+	if cost > GAMEMODE.StartingWorth then return end
 
 	hasalready = {}
 
@@ -337,9 +388,7 @@ concommand.Add("worthcheckout", function(sender, command, arguments)
 
 		local tab = FindStartingItem(id)
 		if tab and not hasalready[id] then
-			if tab.SkillRequirement and not sender:IsSkillActive(tab.SkillRequirement) then
-				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", tab.Name))
-			elseif tab.NoClassicMode and GAMEMODE:IsClassicMode() then
+			if tab.NoClassicMode and GAMEMODE:IsClassicMode() then
 				sender:PrintMessage(HUD_PRINTTALK, translate.ClientFormat(sender, "cant_use_x_in_classic_mode", tab.Name))
 			elseif tab.Callback then
 				tab.Callback(sender)
@@ -386,7 +435,10 @@ concommand.Add("zsdropweapon", function(sender, command, arguments)
 		invitem = arguments[1]
 	end
 	if invitem and not sender:HasInventoryItem(invitem) then return end
-
+	if invitem and GAMEMODE:GetInventoryItemType(invitem) == INVCAT_DEBUFF then
+		GAMEMODE:ConCommandErrorMessage(sender, "You can't drop Debuff trinkets.")
+		return
+	end
 	if invitem or (currentwep and currentwep:IsValid()) then
 		local ent = invitem and sender:DropInventoryItemByType(invitem) or sender:DropWeaponByType(currentwep:GetClass())
 		if ent and ent:IsValid() then

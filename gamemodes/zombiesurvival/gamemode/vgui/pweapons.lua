@@ -1,11 +1,11 @@
 local function WeaponButtonDoClick(self)
 	local swep = self.SWEP
 	if swep then
-		pWeapons:SetWeaponViewerSWEP(self.SWEP, self.Category, self.Comps)
+		pWeapons:SetWeaponViewerSWEP(self.SWEP, self.Category, self.Comps, self.Breakdown, self.AlternateWep, self.HideViewer)
 	end
 end
 
-local function SetWeaponViewerSWEP(self, swep, category, comps)
+local function SetWeaponViewerSWEP(self, swep, category, comps, bdown, altwep, overridehide)
 	if self.Viewer then
 		if self.Viewer:IsValid() then
 			self.Viewer:Remove()
@@ -47,7 +47,7 @@ local function SetWeaponViewerSWEP(self, swep, category, comps)
 	viewer.m_Desc:SetFont("ZSBodyTextFont")
 	viewer.m_Desc:SetText(desctext)
 
-	GAMEMODE:ViewerStatBarUpdate(viewer, category ~= ITEMCAT_GUNS and category ~= ITEMCAT_MELEE, sweptable)
+	GAMEMODE:ViewerStatBarUpdate(viewer, category ~= ITEMCAT_GUNS and category ~= ITEMCAT_MELEE or overridehide, sweptable)
 	if GAMEMODE:HasPurchaseableAmmo(sweptable) and GAMEMODE.AmmoNames[string.lower(sweptable.Primary.Ammo)] then
 		local lower = string.lower(sweptable.Primary.Ammo)
 
@@ -80,13 +80,23 @@ local function SetWeaponViewerSWEP(self, swep, category, comps)
 		recipe:MoveBelow(viewer.m_Recipe1, 20)
 		viewer.m_Recipe2 = recipe
 	end
-
-	viewer.m_Recipe1:SetText(comps and (
-		GAMEMODE.ZSInventoryItemData[comps[1]].PrintName
-	) or "")
+	if not viewer.m_Breakdown then
+		local recipe = EasyLabel(viewer, "", "ZSBodyTextFont", COLOR_LIMEGREEN)
+		recipe:SetContentAlignment(8)
+		recipe:SetSize(viewer:GetWide(), 16 * screenscale)
+		recipe:MoveBelow(viewer.m_Recipe2, 40)
+		viewer.m_Breakdown = recipe
+	end
+	viewer.m_Recipe1:SetText(
+		altwep and weapons.Get(altwep).PrintName or
+		comps and (GAMEMODE.ZSInventoryItemData[comps[1]].PrintName) or 
+		"")
 
 	viewer.m_Recipe2:SetText(comps and (
 		weapons.Get(comps[2]).PrintName
+	) or "")
+	viewer.m_Breakdown:SetText((bdown and bdown.Result) and (
+		"Dismantle to get: "..(GAMEMODE.ZSInventoryItemData[bdown.Result].PrintName)
 	) or "")
 end
 
@@ -124,6 +134,14 @@ function MakepWeapons(silent)
 			if weapons.Get(wep) then
 				crafts[#crafts + 1] = wep
 				added[wep] = true
+			end
+		end
+	end
+	for wep1, wep2 in pairs(GAMEMODE.AlternateWeps) do
+		if not added[wep2] then
+			if weapons.Get(wep2) then
+				crafts[#crafts + 1] = wep2
+				added[wep2] = true
 			end
 		end
 	end
@@ -185,6 +203,8 @@ function MakepWeapons(silent)
 		wepnode.SWEP = wep
 		wepnode.DoClick = WeaponButtonDoClick
 		wepnode.Category = addedcat[wep] or ITEMCAT_GUNS
+		wepnode.Breakdown = GAMEMODE.Breakdowns[wep]
+		wepnode.AlternateWep = GAMEMODE.AlternateWeps[wep]
 	end
 
 	for _, wep in pairs(crafts) do
@@ -199,6 +219,9 @@ function MakepWeapons(silent)
 		wepnode.DoClick = WeaponButtonDoClick
 		wepnode.Category = enttab.RequiredClip and ITEMCAT_GUNS or (enttab.Primary.Ammo == "none" and enttab.MeleeRange) and ITEMCAT_MELEE or ITEMCAT_TOOLS
 		wepnode.Comps = GAMEMODE.Assemblies[wep]
+		wepnode.Breakdown = GAMEMODE.Breakdowns[wep]
+		wepnode.AlternateWep = GAMEMODE:GetAlternateWeapon(wep)
+		wepnode.HideViewer = (wep == "weapon_zs_strengthshot")
 	end
 
 	frame:SetWeaponViewerSWEP()

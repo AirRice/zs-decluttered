@@ -4,7 +4,7 @@ SWEP.PrintName = "Wraith"
 
 SWEP.MeleeDelay = 0.8
 SWEP.MeleeReach = 48
-SWEP.MeleeSize = 4.5
+SWEP.MeleeSize = 1.75 --4.5
 SWEP.MeleeDamage = 43
 SWEP.MeleeDamageType = DMG_SLASH
 SWEP.MeleeAnimationDelay = 0.25

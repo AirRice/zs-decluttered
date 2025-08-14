@@ -59,7 +59,7 @@ function GM:DrawTargetID(ent, fade)
 			end
 			if phant >= 1 then
 				util.ColorCopy(COLOR_MIDGRAY, colTemp)
-				draw.SimpleTextBlur("(BLOODLUST)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
+				draw.SimpleTextBlur("(BIOBUFFER)", "ZSHUDFontSmaller", x, y, colTemp, TEXT_ALIGN_CENTER)
 				y = y + draw.GetFontHeight("ZSHUDFontSmaller") + 2
 			end
 		end
@@ -82,15 +82,6 @@ function GM:DrawTargetID(ent, fade)
 			if wep:IsValid() then
 				draw.SimpleTextBlur(wep:GetPrintName(), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 			end
-		end
-
-		local level = ent:GetZSLevel()
-		local remortlevel = ent:GetZSRemortLevel()
-		y = y + draw.GetFontHeight("ZSHUDFontTiny") + 4
-		if remortlevel >= 1 then
-			draw.SimpleTextBlur(string_format("LVL %d R.LVL %d", level, remortlevel), "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
-		else
-			draw.SimpleTextBlur("LVL "..level, "ZSHUDFontTiny", x, y, colTemp, TEXT_ALIGN_CENTER)
 		end
 	end
 end

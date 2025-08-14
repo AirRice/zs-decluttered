@@ -33,7 +33,7 @@ end
 
 function GM:CreateMoveOTS(cmd)
 	local maxhealth = MySelf:GetMaxHealth()
-	local threshold = MySelf.HasPalsy and maxhealth - 1 or maxhealth * 0.25
+	local threshold = MySelf:HasTrinket("d_stimtrial") and maxhealth - 1 or maxhealth * 0.25
 	local health = MySelf:Health()
 	local frightened = MySelf:GetStatus("frightened")
 	local gunsway = MySelf.GunSway
