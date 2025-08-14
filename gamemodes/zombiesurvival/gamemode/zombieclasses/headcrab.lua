@@ -7,6 +7,7 @@ CLASS.Model = Model("models/headcrabclassic.mdl")
 
 CLASS.Wave = 0
 CLASS.Unlocked = true
+CLASS.Order = 3
 
 CLASS.SWEP = "weapon_zs_headcrab"
 

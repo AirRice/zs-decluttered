@@ -11,6 +11,7 @@ CLASS.Wave = 3 / 6
 
 CLASS.Health = 350
 CLASS.Speed = 135
+CLASS.Order = 6
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 

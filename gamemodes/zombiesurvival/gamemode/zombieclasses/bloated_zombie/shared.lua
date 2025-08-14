@@ -11,6 +11,7 @@ CLASS.Health = 325
 CLASS.Speed = 125
 --CLASS.JumpPower = DEFAULT_JUMP_POWER * 0.811
 CLASS.Mass = DEFAULT_MASS * 2
+CLASS.Order = 6
 
 CLASS.CanTaunt = true
 
