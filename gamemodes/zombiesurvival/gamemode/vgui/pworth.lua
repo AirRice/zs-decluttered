@@ -603,7 +603,7 @@ local function DoDebuffWarningMessage()
 
 	Window:SetCursor("pointer")
 
-	local Text = EasyLabel(Window, "Debuffs are special trinkets that SIGNIFICANTLY change gameplay, often harming the player, and cannot be removed during the round.\nHowever, they provide additional worth to spend and can be useful in specific situations.\n\nThey are not recommended for beginners!"	, "ZSHUDFontSmallerNS", color_white)
+	local Text = EasyLabel(Window, "Debuffs are special trinkets that SIGNIFICANTLY change gameplay, often harming the player, and cannot be removed during the round.\nHowever, they provide additional worth to spend and can be useful in specific situations.\n\nThey are not recommended for beginners!"	, "ZSBodyTextFont", color_white)
 	Text:SetContentAlignment( 5 )
 	Text:StretchToParent(5, 52, 5, 64)
 	Text:SetWrap(true)
