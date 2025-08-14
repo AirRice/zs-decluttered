@@ -6,15 +6,18 @@ GM.StartLoadouts = {
 	{"tossr", "3smgcp", "2smgcp", "zpplnk", "grenade"},
 	{"blstr","2sgcp","3sgcp","brassknuckles","boxingtraining"},
 	{"owens", "3pcp", "2pcp", "zpfryp"},
-	{"60mkit","medkit","processor","stone"},
-	{"minelayer", "4mines", "6mines", "flashbomb"},
+	{"90mkit","medkit","agimagni","processor"},
+	{"60mkit","90mkit","csknf","medgun","regenenzyme"},
+	{"minelayer", "4mines", "6mines", "vitpackagei"},
 	{"crklr", "3arcp", "2arcp", "zpcpot"},
 	{"8nails","crphmr","junkpack","alloyhammer"},
 	{"z9000", "3pls", "stnbtn"},
-	{"sling","xbow1","xbow2","agimagni"},
-	{"infturret","wrench","stone"},
+	{"sling","xbow1","xbow2","agimagni","stone"},
+	{"infturret","wrench","vitpackagei"},
 	{"barricadekit","wrench"},
-	{"crwbar","manhack","wrench"}
+	{"crwbar","kevlar","momentumsupsysii","sharpkit","medcloud"},
+	{"2smgcp","drone","wrench","magnet"},
+	
 }
 
 

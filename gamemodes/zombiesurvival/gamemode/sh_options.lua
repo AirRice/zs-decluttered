@@ -165,7 +165,7 @@ GM:AddStartingItem("6mines",			ITEMCAT_AMMO,			20,				nil,			"9 explosives",				
 GM:AddStartingItem("8nails",			ITEMCAT_AMMO,			15,				nil,			"8 nails",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(8, "GaussEnergy", true) end)
 GM:AddStartingItem("12nails",			ITEMCAT_AMMO,			20,				nil,			"12 nails",						nil, 		"ammo_nail", 			function(pl) pl:GiveAmmo(12, "GaussEnergy", true) end)
 GM:AddStartingItem("60mkit",			ITEMCAT_AMMO,			15,				nil,			"60 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(60, "Battery", true) end)
-GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			25,				nil,			"90 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
+GM:AddStartingItem("90mkit",			ITEMCAT_AMMO,			20,				nil,			"90 medical power",				nil,		"ammo_medpower",		function(pl) pl:GiveAmmo(90, "Battery", true) end)
 
 GM:AddStartingItem("brassknuckles",		ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"
 GM:AddStartingItem("zpaxe",				ITEMCAT_MELEE,			30,				"weapon_zs_axe")
@@ -180,10 +180,10 @@ GM:AddStartingItem("pipe",				ITEMCAT_MELEE,			30,				"weapon_zs_pipe")
 GM:AddStartingItem("hook",				ITEMCAT_MELEE,			25,				"weapon_zs_hook")
 
 local item
-GM:AddStartingItem("medkit",			ITEMCAT_TOOLS,			60,				"weapon_zs_medicalkit")
-GM:AddStartingItem("medgun",			ITEMCAT_TOOLS,			55,				"weapon_zs_medicgun")
+GM:AddStartingItem("medkit",			ITEMCAT_TOOLS,			50,				"weapon_zs_medicalkit")
+GM:AddStartingItem("medgun",			ITEMCAT_TOOLS,			45,				"weapon_zs_medicgun")
 --GM:AddStartingItem("strengthshot",		ITEMCAT_TOOLS,			40,				"weapon_zs_strengthshot")
-GM:AddStartingItem("antidoteshot",		ITEMCAT_TOOLS,			40,				"weapon_zs_antidoteshot")
+GM:AddStartingItem("antidoteshot",		ITEMCAT_TOOLS,			30,				"weapon_zs_antidoteshot")
 GM:AddStartingItem("arscrate",			ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_arsenalcrate")
 .Countables = "prop_arsenalcrate"
 GM:AddStartingItem("resupplybox",		ITEMCAT_DEPLOYABLES,			50,				"weapon_zs_resupplybox")
@@ -239,25 +239,25 @@ GM:AddStartingItem("tv",				ITEMCAT_DEPLOYABLES,			35,				"weapon_zs_tv").Counta
 GM:AddStartingItem("arsenalpack",		ITEMCAT_TRINKETS,		55,				"trinket_arsenalpack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("resupplypack",		ITEMCAT_TRINKETS,		55,				"trinket_resupplypack").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
 GM:AddStartingItem("oxtank",			ITEMCAT_TRINKETS,		5,				"trinket_oxygentank").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
-GM:AddStartingItem("boxingtraining",	ITEMCAT_TRINKETS,		10,				"trinket_boxingtraining").SubCategory =			ITEMSUBCAT_TRINKETS_MELEE
---GM:AddStartingItem("cutlery",			ITEMCAT_TRINKETS,		10,				"trinket_cutlery").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
-GM:AddStartingItem("portablehole",		ITEMCAT_TRINKETS,		10,				"trinket_portablehole").SubCategory =			ITEMSUBCAT_TRINKETS_PERFORMANCE
-GM:AddStartingItem("agimagni",			ITEMCAT_TRINKETS,		20,				"trinket_pathfinder").SubCategory=				ITEMSUBCAT_TRINKETS_PERFORMANCE
-GM:AddStartingItem("nightvision",		ITEMCAT_TRINKETS,		15,				"trinket_nightvision").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
-GM:AddStartingItem("aimcompens",		ITEMCAT_TRINKETS,		25,				"trinket_aimcomp").SubCategory =				ITEMSUBCAT_TRINKETS_OFFENSIVE
-GM:AddStartingItem("pulseampii",		ITEMCAT_TRINKETS,		20,				"trinket_pulseampii").SubCategory =				ITEMSUBCAT_TRINKETS_OFFENSIVE
-GM:AddStartingItem("alloyhammer",		ITEMCAT_TRINKETS,		15,				"trinket_alloyhammer").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
-GM:AddStartingItem("loadingframe",		ITEMCAT_TRINKETS,		15,				"trinket_loadingex").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
+GM:AddStartingItem("vitpackagei",		ITEMCAT_TRINKETS,		5,				"trinket_vitpackagei").SubCategory =			ITEMSUBCAT_TRINKETS_DEFENSIVE
+GM:AddStartingItem("regenenzyme",		ITEMCAT_TRINKETS,		10,				"trinket_regenenzyme").SubCategory =			ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddStartingItem("kevlar",			ITEMCAT_TRINKETS,		15,				"trinket_kevlar").SubCategory =					ITEMSUBCAT_TRINKETS_DEFENSIVE
+GM:AddStartingItem("bloodpack",			ITEMCAT_TRINKETS,		15,				"trinket_bloodpack").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
+GM:AddStartingItem("portablehole",		ITEMCAT_TRINKETS,		10,				"trinket_portablehole").SubCategory =			ITEMSUBCAT_TRINKETS_OFFENSIVE
+GM:AddStartingItem("aimcompens",		ITEMCAT_TRINKETS,		25,				"trinket_aimcomp").SubCategory =				ITEMSUBCAT_TRINKETS_OFFENSIVE
+GM:AddStartingItem("boxingtraining",	ITEMCAT_TRINKETS,		10,				"trinket_boxingtraining").SubCategory =			ITEMSUBCAT_TRINKETS_MELEE
 GM:AddStartingItem("momentumsupsysii",	ITEMCAT_TRINKETS,		15,				"trinket_momentumsupsysii").SubCategory =		ITEMSUBCAT_TRINKETS_MELEE
---GM:AddStartingItem("vitpackagei",		ITEMCAT_TRINKETS,		20,				"trinket_vitpackagei").SubCategory =			ITEMSUBCAT_TRINKETS_DEFENSIVE
-GM:AddStartingItem("processor",			ITEMCAT_TRINKETS,		20,				"trinket_processor").SubCategory =				ITEMSUBCAT_TRINKETS_SUPPORT
-GM:AddStartingItem("hemospoofer",		ITEMCAT_TRINKETS,		20,				"trinket_hemospoofer").SubCategory =			ITEMSUBCAT_TRINKETS_DEFENSIVE
-GM:AddStartingItem("bloodpack",			ITEMCAT_TRINKETS,		20,				"trinket_bloodpack").SubCategory =				ITEMSUBCAT_TRINKETS_DEFENSIVE
-GM:AddStartingItem("biocleanser",		ITEMCAT_TRINKETS,		20,				"trinket_biocleanser").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
-GM:AddStartingItem("reactiveflasher",	ITEMCAT_TRINKETS,		25,				"trinket_reactiveflasher").SubCategory =		ITEMSUBCAT_TRINKETS_SPECIAL
-GM:AddStartingItem("magnet",			ITEMCAT_TRINKETS,		25,				"trinket_magnet").SubCategory =					ITEMSUBCAT_TRINKETS_SPECIAL
-GM:AddStartingItem("logiradar",			ITEMCAT_TRINKETS,		30,				"trinket_logisticsrad").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
+GM:AddStartingItem("sharpkit",			ITEMCAT_TRINKETS,		25,				"trinket_sharpkit").SubCategory =				ITEMSUBCAT_TRINKETS_MELEE
+GM:AddStartingItem("agimagni",			ITEMCAT_TRINKETS,		15,				"trinket_pathfinder").SubCategory=				ITEMSUBCAT_TRINKETS_PERFORMANCE
+GM:AddStartingItem("loadingframe",		ITEMCAT_TRINKETS,		15,				"trinket_loadingex").SubCategory =				ITEMSUBCAT_TRINKETS_PERFORMANCE
+GM:AddStartingItem("alloyhammer",		ITEMCAT_TRINKETS,		15,				"trinket_alloyhammer").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("processor",			ITEMCAT_TRINKETS,		15,				"trinket_processor").SubCategory =				ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("acqmanifest",		ITEMCAT_TRINKETS,		15,				"trinket_acqmanifest").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("scrapreactor",		ITEMCAT_TRINKETS,		15,				"trinket_scrapreactor").SubCategory =			ITEMSUBCAT_TRINKETS_SUPPORT
+GM:AddStartingItem("nightvision",		ITEMCAT_TRINKETS,		15,				"trinket_nightvision").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
+GM:AddStartingItem("magnet",			ITEMCAT_TRINKETS,		10,				"trinket_magnet").SubCategory =					ITEMSUBCAT_TRINKETS_SPECIAL
+GM:AddStartingItem("logiradar",			ITEMCAT_TRINKETS,		15,				"trinket_logisticsrad").SubCategory =			ITEMSUBCAT_TRINKETS_SPECIAL
+
 
 GM:AddStartingItem("stone",				ITEMCAT_OTHER,			5,				"weapon_zs_stone")
 GM:AddStartingItem("grenade",			ITEMCAT_OTHER,			10,				"weapon_zs_grenade")
@@ -472,6 +472,7 @@ GM:AddPointShopItem("oxtank",			ITEMCAT_TRINKETS,		10,				"trinket_oxygentank").
 GM:AddPointShopItem("portablehole",		ITEMCAT_TRINKETS,		10,				"trinket_portablehole").SubCategory =							ITEMSUBCAT_TRINKETS_OFFENSIVE
 GM:AddPointShopItem("magnet",			ITEMCAT_TRINKETS,		10,				"trinket_magnet").SubCategory =									ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddPointShopItem("regenenzyme",		ITEMCAT_TRINKETS,		10,				"trinket_regenenzyme").SubCategory =							ITEMSUBCAT_TRINKETS_DEFENSIVE
+GM:AddPointShopItem("vitpackagei",		ITEMCAT_TRINKETS,		10,				"trinket_vitpackagei").SubCategory =							ITEMSUBCAT_TRINKETS_DEFENSIVE
 --GM:AddPointShopItem("targetingvisi",	ITEMCAT_TRINKETS,		10,				"trinket_targetingvisori").SubCategory =						ITEMSUBCAT_TRINKETS_OFFENSIVE
 --GM:AddPointShopItem("pulseampi",		ITEMCAT_TRINKETS,		10,				"trinket_pulseampi").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
 GM:AddPointShopItem("loadedhull",		ITEMCAT_TRINKETS,		10,				"trinket_loadedhull").SubCategory =								ITEMSUBCAT_TRINKETS_SUPPORT
@@ -482,7 +483,7 @@ GM:AddPointShopItem("bulkstocker",		ITEMCAT_TRINKETS,		10,				"trinket_bulkstock
 GM:AddPointShopItem("cutlery",			ITEMCAT_TRINKETS,		15,				"trinket_cutlery").SubCategory =								ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddPointShopItem("momentumsupsysii",	ITEMCAT_TRINKETS,		15,				"trinket_momentumsupsysii").SubCategory =						ITEMSUBCAT_TRINKETS_MELEE
 GM:AddPointShopItem("sdefmanual",		ITEMCAT_TRINKETS,		15,				"trinket_selfdefense").SubCategory =							ITEMSUBCAT_TRINKETS_MELEE
-GM:AddPointShopItem("nightvision",		ITEMCAT_TRINKETS,		15,				"trinket_nightvision").SubCategory =							ITEMSUBCAT_TRINKETS_PERFORMANCE
+GM:AddPointShopItem("nightvision",		ITEMCAT_TRINKETS,		15,				"trinket_nightvision").SubCategory =							ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddPointShopItem("loadingframe",		ITEMCAT_TRINKETS,		15,				"trinket_loadingex").SubCategory =								ITEMSUBCAT_TRINKETS_PERFORMANCE
 GM:AddPointShopItem("pathfinder",		ITEMCAT_TRINKETS,		15,				"trinket_pathfinder").SubCategory =								ITEMSUBCAT_TRINKETS_PERFORMANCE
 --GM:AddPointShopItem("ammovestii",		ITEMCAT_TRINKETS,		15,				"trinket_ammovestii").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
@@ -491,7 +492,6 @@ GM:AddPointShopItem("projguide",		ITEMCAT_TRINKETS,		15,				"trinket_projguide")
 GM:AddPointShopItem("projwei",			ITEMCAT_TRINKETS,		15,				"trinket_projwei").SubCategory =								ITEMSUBCAT_TRINKETS_OFFENSIVE
 GM:AddPointShopItem("autoreload",		ITEMCAT_TRINKETS,		15,				"trinket_autoreload").SubCategory =								ITEMSUBCAT_TRINKETS_SPECIAL
 GM:AddPointShopItem("curbstompers",		ITEMCAT_TRINKETS,		15,				"trinket_curbstompers").SubCategory =							ITEMSUBCAT_TRINKETS_PERFORMANCE
---GM:AddPointShopItem("vitpackagei",		ITEMCAT_TRINKETS,		15,				"trinket_vitpackagei").SubCategory =							ITEMSUBCAT_TRINKETS_DEFENSIVE
 --GM:AddPointShopItem("cardpackagei",		ITEMCAT_TRINKETS,		15,				"trinket_cardpackagei").SubCategory =							ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddPointShopItem("hemospoofer",		ITEMCAT_TRINKETS,		15,				"trinket_hemospoofer").SubCategory =							ITEMSUBCAT_TRINKETS_DEFENSIVE
 GM:AddPointShopItem("forcedamp",		ITEMCAT_TRINKETS,		15,				"trinket_forcedamp").SubCategory =								ITEMSUBCAT_TRINKETS_DEFENSIVE

@@ -215,11 +215,6 @@ GM:AddSkillModifier(trinket, SKILLMOD_AIMSPREAD_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_AIM_SHAKE_MUL, -0.06)
 trinketwep.NoDismantle = true
 
-trinket, trinketwep = GM:AddTrinket("Vitamin Capsules", "vitamins", false, hpveles, hpweles, nil, "+5 maximum health\n-12% poison damage taken")
-GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 5)
-GM:AddSkillModifier(trinket, SKILLMOD_POISON_DAMAGE_TAKEN_MUL, -0.12)
-trinketwep.NoDismantle = true
-
 trinket, trinketwep = GM:AddTrinket("Welfare Shield", "welfare", false, hpveles, hpweles, nil, "-5% resupply delay\n-7% self damage taken")
 GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.05)
 GM:AddSkillModifier(trinket, SKILLMOD_SELF_DAMAGE_MUL, -0.07)
@@ -232,11 +227,10 @@ trinketwep.NoDismantle = true
 
 
 -- Health Trinkets
--- Combined into antitoxin, hemostatic
---[[trinket, trinketwep = GM:AddTrinket("Health Package", "vitpackagei", false, hpveles, hpweles, 2, "+10 maximum health\n+5% healing received")
-GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 10)
+trinket, trinketwep = GM:AddTrinket("Vitamin Capsules", "vitpackagei", false, hpveles, hpweles, nil, "+5 maximum health\n+5% healing received\n-12% poison damage taken")
+GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 5)
 GM:AddSkillModifier(trinket, SKILLMOD_HEALING_RECEIVED, 0.05)
-trinketwep.NoDismantle = true]]
+GM:AddSkillModifier(trinket, SKILLMOD_POISON_DAMAGE_TAKEN_MUL, -0.12)
 
 trinket = GM:AddTrinket("Vitality Bank", "vitpackageii", false, hpveles, hpweles, 4, "+21 maximum health\n+6% healing received")
 GM:AddSkillModifier(trinket, SKILLMOD_HEALTH, 21)
