@@ -126,7 +126,6 @@ function GM:GetAlternateWeapon(wepname)
 		if k == wepname then out = v break
 		elseif v == wepname then out = k break end
 	end
-	print(out)
 	return out
 end
 

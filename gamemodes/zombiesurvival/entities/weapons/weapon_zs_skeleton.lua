@@ -35,7 +35,6 @@ function SWEP:Initialize()
 end
 
 function SWEP:Reload()
-	print("haha")
 	if IsFirstTimePredicted() then
 		if CurTime() < (self.SpawnTime + 1) then return end
 		self:BecomeTorso()
