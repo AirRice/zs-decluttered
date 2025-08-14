@@ -75,7 +75,10 @@ GM:AddWeaponBreakdownRecipe("weapon_zs_fracture",							"comp_linearactuator")
 GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
 GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret",							"comp_turretassembly")
 GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret_buckshot",					"comp_turretassembly")
-
+GM:AddWeaponBreakdownRecipe("weapon_zs_zapper",								"comp_pwrcapacitor")
+GM:AddWeaponBreakdownRecipe("weapon_zs_tempest",							"comp_burstmech")
+GM:AddWeaponBreakdownRecipe("weapon_zs_hurricane",							"comp_pulsespool")
+GM:AddWeaponBreakdownRecipe("weapon_zs_gluon",								"comp_flak")
 -- Assemblies (Assembly, Component, Weapon)
 GM.Assemblies["weapon_zs_waraxe"] 								= {"comp_modbarrel", 		"weapon_zs_glock3"}
 GM.Assemblies["weapon_zs_bust"] 								= {"comp_busthead", 		"weapon_zs_plank"}
@@ -87,28 +90,31 @@ GM.Assemblies["weapon_zs_novablaster"] 							= {"comp_basicecore",		"weapon_zs_
 GM.Assemblies["weapon_zs_tithonus"] 							= {"comp_contaecore",		"weapon_zs_oberon"}
 GM.Assemblies["weapon_zs_fracture"] 							= {"comp_pumpaction",		"weapon_zs_sawedoff"}
 GM.Assemblies["weapon_zs_seditionist"] 							= {"comp_focusbarrel",		"weapon_zs_deagle"}
-GM.Assemblies["weapon_zs_molotov"] 								= {"comp_propanecan",		"weapon_zs_glassbottle"}
-GM.Assemblies["weapon_zs_blareduct"] 							= {"trinket_ammovestii",	"weapon_zs_pipe"}
+GM.Assemblies["weapon_zs_molotov"] 								= {"comp_jerrycan",			"weapon_zs_glassbottle"}
+GM.Assemblies["weapon_zs_blareduct"] 							= {"comp_jerrycan",			"weapon_zs_pipe"}
 GM.Assemblies["weapon_zs_cinderrod"] 							= {"comp_propanecan",		"weapon_zs_blareduct"}
 GM.Assemblies["weapon_zs_innervator"] 							= {"comp_electrobattery",	"weapon_zs_jackhammer"}
 GM.Assemblies["weapon_zs_hephaestus"] 							= {"comp_gaussframe",		"weapon_zs_tithonus"}
 GM.Assemblies["weapon_zs_stabber"] 								= {"comp_shortblade",		"weapon_zs_annabelle"}
 GM.Assemblies["weapon_zs_galestorm"] 							= {"comp_multibarrel",		"weapon_zs_uzi"}
-GM.Assemblies["weapon_zs_eminence"] 							= {"trinket_ammovestiii",	"weapon_zs_barrage"}
-GM.Assemblies["weapon_zs_gladiator"] 							= {"trinket_ammovestiii",	"weapon_zs_sweepershotgun"}
+GM.Assemblies["weapon_zs_eminence"] 							= {"comp_pulsespool",		"weapon_zs_barrage"}
+GM.Assemblies["weapon_zs_gladiator"] 							= {"comp_focusbarrel",		"weapon_zs_sweepershotgun"}
 GM.Assemblies["weapon_zs_ripper"]								= {"comp_sawblade",			"weapon_zs_zeus"}
-GM.Assemblies["weapon_zs_avelyn"]								= {"trinket_ammovestiii",	"weapon_zs_charon"}
+GM.Assemblies["weapon_zs_avelyn"]								= {"comp_burstmech",		"weapon_zs_charon"}
 GM.Assemblies["weapon_zs_asmd"]									= {"comp_precision",		"weapon_zs_quasar"}
 GM.Assemblies["weapon_zs_enkindler"]							= {"comp_launcher",			"weapon_zs_cinderrod"}
 GM.Assemblies["weapon_zs_proliferator"]							= {"comp_linearactuator",	"weapon_zs_galestorm"}
 GM.Assemblies["trinket_electromagnet"]							= {"comp_electrobattery",	"trinket_magnet"}
-GM.Assemblies["trinket_projguide"]								= {"comp_cpuparts",			"trinket_targetingvisori"}
-GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
-GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
-GM.Assemblies["weapon_zs_rollermine"]							= {"trinket_pulseampi", 	"weapon_zs_manhack"}
+--GM.Assemblies["trinket_projguide"]							= {"comp_cpuparts",			"trinket_targetingvisori"}
+--GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
+--GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
+GM.Assemblies["weapon_zs_rollermine"]							= {"comp_cpuparts", 		"weapon_zs_drone_hauler"}
 GM.Assemblies["weapon_zs_zapper_arc"]							= {"comp_contaecore", 		"weapon_zs_zapper"}
 GM.Assemblies["weapon_zs_gunturret_assault"]					= {"comp_turretassembly", 	"weapon_zs_akbar"}
 GM.Assemblies["weapon_zs_gunturret_rocket"]						= {"comp_turretassembly", 	"weapon_zs_hyena"}
+GM.Assemblies["weapon_zs_zeus"]									= {"comp_pwrcapacitor", 	"weapon_zs_charon"}
+GM.Assemblies["weapon_zs_gluon"]								= {"comp_pulsespool", 		"weapon_zs_tithonus"}
+GM.Assemblies["weapon_zs_smelter"]								= {"comp_flak", 			"weapon_zs_barrage"}
 
 GM:AddInventoryItemData("comp_modbarrel",		"Modular Barrel",			"A modular barrel suited for pairing up with another gun barrel.",								"models/props_c17/trappropeller_lever.mdl")
 GM:AddInventoryItemData("comp_burstmech",		"Burst Fire Mechanism",		"A mechanism that could be used to make a gun burst fire.",										"models/props_c17/trappropeller_lever.mdl")
@@ -140,6 +146,8 @@ GM:AddInventoryItemData("comp_pulsespool",		"Pulse Spool",				"Used to inject mo
 GM:AddInventoryItemData("comp_flak",			"Flak Chamber",				"An internal chamber for projecting heated scrap.",												"models/weapons/w_rocket_launcher.mdl")
 GM:AddInventoryItemData("comp_precision",		"Precision Chassis",		"A suite setup for rewarding precise shots on moving targets.",									"models/Items/combine_rifle_cartridge01.mdl")
 GM:AddInventoryItemData("comp_turretassembly",	"Turret Assembly",			"The automated targeting and scanning mechanisms from a turret.",								"models/combine_turrets/floor_turret_gib1.mdl")
+GM:AddInventoryItemData("comp_pwrcapacitor",	"Power Capacitor",			"A device that stores charge. Could be used to electrify things.",								"models/props_lab/powerbox02d.mdl")
+GM:AddInventoryItemData("comp_jerrycan",		"Jerry Can",				"Still has a bit of fuel left inside.",															"models/props_junk/gascan001a.mdl")
 
 -- Trinkets
 local trinket, description, trinketwep
@@ -532,7 +540,7 @@ GM:AddSkillModifier(trinket, SKILLMOD_TURRET_RANGE_MUL, 0.1)
 GM:AddSkillModifier(trinket, SKILLMOD_TURRET_SCANSPEED_MUL, 1.0)
 
 -- SKILL_STABLEHULL added
-trinket = GM:AddTrinket("Control Platform", "controlplat", false, supveles, supweles, 2, "+15% controllable health\nControllables become immune to high speed impact damage\n+15% controllable speed\n+40% controllable handling\n+20% manhack damage")
+trinket = GM:AddTrinket("Control Platform", "controlplat", false, supveles, supweles, 3, "+15% controllable health\nControllables become immune to high speed impact damage\n+15% controllable speed\n+40% controllable handling\n+20% manhack damage")
 GM:AddSkillModifier(trinket, SKILLMOD_CONTROLLABLE_HEALTH_MUL, 0.15)
 GM:AddSkillModifier(trinket, SKILLMOD_CONTROLLABLE_SPEED_MUL, 0.15)
 GM:AddSkillModifier(trinket, SKILLMOD_CONTROLLABLE_HANDLING_MUL, 0.4)

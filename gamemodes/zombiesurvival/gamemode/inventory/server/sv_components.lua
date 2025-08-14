@@ -21,3 +21,4 @@ GM:AddWorldPropConversionRecipe("models/props_junk/propane_tank001a.mdl", 	"comp
 GM:AddWorldPropConversionRecipe("models/items/car_battery01.mdl", 			"comp_electrobattery")
 GM:AddWorldPropConversionRecipe("models/props_lab/reciever01b.mdl", 		"comp_reciever")
 GM:AddWorldPropConversionRecipe("models/props_lab/harddrive01.mdl", 		"comp_cpuparts")
+GM:AddWorldPropConversionRecipe("models/props_junk/gascan001a.mdl",			"comp_jerrycan")
