@@ -13,9 +13,10 @@ CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 22)}
 
 CLASS.SWEP = "weapon_zs_shadowlurker"
 
-CLASS.Wave = 2 / 6
-CLASS.Unlocked = false
-CLASS.Hidden = false
+CLASS.Wave = 0
+CLASS.Threshold = 0
+CLASS.Unlocked = true
+CLASS.Hidden = true
 
 CLASS.Health = 165
 CLASS.Speed = 160
