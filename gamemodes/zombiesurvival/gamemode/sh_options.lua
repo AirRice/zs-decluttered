@@ -111,7 +111,7 @@ GM.AmmoCache["sniperpenetratedround"]		= 1			-- Remote Det pack.
 GM.AmmoCache["grenade"]						= 1			-- Grenades.
 GM.AmmoCache["thumper"]						= 1			-- Gun turret.
 GM.AmmoCache["gravity"]						= 1			-- Unused.
-GM.AmmoCache["battery"]						= 23		-- Used with the Medical Kit.
+GM.AmmoCache["battery"]						= 25		-- Used with the Medical Kit.
 GM.AmmoCache["gaussenergy"]					= 2			-- Nails used with the Carpenter's Hammer.
 GM.AmmoCache["combinecannon"]				= 1			-- Not used.
 GM.AmmoCache["airboatgun"]					= 1			-- Arsenal crates.
@@ -123,7 +123,7 @@ GM.AmmoCache["repairfield"]					= 1
 GM.AmmoCache["zapper"]						= 1
 GM.AmmoCache["pulse"]						= 30
 GM.AmmoCache["impactmine"]					= 3
-GM.AmmoCache["chemical"]					= 20
+GM.AmmoCache["chemical"]					= 25
 GM.AmmoCache["flashbomb"]					= 1
 GM.AmmoCache["turret_buckshot"]				= 1
 GM.AmmoCache["turret_assault"]				= 1
@@ -362,18 +362,18 @@ GM:AddPointShopItem("spinfusor",		ITEMCAT_GUNS,			200,			"weapon_zs_spinfusor")
 GM:AddPointShopItem("broadside",		ITEMCAT_GUNS,			200,			"weapon_zs_broadside")
 --GM:AddPointShopItem("smelter",			ITEMCAT_GUNS,			200,			"weapon_zs_smelter")
 
-GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			9,				nil,							"14 pistol ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
-GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			9,				nil,							"12 shotgun ammo",				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
-GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			9,				nil,							"36 SMG ammo",					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
-GM:AddPointShopItem("rifleammo",		ITEMCAT_AMMO,			9,				nil,							"8 rifle ammo",					nil,									"ammo_rifle",						function(pl) pl:GiveAmmo(8, "357", true) end)
-GM:AddPointShopItem("crossbowammo",		ITEMCAT_AMMO,			9,				nil,							"8 crossbow bolts",				nil,									"ammo_bolts",						function(pl) pl:GiveAmmo(8,	"XBowBolt",	true) end)
-GM:AddPointShopItem("assaultrifleammo",	ITEMCAT_AMMO,			9,				nil,							"32 assault rifle ammo",		nil,									"ammo_assault",						function(pl) pl:GiveAmmo(32, "ar2", true) end)
-GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			9,				nil,							"30 pulse ammo",				nil,									"ammo_pulse",						function(pl) pl:GiveAmmo(30, "pulse", true) end)
-GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			9,				nil,							"3 explosives",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
-GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			9,				nil,							"20 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(20, "chemical", true) end)
-GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			15,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
-GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			4,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end).NoClassicMode = true
-GM:AddPointShopItem("woodboard",		ITEMCAT_AMMO,			16,				nil,							"Wooden Board",					nil,									"ammo_woodboard",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end).NoClassicMode = true
+GM:AddPointShopItem("pistolammo",		ITEMCAT_AMMO,			6,				nil,							"14 pistol ammo",				nil,									"ammo_pistol",						function(pl) pl:GiveAmmo(14, "pistol", true) end)
+GM:AddPointShopItem("shotgunammo",		ITEMCAT_AMMO,			6,				nil,							"12 shotgun ammo",				nil,									"ammo_shotgun",						function(pl) pl:GiveAmmo(12, "buckshot", true) end)
+GM:AddPointShopItem("smgammo",			ITEMCAT_AMMO,			6,				nil,							"36 SMG ammo",					nil,									"ammo_smg",							function(pl) pl:GiveAmmo(36, "smg1", true) end)
+GM:AddPointShopItem("rifleammo",		ITEMCAT_AMMO,			6,				nil,							"8 rifle ammo",					nil,									"ammo_rifle",						function(pl) pl:GiveAmmo(8, "357", true) end)
+GM:AddPointShopItem("crossbowammo",		ITEMCAT_AMMO,			6,				nil,							"8 crossbow bolts",				nil,									"ammo_bolts",						function(pl) pl:GiveAmmo(8,	"XBowBolt",	true) end)
+GM:AddPointShopItem("assaultrifleammo",	ITEMCAT_AMMO,			6,				nil,							"32 assault rifle ammo",		nil,									"ammo_assault",						function(pl) pl:GiveAmmo(32, "ar2", true) end)
+GM:AddPointShopItem("pulseammo",		ITEMCAT_AMMO,			6,				nil,							"30 pulse ammo",				nil,									"ammo_pulse",						function(pl) pl:GiveAmmo(30, "pulse", true) end)
+GM:AddPointShopItem("impactmine",		ITEMCAT_AMMO,			6,				nil,							"3 explosives",					nil,									"ammo_explosive",					function(pl) pl:GiveAmmo(3, "impactmine", true) end)
+GM:AddPointShopItem("chemical",			ITEMCAT_AMMO,			6,				nil,							"25 chemical vials",			nil,									"ammo_chemical",					function(pl) pl:GiveAmmo(25, "chemical", true) end)
+GM:AddPointShopItem("25mkit",			ITEMCAT_AMMO,			10,				nil,							"25 Medical Kit power",			"25 extra power for the Medical Kit.",	"ammo_medpower",					function(pl) pl:GiveAmmo(25, "Battery", true) end)
+GM:AddPointShopItem("nail",				ITEMCAT_AMMO,			3,				nil,							"Nail",							"It's just one nail.",					"ammo_nail",						function(pl) pl:GiveAmmo(1, "GaussEnergy", true) end).NoClassicMode = true
+GM:AddPointShopItem("woodboard",		ITEMCAT_AMMO,			12,				nil,							"Wooden Board",					nil,									"ammo_woodboard",					function(pl) pl:GiveAmmo(1, "SniperRound", true) end).NoClassicMode = true
 
 -- Tier 1
 GM:AddPointShopItem("brassknuckles",	ITEMCAT_MELEE,			10,				"weapon_zs_brassknuckles").Model = "models/props_c17/utilityconnecter005.mdl"

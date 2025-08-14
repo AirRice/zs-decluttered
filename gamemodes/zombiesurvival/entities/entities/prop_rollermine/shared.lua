@@ -20,7 +20,7 @@ ENT.IdleDrag = 0.25
 
 ENT.MaxHealth = 225
 ENT.HitCooldown = 1.15
-ENT.HitDamage = 25
+ENT.HitDamage = 30
 ENT.BounceFleshVelocity = 320
 
 ENT.IgnoreBullets = true

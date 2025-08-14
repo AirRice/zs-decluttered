@@ -460,7 +460,6 @@ function PANEL:Init()
 	self:SetKeyboardInputEnabled(false)
 end
 
-local matGradientLeft = CreateMaterial("gradient-l", "UnlitGeneric", {["$basetexture"] = "vgui/gradient-l", ["$vertexalpha"] = "1", ["$vertexcolor"] = "1", ["$ignorez"] = "1", ["$nomip"] = "1"})
 function PANEL:Paint(w, h)
 	self.LerpStat = Lerp(FrameTime() * 4, self.LerpStat, self.Stat)
 	local progress = math.Clamp((self.StatMax - self.LerpStat)/(self.StatMax - self.StatMin), 0, 1)
@@ -468,13 +467,13 @@ function PANEL:Paint(w, h)
 		progress = 1 - progress
 	end
 
+	
 	surface.SetDrawColor(0, 0, 0, 220)
 	surface.DrawRect(0, 0, w, 5)
 	surface.SetDrawColor(250, 250, 250, 20)
 	surface.DrawRect(math.min(w * 0.95, w * progress), 0, 1, 5)
 	surface.SetDrawColor(200 * (1 - progress), 200 * progress, 10, 160)
-	surface.SetMaterial(matGradientLeft)
-	surface.DrawTexturedRect(0, 0, w * progress, 4)
+	surface.DrawRect(0, 0, w * progress, 4)
 end
 vgui.Register("ZSItemStatBar", PANEL, "Panel")
 

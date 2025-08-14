@@ -72,7 +72,7 @@ GM:AddWeaponBreakdownRecipe("weapon_zs_owens",								"comp_multibarrel")
 GM:AddWeaponBreakdownRecipe("weapon_zs_onyx",								"comp_precision")
 GM:AddWeaponBreakdownRecipe("weapon_zs_minelayer",							"comp_launcher")
 GM:AddWeaponBreakdownRecipe("weapon_zs_fracture",							"comp_linearactuator")
-GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
+--GM:AddWeaponBreakdownRecipe("weapon_zs_harpoon",							"comp_metalpole")
 GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret",							"comp_turretassembly")
 GM:AddWeaponBreakdownRecipe("weapon_zs_gunturret_buckshot",					"comp_turretassembly")
 GM:AddWeaponBreakdownRecipe("weapon_zs_zapper",								"comp_pwrcapacitor")
@@ -109,7 +109,7 @@ GM.Assemblies["trinket_electromagnet"]							= {"comp_electrobattery",	"trinket_
 --GM.Assemblies["trinket_projwei"]								= {"comp_busthead",			"trinket_projguide"}
 --GM.Assemblies["trinket_controlplat"]							= {"comp_cpuparts",			"trinket_mainsuite"}
 GM.Assemblies["weapon_zs_rollermine"]							= {"comp_cpuparts", 		"weapon_zs_drone_hauler"}
-GM.Assemblies["weapon_zs_zapper_arc"]							= {"comp_contaecore", 		"weapon_zs_zapper"}
+GM.Assemblies["weapon_zs_zapper_arc"]							= {"comp_pwrcapacitor", 	"weapon_zs_rollermine"}
 GM.Assemblies["weapon_zs_gunturret_assault"]					= {"comp_turretassembly", 	"weapon_zs_akbar"}
 GM.Assemblies["weapon_zs_gunturret_rocket"]						= {"comp_turretassembly", 	"weapon_zs_hyena"}
 GM.Assemblies["weapon_zs_zeus"]									= {"comp_pwrcapacitor", 	"weapon_zs_charon"}
@@ -611,8 +611,8 @@ GM:AddSkillModifier(trinket, SKILLMOD_RESUPPLY_DELAY_MUL, -0.03)
 
 GM:AddDebuffTrinket("DEBUFF: Gimbal-assisted Aiming", "d_gimbalaim", "Accuracy becomes completely unaffected by crouching, ironsighting, jumping, or moving")
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Late Buyer", "d_hodl", "2% arsenal discount\nUnable to spend points at arsenal crates until the second half of the round")
-GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, -0.02)
+trinket = GM:AddDebuffTrinket("DEBUFF: Late Buyer", "d_hodl", "10% arsenal discount\nUnable to spend points at arsenal crates until the second half of the round")
+GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, -0.1)
 
 trinket = GM:AddDebuffTrinket("DEBUFF: Broken Exoskeleton", "d_brokenexo", "+1 starting scrap\nUnable to carry props")
 GM:AddSkillModifier(trinket, SKILLMOD_SCRAP_START, 1)
@@ -641,9 +641,9 @@ GM:AddSkillModifier(trinket, SKILLMOD_SPEED, -33.75)
 trinket = GM:AddDebuffTrinket("DEBUFF: Swing Amplifier", "d_swingamp", "+100% melee knockback\nIf an attack knocks a zombie backwards, 20% of melee damage dealt is reflected back to you\n100% reflection rate if using unarmed strikes")
 GM:AddSkillModifier(trinket, SKILLMOD_MELEE_KNOCKBACK_MUL, 1)
 
-trinket = GM:AddDebuffTrinket("DEBUFF: Predatory Loan", "d_predloan", "-20 starting points\n+2% higher arsenal prices")
+trinket = GM:AddDebuffTrinket("DEBUFF: Predatory Loan", "d_predloan", "-20 starting points\n+10% higher arsenal prices")
 GM:AddSkillModifier(trinket, SKILLMOD_POINTS, -20)
-GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, 0.02)
+GM:AddSkillModifier(trinket, SKILLMOD_ARSENAL_DISCOUNT, 0.1)
 
 -- Boss Trinkets
 

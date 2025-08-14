@@ -998,6 +998,10 @@ function meta:ScrapReactorCashOut(ent)
 	if togive >= 1 and P_Team(self) == TEAM_HUMAN then
 		self.ScrapReactorDmgRemainder = self.ScrapReactorDmgRemainder - (togive * 200)
 		self:GiveAmmo(togive, "scrap")
+		net.Start("zs_ammopickup")
+			net.WriteUInt(togive, 16)
+			net.WriteString("scrap")
+		net.Send(activator)
 		self:FloatingScore(ent or self.LastDamageDealtPos or vector_origin, "floatingscore_scrap", togive, FM_NONE)
 	end
 end

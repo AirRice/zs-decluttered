@@ -538,6 +538,7 @@ function GM:ShowSpare1(pl)
 			pl:SendLua("GAMEMODE:OpenClassSelect()")
 		end
 	elseif pl:Team() == TEAM_HUMAN then
+		pl:SendLua("MakepWeapons()")
 		--pl:SendLua("GAMEMODE:ToggleSkillWeb()")
 	end
 end
@@ -1235,11 +1236,13 @@ function GM:Think()
 			if P_GetBarricadeGhosting(pl) then
 				P_BarricadeGhostingThink(pl)
 			end
-
+			
 			if pl.PointQueue >= 1 and time >= pl.LastDamageDealtTime + 2 then
 				pl:PointCashOut(pl.LastDamageDealtPos or pl:GetPos(), FM_NONE)
 			end
-
+			if pl:HasTrinket("scrapreactor") and pl.ScrapReactorDmgRemainder >= 200 and time >= pl.LastDamageDealtTime + 0.5 then
+				pl:ScrapReactorCashOut(pl.LastDamageDealtPos or pl:GetPos())
+			end
 			if P_GetPhantomHealth(pl) > 0 and P_Alive(pl) then
 				pl:SetPhantomHealth(math_max(0, P_GetPhantomHealth(pl) - 5 * FrameTime()))
 			end
@@ -2741,10 +2744,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
 									points = points * ent.PointsMultiplier
 								end
 								attacker.PointQueue = attacker.PointQueue + points
-
 								if attacker:HasTrinket("scrapreactor") then
 									attacker.ScrapReactorDmgRemainder = attacker.ScrapReactorDmgRemainder + damage
-									attacker:ScrapReactorCashOut(ent)
 								end
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "PointsEarned", points)
 								GAMEMODE.StatTracking:IncreaseElementKV(STATTRACK_TYPE_WEAPON, inflictor:GetClass(), "Damage", damage)

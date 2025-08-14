@@ -674,7 +674,7 @@ function meta:RecalculateNailBonuses()
 	local max_health = self:GetMaxBarricadeHealth()
 	if max_health == 0 then return end
 
-	local num_extra_nails = math.Clamp(self:NumLivingNails() - 1, 0, 3)
+	local num_extra_nails = math.Clamp(self:NumLivingNails() - 1, 0, GAMEMODE.MaxNails-1)
 	local repairs_frac = self:GetBarricadeRepairs() / self:GetMaxBarricadeRepairs()
 
 	self.OriginalMaxHealth = self.OriginalMaxHealth or max_health

@@ -437,7 +437,8 @@ concommand.Add("zsdropweapon", function(sender, command, arguments)
 	end
 	if invitem and not sender:HasInventoryItem(invitem) then return end
 
-	if invitem and GAMEMODE:GetIsTrinketDebuff(string.sub(invitem, 9)) then
+	local invitemcat = GAMEMODE:GetInventoryItemType(invitem)
+	if invitem and invitemcat == INVCAT_DEBUFF then
 		GAMEMODE:ConCommandErrorMessage(sender, "You can't drop Debuff trinkets.")
 		return
 	end
