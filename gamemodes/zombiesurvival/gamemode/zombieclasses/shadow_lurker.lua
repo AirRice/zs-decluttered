@@ -26,7 +26,7 @@ CLASS.Points = CLASS.Health/GM.TorsoZombiePointRatio
 
 CLASS.VoicePitch = 0.55
 
-CLASS.NoHideMainModel = true
+--CLASS.NoHideMainModel = true
 
 CLASS.IsTorso = true
 
@@ -129,7 +129,7 @@ local matBlack = CreateMaterial("shadowlurkersheet", "UnlitGeneric", {["$basetex
 local vecEyeLeft = Vector(5, -3.5, -1)
 local vecEyeRight = Vector(5, -3.5, 1)
 
-function CLASS:PrePlayerDraw(pl)
+--[[function CLASS:PrePlayerDraw(pl)
 	render_SetBlend(0.45)
 	render_SetColorModulation(0.1, 0.1, 0.1)
 end
@@ -137,7 +137,7 @@ end
 function CLASS:PostPlayerDraw(pl)
 	render_SetBlend(1)
 	render_SetColorModulation(1, 1, 1)
-end
+end]]
 
 function CLASS:PrePlayerDrawOverrideModel(pl)
 	render_ModelMaterialOverride(matBlack)

@@ -28,15 +28,9 @@ function SWEP:PlayAttackSound()
 	self:EmitSound("npc/fast_zombie/wake1.wav", 70, math.random(115, 140))
 end
 
-
-function SWEP:Initialize()
-	self.SpawnTime = CurTime()
-	self.BaseClass.Initialize(self)
-end
-
 function SWEP:Reload()
-	if IsFirstTimePredicted() then
-		if CurTime() < (self.SpawnTime + 1) then return end
+	if IsFirstTimePredicted() and SERVER and not self.AlreadyTorso then
+		if CurTime() < (self:GetOwner().SpawnedTime + 1) then return end
 		self:BecomeTorso()
 	end
 end
@@ -47,7 +41,7 @@ function SWEP:BecomeTorso()
 	local ang = owner:EyeAngles()
 	local deathclass = owner.DeathClass or owner:GetZombieClass()
 	if SERVER then
-		owner:EmitSound("physics/flesh/flesh_bloody_break.wav", 100, 75)
+		self.AlreadyTorso = true
 		local lastattacker = owner:GetLastAttacker()
 		local classtable = GAMEMODE.ZombieClasses["Skeletal Crawler"]
 		local hpmul = math.min((owner:Health() * 1.25) / owner:GetMaxHealth(), 1)
@@ -55,11 +49,12 @@ function SWEP:BecomeTorso()
 		spawnpos.z = spawnpos.z + owner:OBBMaxs().z
 		if classtable then
 			owner:RemoveStatus("overridemodel", false, true)
+			local deathclass = owner.DeathClass or owner:GetZombieClass()
 			owner:SetZombieClass(classtable.Index)
 			owner:DoHulls(classtable.Index, TEAM_UNDEAD)
 			owner.DeathClass = deathclass
-			spawnpos.z = spawnpos.z - owner:OBBMaxs().z
 
+			owner:EmitSound("physics/flesh/flesh_bloody_break.wav", 100, 75)
 			local effectdata = EffectData()
 				effectdata:SetEntity(owner)
 				effectdata:SetOrigin(pos)
@@ -78,7 +73,6 @@ function SWEP:BecomeTorso()
 					owner:SetEyeAngles(ang)
 				end
 			end)
-
 		end
 	end
 end

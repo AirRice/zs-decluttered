@@ -137,6 +137,7 @@ killicon.Add("projectile_extinctioncrab", "zombiesurvival/killicons/fastheadcrab
 killicon.Add("weapon_zs_frigidrevenant", "zombiesurvival/killicons/skeletal_walker", Color(50, 90, 135))
 killicon.Add("weapon_zs_frigidlurker", "zombiesurvival/killicons/skeletal_lurker", Color(30, 60, 135))
 killicon.Add("weapon_zs_skelesham", "zombiesurvival/killicons/skeletal_walker", Color(220, 200, 150))
+killicon.Add("weapon_zs_skeletalprowler", "zombiesurvival/killicons/skeletal_lurker", Color(220, 200, 150))
 killicon.Add("weapon_zs_tormentedwraith", "zombiesurvival/killicons/wraithv2", Color(190, 255, 190))
 killicon.Add("weapon_zs_noxiousghoul", "zombiesurvival/killicons/ghoul", Color(230, 130, 190))
 

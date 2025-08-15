@@ -1,7 +1,7 @@
 CLASS.Name = "Shadow Walker"
 CLASS.TranslationName = "class_shadow_walker"
 CLASS.Description = "description_shadow_walker"
-CLASS.Help = "controls_shadow_lurker"
+CLASS.Help = "controls_shadow_walker"
 
 CLASS.BetterVersion = "Frigid Revenant"
 
