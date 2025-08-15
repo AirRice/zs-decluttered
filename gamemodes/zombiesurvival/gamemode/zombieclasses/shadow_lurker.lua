@@ -26,7 +26,7 @@ CLASS.Points = CLASS.Health/GM.TorsoZombiePointRatio
 
 CLASS.VoicePitch = 0.55
 
---CLASS.NoHideMainModel = true
+CLASS.NoHideMainModel = false
 
 CLASS.IsTorso = true
 

@@ -12,7 +12,7 @@ CLASS.SWEP = "weapon_zs_coolwisp"
 CLASS.Health = 900
 
 CLASS.Points = 20
-
+CLASS.Order = 7
 CLASS.ResistFrost = true
 
 CLASS.DeathSounds = {Sound("npc/scanner/cbot_energyexplosion1.wav")}

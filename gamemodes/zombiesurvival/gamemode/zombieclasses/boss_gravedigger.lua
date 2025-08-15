@@ -15,7 +15,7 @@ CLASS.CanTaunt = true
 CLASS.FearPerInstance = 1
 
 CLASS.Points = 30
-
+CLASS.Order = 5
 CLASS.SWEP = "weapon_zs_graveshovelz"
 
 if SERVER then

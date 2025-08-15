@@ -11,7 +11,7 @@ CLASS.Health = 1500
 CLASS.Speed = 170
 
 CLASS.Points = 30
-
+CLASS.Order = 4
 CLASS.SWEP = "weapon_zs_frostshade"
 
 CLASS.ResistFrost = true

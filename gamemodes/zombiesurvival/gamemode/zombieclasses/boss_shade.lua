@@ -22,7 +22,7 @@ CLASS.Speed = 170 --125
 CLASS.FearPerInstance = 1
 
 CLASS.Points = 30
-
+CLASS.Order = 4
 CLASS.SWEP = "weapon_zs_shade"
 
 CLASS.Model = Model("models/player/zombie_fast.mdl")

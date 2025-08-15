@@ -16,7 +16,7 @@ CLASS.Model = Model("models/Zombie/Poison.mdl")
 
 CLASS.Speed = 135 --120
 CLASS.Points = 40
-
+CLASS.Order = 1
 CLASS.PainSounds = {"NPC_PoisonZombie.Pain"}
 CLASS.DeathSounds = {Sound("npc/zombie_poison/pz_call1.wav")}
 

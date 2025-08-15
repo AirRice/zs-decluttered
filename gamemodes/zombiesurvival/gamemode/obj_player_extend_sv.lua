@@ -1171,7 +1171,7 @@ function meta:DoHulls(classid, teamid)
 			self:DrawShadow(not classtab.NoShadow)
 			self:SetRenderMode(classtab.RenderMode or RENDERMODE_NORMAL)
 
-			self.NoCollideAll = classtab.NoCollideAll or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
+			self.NoCollideAll = classtab.NoCollideAll --or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
 			--self.NoCollideInside = classtab.NoCollideInside or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
 			self.AllowTeamDamage = classtab.AllowTeamDamage
 			self.NeverAlive = classtab.NeverAlive

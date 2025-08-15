@@ -7,7 +7,7 @@ CLASS.Wave = 0
 CLASS.Unlocked = true
 CLASS.Order = 1
 
-CLASS.BetterVersion = "Elder Ghoul"
+CLASS.BetterVersion = "Noxious Ghoul"
 
 CLASS.Health = 210
 CLASS.Speed = 175

@@ -15,7 +15,7 @@ CLASS.CanTaunt = true
 CLASS.FearPerInstance = 1
 
 CLASS.Points = 30
-
+CLASS.Order = 5
 CLASS.SWEP = "weapon_zs_butcherknifez"
 
 CLASS.Model = Model("models/player/corpse1.mdl")

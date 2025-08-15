@@ -1,4 +1,4 @@
-CLASS.Base = "shadow_lurker"
+CLASS.Base = "zombie_torso"
 
 CLASS.Name = "Frigid Lurker"
 CLASS.TranslationName = "class_frigid_lurker"
@@ -7,12 +7,28 @@ CLASS.Help = "controls_frigid_lurker"
 
 CLASS.SWEP = "weapon_zs_frigidlurker"
 
+CLASS.Model = Model("models/zombie/classic_torso.mdl")
+CLASS.OverrideModel = Model("models/player/skeleton.mdl")
+
+CLASS.Hull = {Vector(-16, -16, 0), Vector(16, 16, 22)}
+CLASS.HullDuck = {Vector(-16, -16, 0), Vector(16, 16, 22)}
+
+CLASS.Wave = 0
+CLASS.Threshold = 0
+CLASS.Unlocked = true
+CLASS.Hidden = true
+
 CLASS.Health = 185
+CLASS.Speed = 160
+CLASS.JumpPower = 160
 
 CLASS.Points = CLASS.Health/GM.TorsoZombiePointRatio
 
 CLASS.VoicePitch = 0.45
 CLASS.NoHideMainModel = false
+CLASS.IsTorso = true
+
+CLASS.Skeletal = true
 
 local math_random = math.random
 local ACT_IDLE = ACT_IDLE
@@ -24,6 +40,72 @@ function CLASS:CalcMainActivity(pl, velocity)
 	end
 
 	return ACT_WALK, -1
+end
+
+function CLASS:PlayPainSound(pl)
+	pl:EmitSound("npc/antlion/pain2.wav", 70, math_random(240, 250))
+	pl.NextPainSound = CurTime() + 0.5
+
+	return true
+end
+
+function CLASS:PlayDeathSound(pl)
+	pl:EmitSound("npc/antlion/pain"..math_random(2)..".wav", 70, math_random(240, 250))
+
+	return true
+end
+
+local StepSounds = {
+	Sound("npc/barnacle/neck_snap1.wav"),
+	Sound("npc/barnacle/neck_snap2.wav")
+}
+function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilter)
+	pl:EmitSound(StepSounds[math_random(#StepSounds)], 50, math_random(210, 220), 0.5)
+
+	return true
+end
+
+function CLASS:PlayerStepSoundTime(pl, iType, bWalking)
+	return GAMEMODE.BaseClass.PlayerStepSoundTime(GAMEMODE, pl, iType, bWalking) --* 2
+end
+
+function CLASS:UpdateAnimation(pl, velocity, maxseqgroundspeed)
+end
+
+function CLASS:ManipulateOverrideModel(pl, overridemodel)
+	overridemodel:ManipulateBoneScale(0, vector_origin)
+	overridemodel:ManipulateBoneScale(2, vector_origin)
+	overridemodel:ManipulateBoneScale(4, vector_origin)
+	for i=18, 25 do
+		overridemodel:ManipulateBoneScale(i, vector_origin)
+	end
+end
+
+if SERVER then
+	function CLASS:ProcessDamage(pl, dmginfo)
+		if dmginfo:GetInflictor().IsMelee then
+			dmginfo:SetDamage(dmginfo:GetDamage() / 2)
+		end
+	end
+
+	function CLASS:OnKilled(pl, attacker, inflictor, suicide, headshot, dmginfo, assister)
+		local effectdata = EffectData()
+			effectdata:SetOrigin(pl:GetPos())
+			effectdata:SetNormal(pl:GetForward())
+			effectdata:SetEntity(pl)
+		util.Effect("death_shadowlurker", effectdata, nil, true)
+
+		local fakedeath = pl:FakeDeath(462, 1, 1, 1)
+		if fakedeath and fakedeath:IsValid() then
+			fakedeath:SetColor(color_black)
+			fakedeath:SetModel(self.OverrideModel)
+			fakedeath:SetPos(fakedeath:GetPos() - fakedeath:GetDeathAngles():Up() * 46)
+
+			self:ManipulateOverrideModel(pl, fakedeath)
+		end
+
+		return true
+	end
 end
 
 if not CLIENT then return end

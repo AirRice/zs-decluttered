@@ -15,7 +15,7 @@ CLASS.CanTaunt = true
 CLASS.FearPerInstance = 1
 
 CLASS.Points = 30
-
+CLASS.Order = 1
 CLASS.SWEP = "weapon_zs_nightmare"
 
 CLASS.Model = Model("models/player/zombie_classic_hbfix.mdl")

@@ -10,7 +10,7 @@ CLASS.KnockbackScale = 0
 CLASS.FearPerInstance = 0.05
 
 CLASS.Points = 20
-
+CLASS.Order = 7
 CLASS.Model = Model("models/dav0r/hoverball.mdl")
 
 CLASS.SWEP = "weapon_zs_special_wow"

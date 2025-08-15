@@ -7,6 +7,8 @@ CLASS.TranslationName = "class_elderghoul"
 CLASS.Description = "description_elderghoul"
 CLASS.Help = "controls_elderghoul"
 
+CLASS.Hidden = true
+CLASS.Disabled = true
 CLASS.BetterVersion = "Noxious Ghoul"
 
 CLASS.Health = 190
