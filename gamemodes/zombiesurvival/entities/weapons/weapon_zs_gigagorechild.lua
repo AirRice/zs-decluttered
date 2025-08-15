@@ -25,13 +25,21 @@ SWEP.CryDelay = 8
 SWEP.CryImpactDelay = 1
 SWEP.ThrowDelay = 1
 
-AccessorFuncDT(SWEP, "ThrowTime", "Float", 3)
-AccessorFuncDT(SWEP, "CryTime", "Float", 4)
+function SWEP:SetupDataTables()
+	self:NetworkVar("Float", 3, "ThrowTime")
+	self:NetworkVar("Float", 4, "CryTime")
+	self:NetworkVar("Float", 5, "NextCry")
+end
 
 function SWEP:Think()
 	self:CheckMeleeAttack()
 	self:CheckThrow()
 	self:CheckCry()
+end
+
+function SWEP:Initialize()
+	self:SetNextCry(CurTime() + 5)
+	self.BaseClass.Initialize(self)
 end
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
@@ -62,7 +70,6 @@ end
 function SWEP:Deploy()
 	local vm = self:GetOwner():GetViewModel()
 	vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
-
 	return self.BaseClass.Deploy(self)
 end
 
@@ -120,14 +127,14 @@ end
 SWEP.GetThrowing = SWEP.IsThrowing
 
 function SWEP:Reload()
-	if self:IsSwinging() or CurTime() <= self:GetNextSecondaryAttack() or IsValid(self:GetOwner().FeignDeath) then return end
+	if self:IsSwinging() or CurTime() <= self:GetNextSecondaryAttack() or CurTime() <= (self:GetNextCry() + self.CryImpactDelay) or IsValid(self:GetOwner().FeignDeath) then return end
 
 	self:PlayAlertSound()
 	self:GetOwner():AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_GMOD_GESTURE_TAUNT_ZOMBIE, true)
 
 	self:SetCryTime(CurTime() + self.CryImpactDelay)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-	self:SetNextSecondaryAttack(CurTime() + self.CryDelay)
+	self:SetNextCry(CurTime() + self.CryDelay)
 end
 
 function SWEP:CheckCry()
@@ -174,4 +181,32 @@ end
 
 function SWEP:PlayMissSound()
 	self:EmitSound("npc/zombie/claw_miss"..math.random(2)..".wav", 77, math.random(60, 70), nil, CHAN_AUTO)
+end
+
+if not CLIENT then return end
+
+local texGradDown = surface.GetTextureID("VGUI/gradient_down")
+function SWEP:DrawHUD()
+	if self.BaseClass.DrawHUD then
+		self.BaseClass.DrawHUD(self)
+	end
+
+	local scrW = ScrW()
+	local scrH = ScrH()
+	local width = 200
+	local height = 20
+	local x, y = ScrW() - width - 32, ScrH() - height - 72
+	local ratio = (self:GetNextCry() + self.CryImpactDelay - CurTime()) / self.CryDelay
+	if ratio > 1 or ratio < 0 then return end
+	local clampedratio = math.Clamp(ratio, 0, 1)
+
+	surface.SetDrawColor(5, 5, 5, 180)
+	surface.DrawRect(x, y, width, height)
+
+	surface.SetDrawColor(255, 0, 0, 180)
+	surface.SetTexture(texGradDown)
+	surface.DrawTexturedRect(x, y, width*clampedratio, height)
+
+	surface.SetDrawColor(255, 0, 0, 180)
+	surface.DrawOutlinedRect(x - 1, y - 1, width + 2, height + 2)
 end

@@ -4,28 +4,7 @@ SWEP.PrintName = "Giga Shadow Child"
 
 SWEP.MeleeDamage = 24
 SWEP.MeleeForceScale = 1
-
-function SWEP:PrimaryAttack()
-	if self:IsThrowing() then return end
-
-	self.BaseClass.BaseClass.PrimaryAttack(self)
-end
-
-function SWEP:Deploy()
-	local vm = self:GetOwner():GetViewModel()
-	vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
-
-	return self.BaseClass.BaseClass.Deploy(self)
-end
-
-local anims = {"fists_uppercut", "fists_right", "fists_left"}
-function SWEP:StartSwinging()
-	self.BaseClass.BaseClass.StartSwinging(self)
-
-	local vm = self:GetOwner():GetViewModel()
-	vm:SendViewModelMatchingSequence(vm:LookupSequence(anims[math.random(#anims)]))
-	vm:SetPlaybackRate(0.32)
-end
+SWEP.CryDelay = 12
 
 function SWEP:ApplyMeleeDamage(ent, trace, damage)
 	if ent:IsValidPlayer() then

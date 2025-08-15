@@ -57,10 +57,10 @@ function SWEP:Think()
 		local delay = owner:GetMeleeSpeedMul()
 		if owner:WaterLevel() >= 2 then
 			self:SetPouncing(false)
-			self:SetNextPrimaryFire(time + 0.5 * delay)
+			self:SetNextPrimaryFire(time + 1 * delay)
 		elseif owner:OnGround() and owner:IsOnGround() then
 			self:SetPouncing(false)
-			self:SetNextPrimaryFire(time + 0.6 * delay)
+			self:SetNextPrimaryFire(time + 1.2 * delay)
 
 			if SERVER then
 				self:PoundAttackProcess()

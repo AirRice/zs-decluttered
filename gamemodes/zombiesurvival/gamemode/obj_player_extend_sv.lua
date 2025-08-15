@@ -1001,7 +1001,7 @@ function meta:ScrapReactorCashOut(ent)
 		net.Start("zs_ammopickup")
 			net.WriteUInt(togive, 16)
 			net.WriteString("scrap")
-		net.Send(activator)
+		net.Send(self)
 		self:FloatingScore(ent or self.LastDamageDealtPos or vector_origin, "floatingscore_scrap", togive, FM_NONE)
 	end
 end
