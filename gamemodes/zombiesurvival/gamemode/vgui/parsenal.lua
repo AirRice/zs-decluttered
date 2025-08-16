@@ -283,7 +283,7 @@ local function ItemPanelDoClick(self)
 	purl:SetVisible(canammo)
 
 	ppurbl = viewer.m_AmmoPrice
-	price = math.floor(9 * (MySelf.ArsenalDiscount or 1))
+	price = math.floor((FindItem("ps_"..purb.AmmoType).Worth or 9) * (MySelf.ArsenalDiscount or 1))
 	ppurbl:SetText(price .. " Points")
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
@@ -638,7 +638,7 @@ function GM:OpenArsenalMenu()
 	frame:SetDeleteOnClose(false)
 	frame:SetTitle(" ")
 	frame:SetDraggable(false)
-	if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
+	--if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
 	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
 	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
 	frame.CenterMouse = ArsenalMenuCenterMouse
@@ -646,7 +646,7 @@ function GM:OpenArsenalMenu()
 	self.ArsenalInterface = frame
 
 	local topspace = vgui.Create("DPanel", frame)
-	topspace:SetWide(wid - 16)
+	topspace:SetWide(wid * 0.75)
 
 	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
@@ -667,7 +667,7 @@ function GM:OpenArsenalMenu()
 	wsb.DoClick = worthmenuDoClick
 
 	local bottomspace = vgui.Create("DPanel", frame)
-	bottomspace:SetWide(topspace:GetWide())
+	bottomspace:SetWide(wid - 16)
 
 	local pointslabel = EasyLabel(bottomspace, "Points to spend: 0", "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)

@@ -780,8 +780,9 @@ function GM:PlayBeats(teamid, fear)
 
 	--if (LASTHUMAN or self:GetAllSigilsDestroyed()) and cv_ShouldPlayMusic:GetBool() then
 	if LASTHUMAN and cv_ShouldPlayMusic:GetBool() then
-		MySelf:EmitSound(self.LastHumanSound, 0, 100, self.BeatsVolume)
-		NextBeat = RealTime() + SoundDuration(self.LastHumanSound) - 0.025
+		local lhsnd = self.LastHumanSound
+		MySelf:EmitSound(lhsnd, 0, 100, self.BeatsVolume)
+		NextBeat = RealTime() + (self.SoundDuration[lhsnd] or SoundDuration(lhsnd)) - 0.025
 		return
 	end
 
@@ -1612,6 +1613,11 @@ local function DismantleWeapon()
 	RunConsoleCommand("zs_dismantle", GAMEMODE.InventoryMenu.SelInv)
 end
 
+local function QuickBuyAmmo()
+	RunConsoleCommand("zs_quickbuyammo")
+end
+
+
 local function AltSelItemUpd()
 	local activeweapon = MySelf:GetActiveWeapon()
 	if not activeweapon or not activeweapon:IsValid() then return end
@@ -1639,6 +1645,11 @@ function GM:HumanMenu()
 	end
 
 	self:OpenInventory()
+	local activewep = MySelf:GetActiveWeapon()
+	if activewep and activewep:IsValid() then
+		self:MakeWeaponInfo(activewep:GetClass())
+	end
+	
 	if self.HumanMenuPanel and self.HumanMenuPanel:IsValid() then
 		self.HumanMenuPanel:SetVisible(true)
 		self.HumanMenuPanel:OpenMenu()
@@ -1709,6 +1720,14 @@ function GM:HumanMenu()
 	gwbtn.DoClick = DismantleWeapon
 	panel:AddItem(gwbtn)
 
+	gwbtn = vgui.Create("DButton")
+	gwbtn:SetFont("ZSHUDFontSmaller")
+	gwbtn:SetText("Buy Weapon Ammo")
+	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+	gwbtn:CenterHorizontal()
+	gwbtn.DoClick = QuickBuyAmmo
+	panel:AddItem(gwbtn)
+
 	panel:AddItem(EasyLabel(panel, "Resupply Ammo Selection", "DefaultFont", color_white))
 	local dropdown = vgui.Create("DComboBox", panel)
 	dropdown:SetMouseInputEnabled(true)
@@ -1738,6 +1757,46 @@ function GM:HumanMenu()
 	self.HumanMenuSupplyChoice = dropdown
 
 	panel:OpenMenu()
+end
+
+function GM:MakeWeaponInfo(swep)
+	if not swep then return end
+	local sweptable = weapons.GetStored(swep)
+	if not (sweptable and sweptable.Description and string.len(sweptable.Description) > 0) then return end
+
+	if self.m_weaponInfoFrame and self.m_weaponInfoFrame:IsValid() then
+		self.m_weaponInfoFrame:SetVisible(true)
+		if self.m_weaponInfoFrame.m_DescLabel and self.m_weaponInfoFrame.m_DescLabel:IsValid() then
+			self.m_weaponInfoFrame.m_DescLabel:SetText(sweptable.Description)
+			self.m_weaponInfoFrame:SizeToContents()
+		end
+		return
+	end
+
+	local screenscale = BetterScreenScale()
+	local wid, hei = 400 * screenscale, 520*screenscale
+	local scrwid = ScrW()
+	local scrhei = ScrH()
+	local frame = vgui.Create("DFrame")
+	frame:SetDraggable(false)
+	frame:SetDeleteOnClose(false)
+	frame:SetKeyboardInputEnabled(false)
+	frame:ShowCloseButton( false )
+	frame:SetSize(wid, hei)
+	frame:SetPos(scrwid * 0.8 - wid, scrhei - hei - 120*screenscale) 
+	frame:SetTitle(" ")
+	frame:DockPadding(24, 16, 24, 16)
+	self.m_weaponInfoFrame = frame
+
+	local desclabel = EasyLabel(frame, "", (screenscale > 0.9 and "ZSBodyTextFontBig" or "ZSBodyTextFont"), COLOR_GRAY)
+	desclabel:SetContentAlignment(7)
+	desclabel:SetMultiline(true)
+	desclabel:SetWrap(true)
+	desclabel:Dock(FILL)
+	desclabel:CenterHorizontal()
+	desclabel:SetText(sweptable.Description)
+	self.m_weaponInfoFrame:SizeToContents()
+	self.m_weaponInfoFrame.m_DescLabel = desclabel
 end
 
 function GM:ZombieSpawnMenu()
@@ -2138,6 +2197,9 @@ function GM:KeyRelease(pl, key)
 				if self.m_InvViewer and self.m_InvViewer:IsValid() then
 					self.m_InvViewer:SetVisible(false)
 				end
+			end
+			if self.m_weaponInfoFrame and self.m_weaponInfoFrame:IsValid() then
+				self.m_weaponInfoFrame:SetVisible(false)
 			end
 
 			if self.HumanMenuSupplyChoice then

@@ -144,7 +144,9 @@ function GM:CreateWeaponOfQuality(i, orig, quality, classname, branch)
 	if wept.PrintName then
 		wept.PrintName = (branch and branch.NewNames and branch.NewNames[i] or branch and quality[3] or quality[1]).." "..(branch and branch.PrintName or wept.PrintName)
 	end
-
+	if (branch and branch.Desc) then
+		wept.Description = (wept.Description or "").."\n\nREMANTLE EFFECT:\n"..branch.Desc
+	end
 	if wept.PrimaryRemantleModifier then
 		local primod = wept.PrimaryRemantleModifier
 

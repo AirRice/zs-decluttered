@@ -260,7 +260,7 @@ function MakepOptions()
 	dropdown = vgui.Create("DComboBox", Window)
 	dropdown:SetMouseInputEnabled(true)
 	for setname in pairs(GAMEMODE.Beats) do
-		if setname ~= GAMEMODE.BeatSetHumanDefualt then
+		if setname ~= GAMEMODE.BeatSetHumanDefault then
 			dropdown:AddChoice(setname)
 		end
 	end
@@ -277,7 +277,7 @@ function MakepOptions()
 	dropdown = vgui.Create("DComboBox", Window)
 	dropdown:SetMouseInputEnabled(true)
 	for setname in pairs(GAMEMODE.Beats) do
-		if setname ~= GAMEMODE.BeatSetZombieDefualt then
+		if setname ~= GAMEMODE.BeatSetZombieDefault then
 			dropdown:AddChoice(setname)
 		end
 	end

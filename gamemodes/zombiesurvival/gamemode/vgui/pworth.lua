@@ -207,6 +207,9 @@ function MakepWorth()
 	frame:SetDeleteOnClose(true)
 	frame:SetKeyboardInputEnabled(false)
 	frame:SetTitle(" ")
+	--if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
+	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
+	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
 	frame.Think = WorthThink
 
 	local topspace = vgui.Create("DPanel", frame)
