@@ -10,7 +10,7 @@ CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio
 CLASS.Speed = 150
 
 CLASS.Wave = 2 / 6
-
+CLASS.Order = 2
 CLASS.SWEP = "weapon_zs_tormentedwraith"
 
 function CLASS:Move(pl, move)

@@ -15,7 +15,7 @@ CLASS.FearPerInstance = 1
 CLASS.CanTaunt = true
 
 CLASS.Points = 30
-
+CLASS.Order = 2
 CLASS.SWEP = "weapon_zs_ticklemonster"
 
 CLASS.Model = Model("models/player/zombie_classic_hbfix.mdl")

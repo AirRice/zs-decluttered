@@ -7,10 +7,13 @@ CLASS.TranslationName = "class_elderghoul"
 CLASS.Description = "description_elderghoul"
 CLASS.Help = "controls_elderghoul"
 
+CLASS.Hidden = true
+CLASS.Disabled = true
 CLASS.BetterVersion = "Noxious Ghoul"
 
 CLASS.Health = 190
 CLASS.Speed = 165
+CLASS.Order = 1
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 

@@ -136,7 +136,7 @@ function meta:DoHulls(classid, teamid)
 				m:Scale(self.ClientsideModelScale)
 				self:EnableMatrix("RenderMultiply", m)
 			end
-			self.NoCollideAll = classtab.NoCollideAll or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
+			self.NoCollideAll = classtab.NoCollideAll --or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
 			--self.NoCollideInside = classtab.NoCollideInside or (classtab.ModelScale or 1) ~= DEFAULT_MODELSCALE
 			self.AllowTeamDamage = classtab.AllowTeamDamage
 			self.NeverAlive = classtab.NeverAlive

@@ -11,6 +11,7 @@ CLASS.Health = 325
 CLASS.Speed = 125
 --CLASS.JumpPower = DEFAULT_JUMP_POWER * 0.811
 CLASS.Mass = DEFAULT_MASS * 2
+CLASS.Order = 6
 
 CLASS.CanTaunt = true
 
@@ -68,6 +69,47 @@ function CLASS:PlayerFootstep(pl, vFootPos, iFoot, strSoundName, fVolume, pFilte
 	end
 
 	return true
+end
+
+local function CreateFlesh(pl, damage, damagepos, damagedir)
+	damage = math.min(damage, 100)
+
+	pl:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav", 74, 125 - damage * 0.50)
+
+	if SERVER then
+		damagepos = pl:LocalToWorld(damagepos)
+
+		for i=1, math.max(1, math.floor(damage / 15)) do
+			local ent = ents.Create("projectile_poisonflesh")
+			if ent:IsValid() then
+				local heading = (damagedir + VectorRand() * 0.3):GetNormalized()
+				ent:SetPos(damagepos + heading)
+				ent:SetOwner(pl)
+				ent:Spawn()
+
+				local phys = ent:GetPhysicsObject()
+				if phys:IsValid() then
+					phys:Wake()
+					phys:SetVelocityInstantaneous(math.min(300, 50 + damage ^ math.Rand(1.15, 1.25)) * heading)
+				end
+			end
+		end
+	end
+end
+
+function CLASS:ProcessDamage(pl, dmginfo)
+	local attacker, damage = dmginfo:GetAttacker(), math.min(dmginfo:GetDamage(), pl:Health())
+	if attacker ~= pl and damage >= 5 and CurTime() >= (pl.m_NextPukeEmit or 0) then
+		pl.m_NextPukeEmit = CurTime() + 0.3
+
+		local pos = pl:WorldToLocal(dmginfo:GetDamagePosition())
+		local norm = dmginfo:GetDamageForce():GetNormalized() * -1
+		timer.Simple(0, function()
+			if pl:IsValid() then
+				CreateFlesh(pl, damage, pos, norm)
+			end
+		end)
+	end
 end
 
 function CLASS:CalcMainActivity(pl, velocity)

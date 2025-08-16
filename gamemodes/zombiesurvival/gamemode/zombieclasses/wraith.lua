@@ -13,7 +13,7 @@ CLASS.Health = 135
 CLASS.SWEP = "weapon_zs_wraith"
 CLASS.Model = Model("models/player/zelpa/stalker.mdl")
 CLASS.Speed = 150
-
+CLASS.Order = 2
 CLASS.CanTaunt = true
 
 CLASS.Points = CLASS.Health/GM.NoHeadboxZombiePointRatio

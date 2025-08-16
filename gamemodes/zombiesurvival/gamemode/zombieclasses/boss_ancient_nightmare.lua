@@ -11,7 +11,7 @@ CLASS.Health = 1825
 CLASS.Speed = 165
 
 CLASS.Points = 30
-
+CLASS.Order = 0
 CLASS.SWEP = "weapon_zs_anightmare"
 
 CLASS.Model = Model("models/player/skeleton.mdl")

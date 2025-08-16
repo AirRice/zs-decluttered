@@ -9,6 +9,10 @@ CLASS.Help = "controls_noxiousghoul"
 
 CLASS.Health = 320
 CLASS.Speed = 185
+CLASS.Order = 1
+
+CLASS.Hidden = false
+CLASS.Disabled = false
 
 CLASS.Points = CLASS.Health/GM.HumanoidZombiePointRatio
 CLASS.NoPlayerColor = true

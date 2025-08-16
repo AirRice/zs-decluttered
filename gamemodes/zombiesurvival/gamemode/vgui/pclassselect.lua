@@ -75,10 +75,12 @@ function PANEL:Init()
 			end
 
 			if ok then
-				if not use_better_versions or not classtab.BetterVersionOf or GAMEMODE:IsClassUnlocked(classtab.Index) then
+				if GAMEMODE:IsClassUnlocked(classtab.Index) then--and (not use_better_versions or not classtab.BetterVersionOf) then
 					local button = vgui.Create("ClassButton")
 					button:SetClassTable(classtab)
 					button.Wave = classtab.Wave or 1
+					button.OrderedIndex = classtab.Index or 1
+
 
 					table.insert(self.ClassButtons, button)
 
@@ -88,12 +90,12 @@ function PANEL:Init()
 		end
 	end
 
-	self.ButtonGrid:SortByMember("Wave")
+	self.ButtonGrid:SortByMember("OrderedIndex")
 	self:InvalidateLayout()
 end
 
 function PANEL:PerformLayout()
-	if #self.ClassButtons < 8 then self.Rows = 1 end
+	if #self.ClassButtons <= 8 then self.Rows = 1 end
 
 	local cols = math.ceil(#self.ClassButtons / self.Rows)
 	local cell_size = ScrW() / cols

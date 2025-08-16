@@ -6,7 +6,7 @@ CLASS.Description = "description_bloodsucker_headcrab"
 CLASS.Help = "controls_bloodsucker_headcrab"
 
 CLASS.Wave = 3 / 6
-
+CLASS.Order = 4
 CLASS.Model = Model("models/headcrab.mdl")
 
 CLASS.SWEP = "weapon_zs_bloodsucker_headcrab"

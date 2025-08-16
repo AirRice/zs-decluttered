@@ -5,6 +5,7 @@ CLASS.Help = "controls_ghoul"
 
 CLASS.Wave = 0
 CLASS.Unlocked = true
+CLASS.Order = 1
 
 CLASS.BetterVersion = "Noxious Ghoul"
 

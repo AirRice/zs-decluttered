@@ -4,6 +4,12 @@ SWEP.PrintName = "Giga Shadow Child"
 
 SWEP.MeleeDamage = 24
 SWEP.MeleeForceScale = 1
+SWEP.CryDelay = 12
+
+function SWEP:Initialize()
+	self:SetNextCry(CurTime() + 5)
+	self.BaseClass.BaseClass.Initialize(self)
+end
 
 function SWEP:PrimaryAttack()
 	if self:IsThrowing() then return end

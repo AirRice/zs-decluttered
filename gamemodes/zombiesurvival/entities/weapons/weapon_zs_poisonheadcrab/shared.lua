@@ -92,8 +92,8 @@ function SWEP:Think()
 		else
 			--owner:LagCompensation(true)
 
-			local vStart = owner:LocalToWorld(owner:OBBCenter())
-			local trace = owner:CompensatedMeleeTrace(owner:BoundingRadius() + 8, 12, vStart, owner:GetForward())
+			local vStart = owner:GetShootPos()
+			local trace = owner:CompensatedMeleeTrace(8, 12, vStart, owner:GetForward())
 			local ent = trace.Entity
 
 			if ent:IsValid() then

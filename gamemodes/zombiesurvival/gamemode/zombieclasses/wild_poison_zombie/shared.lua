@@ -9,6 +9,7 @@ CLASS.Wave = 5 / 6
 
 CLASS.Health = 460
 CLASS.SWEP = "weapon_zs_wildpoisonzombie"
+CLASS.Order = 6
 
 CLASS.Points = CLASS.Health/GM.PoisonZombiePointRatio
 

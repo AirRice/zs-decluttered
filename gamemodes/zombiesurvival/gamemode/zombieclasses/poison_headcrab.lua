@@ -15,6 +15,7 @@ CLASS.SWEP = "weapon_zs_poisonheadcrab"
 CLASS.Health = 85
 CLASS.Speed = 145
 CLASS.JumpPower = 100
+CLASS.Order = 8
 
 CLASS.NoFallDamage = true
 CLASS.NoFallSlowdown = true

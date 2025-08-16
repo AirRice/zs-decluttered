@@ -13,6 +13,7 @@ CLASS.Health = 440
 CLASS.Speed = 150
 CLASS.JumpPower = DEFAULT_JUMP_POWER * 1.081
 CLASS.SWEP = "weapon_zs_poisonzombie"
+CLASS.Order = 6
 
 CLASS.Mass = DEFAULT_MASS * 1.5
 

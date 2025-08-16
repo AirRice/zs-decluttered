@@ -1,18 +1,9 @@
-SWEP.Base = "weapon_zs_zombie"
+SWEP.Base = "weapon_zs_zombietorso"
 
-SWEP.PrintName = "Shadow Walker"
+SWEP.PrintName = "Frigid Lurker"
 
-SWEP.MeleeDamage = 30
-
-function SWEP:StartMoaning()
-end
-
-function SWEP:StopMoaning()
-end
-
-function SWEP:IsMoaning()
-	return false
-end
+SWEP.MeleeDelay = 0.25
+SWEP.MeleeDamage = 25
 
 function SWEP:PlayHitSound()
 	self:EmitSound("NPC_FastZombie.AttackHit", nil, nil, nil, CHAN_AUTO)
@@ -23,7 +14,7 @@ function SWEP:PlayMissSound()
 end
 
 function SWEP:PlayAttackSound()
-	self:EmitSound("npc/zombie_poison/pz_warn"..math.random(2)..".wav", 70, math.random(180, 190), nil, CHAN_AUTO)
+	self:EmitSound("npc/zombie_poison/pz_warn"..math.random(2)..".wav", 70, math.random(200, 210), nil, CHAN_AUTO)
 end
 
 function SWEP:PlayIdleSound()

@@ -11,7 +11,7 @@ CLASS.Health = 2000
 CLASS.Speed = 235
 
 CLASS.Points = 35
-
+CLASS.Order = 6
 CLASS.SWEP = "weapon_zs_gigashadowchild"
 
 CLASS.OverrideModel = Model("models/player/skeleton.mdl")
