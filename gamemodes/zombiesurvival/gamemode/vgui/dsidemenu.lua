@@ -58,7 +58,7 @@ function PANEL:Paint()
 	surface.SetDrawColor(5, 5, 5, 180)
 	surface.DrawRect(self:GetWide() * 0.4, 0, self:GetWide() * 0.6 + 1, self:GetTall())
 	surface.SetTexture(texRightEdge)
-	surface.DrawTexturedRectRotated(self:GetWide() * 0.2, self:GetTall() * 0.5, self:GetWide() * 0.4, self:GetTall(), 180)
+	surface.DrawTexturedRectRotated(self:GetWide() * 0.2, self:GetTall() * 0.5, self:GetWide() * 0.4 + 1, self:GetTall(), 180)
 end
 
 function PANEL:AddItem(item)

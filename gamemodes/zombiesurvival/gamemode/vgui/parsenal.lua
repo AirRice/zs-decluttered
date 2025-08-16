@@ -283,7 +283,7 @@ local function ItemPanelDoClick(self)
 	purl:SetVisible(canammo)
 
 	ppurbl = viewer.m_AmmoPrice
-	price = math.floor(9 * (MySelf.ArsenalDiscount or 1))
+	price = math.floor((FindItem("ps_"..purb.AmmoType).Worth or 9) * (MySelf.ArsenalDiscount or 1))
 	ppurbl:SetText(price .. " Points")
 	ppurbl:SizeToContents()
 	ppurbl:SetPos(purb:GetWide() / 2 - ppurbl:GetWide() / 2, purb:GetTall() * 0.75 - ppurbl:GetTall() * 0.5)
@@ -667,7 +667,7 @@ function GM:OpenArsenalMenu()
 	wsb.DoClick = worthmenuDoClick
 
 	local bottomspace = vgui.Create("DPanel", frame)
-	bottomspace:SetWide(topspace:GetWide())
+	bottomspace:SetWide(wid - 16)
 
 	local pointslabel = EasyLabel(bottomspace, "Points to spend: 0", "ZSHUDFontTiny", COLOR_GREEN)
 	pointslabel:AlignTop(4)

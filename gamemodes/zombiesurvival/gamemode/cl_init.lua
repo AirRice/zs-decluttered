@@ -1613,6 +1613,11 @@ local function DismantleWeapon()
 	RunConsoleCommand("zs_dismantle", GAMEMODE.InventoryMenu.SelInv)
 end
 
+local function QuickBuyAmmo()
+	RunConsoleCommand("zs_quickbuyammo")
+end
+
+
 local function AltSelItemUpd()
 	local activeweapon = MySelf:GetActiveWeapon()
 	if not activeweapon or not activeweapon:IsValid() then return end
@@ -1713,6 +1718,14 @@ function GM:HumanMenu()
 	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
 	gwbtn:CenterHorizontal()
 	gwbtn.DoClick = DismantleWeapon
+	panel:AddItem(gwbtn)
+
+	gwbtn = vgui.Create("DButton")
+	gwbtn:SetFont("ZSHUDFontSmaller")
+	gwbtn:SetText("Buy Weapon Ammo")
+	gwbtn:SetSize(panel:GetWide() - 8 * screenscale, hei - 4 * screenscale)
+	gwbtn:CenterHorizontal()
+	gwbtn.DoClick = QuickBuyAmmo
 	panel:AddItem(gwbtn)
 
 	panel:AddItem(EasyLabel(panel, "Resupply Ammo Selection", "DefaultFont", color_white))
