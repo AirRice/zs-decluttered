@@ -88,7 +88,7 @@ local function SetWeaponViewerSWEP(self, swep, category, comps, bdown, altwep, o
 		viewer.m_Breakdown = recipe
 	end
 	viewer.m_Recipe1:SetText(
-		altwep and weapons.Get(altwep).PrintName or
+		altwep and "Convert from: "..weapons.Get(altwep).PrintName or
 		comps and (GAMEMODE.ZSInventoryItemData[comps[1]].PrintName) or 
 		"")
 

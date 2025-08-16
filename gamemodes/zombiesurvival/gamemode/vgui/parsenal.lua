@@ -638,7 +638,7 @@ function GM:OpenArsenalMenu()
 	frame:SetDeleteOnClose(false)
 	frame:SetTitle(" ")
 	frame:SetDraggable(false)
-	if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
+	--if frame.btnClose and frame.btnClose:IsValid() then frame.btnClose:SetVisible(false) end
 	if frame.btnMinim and frame.btnMinim:IsValid() then frame.btnMinim:SetVisible(false) end
 	if frame.btnMaxim and frame.btnMaxim:IsValid() then frame.btnMaxim:SetVisible(false) end
 	frame.CenterMouse = ArsenalMenuCenterMouse
@@ -646,7 +646,7 @@ function GM:OpenArsenalMenu()
 	self.ArsenalInterface = frame
 
 	local topspace = vgui.Create("DPanel", frame)
-	topspace:SetWide(wid - 16)
+	topspace:SetWide(wid * 0.75)
 
 	local title = EasyLabel(topspace, "The Points Shop", "ZSHUDFontSmall", COLOR_WHITE)
 	title:CenterHorizontal()
